@@ -23,9 +23,11 @@ Plots are automatically labeled if a variable dictionary is provided. Important 
 
 Discrete and numeric variables are handled automatically and given separate treatment. Plots are customized for data with high missing and zero rates. 
 
-#### Here is an example of a numeric plot ![numeric plot](https://github.com/[placeholder]/otvPlots/blob/master/vignettes/Figs/unnamed-chunk-1-1.png)
+#### Here is an example of a numeric plot ![numeric plot](https://github.com/[placeholder]/otvPlots/blob/master/vignettes/Figs/cntns_ex.png)
 
-#### Here is an example of a discrete plot ![discrete plot](https://github.com/[placeholder]/otvPlots/blob/master/vignettes/Figs/unnamed-chunk-2-1.png)
+#### Here is an example of a discrete plot ![discrete plot](https://github.com/[placeholder]/otvPlots/blob/master/vignettes/Figs/dscrt_ex.png)
+
+#### Here is a binary plot ![binary plot](https://github.com/[placeholder]/otvPlots/blob/master/vignettes/Figs/bin_ex.png)
 
 
 ## Install otvPlots
