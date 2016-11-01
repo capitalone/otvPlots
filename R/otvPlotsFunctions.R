@@ -14,7 +14,7 @@
 #' aggregated from large datasets. Plots are optionally returned ordered by correlation with date 
 #' -- a natural starting point for anomaly detection.  Plots are automatically labeled if a 
 #' variable dictionary is provided. Discrete and numeric variables are handled automatically. The 
-#' package can be used either interactively for adhoc creation of plots for specifical varaibles, 
+#' package can be used either interactively for adhoc creation of plots for specifical variables, 
 #' or via the included wrapper function for hands-off monitoring reports. 
 #'
 #' @seealso \code{\link{PlotWrapper}}
@@ -394,7 +394,6 @@ PlotVar = function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL, lab
     p <- gridExtra::arrangeGrob(p, grid::textGrob(ll, gp = grid::gpar(fontsize = 10, col = subcol)), heights =
                        grid::unit.c(grid::unit(1, "npc") - theight, theight))
   }
-  rm(list = setdiff(ls(), "p"))
 
   return(p)
 }
@@ -605,7 +604,6 @@ PlotContVar = function(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt = NULL
   p4 = PlotRates(meltdx, myVar, dateGp)
   p5 = rbind(ggplot2::ggplotGrob(p2), ggplot2::ggplotGrob(p3), ggplot2::ggplotGrob(p4), size = "last")
   p  = gridExtra::arrangeGrob(p1, p5,  layout_matrix = cbind(c(1,1,1), c(5,5,5)), widths = 1:2)
-  rm(list=setdiff(ls(), "p"))
 
   return(p)
 }
@@ -810,7 +808,6 @@ PlotDist = function(dataFl, myVar, dateGpBp, weightNm, skewOpt) {
       }
     }
   }
-  rm(list=setdiff(ls(), "p"))
 
   return(p)
 }
@@ -1142,7 +1139,6 @@ OrderByR2 = function(dataFl, buildTm = NULL, dateNm, weightNm = NULL, kSample = 
   } else {
     sortVars = cat_vars
   }
-  rm(list=setdiff(ls(), "sortVars"))
 
   return(sortVars)
 }
@@ -1196,12 +1192,10 @@ CalcR2 = function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
     if (is.null(weightNm)) {
       mod = lm.fit(x = x, y = y)
       r2 = 1 - sum(mod$resid ^ 2) / sum((y - mean(y) ^ 2))
-      rm(list=setdiff(ls(), "r2"))
 
     } else {
       mod = lm.wfit(x = x, y = y, w = w)
       r2 = 1 - sum(w * mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)
-      rm(list=setdiff(ls(), "r2"))
 
     }
     return(r2)
