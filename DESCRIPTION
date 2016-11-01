@@ -1,0 +1,16 @@
+Package: otvPlots
+Title: Over time variable plots
+Version: 0.1
+Authors@R: "Rebecca Payne <rebecca.payne@capitalone.com> [aut, cre]"
+Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
+    predictive model building.
+Depends:
+    R (>= 3.2.0),
+    data.table (>= 1.9.6)
+Imports: moments, ggplot2 (>= 2.1.0), Hmisc (>= 3.17-4), grid (>= 3.2.0), gridExtra (>= 2.2.1), stringi (>= 1.1.1)
+License: file LICENSE
+LazyData: true
+Suggests:
+    knitr
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
