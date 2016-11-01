@@ -55,9 +55,8 @@ example(PlotVlm)
 ## Simple usage example
 ```
 
- data(bankData);  alloc.col(bankData, 100)
- data(bankLabels);  alloc.col(bankLabels, 100)
- # --- note that you do not have to allocate columns to a data.table unless you are loading it from disk via the "data" command
+ data(bankData);  setDT(bankData)
+ data(bankLabels);  setDT(bankLabels)
  
  PrepLabels(bankLabels)
  RunVlm(
@@ -67,14 +66,12 @@ example(PlotVlm)
    dateGp   = "months", 
    dateGpBp = "quarters", 
    outFl    = "bank.pdf", 
-   prepData = TRUE, 
-   kSample  = NULL
+   prepData = TRUE
    )
 
 ```
 ## Known issues and bug reports
 
-Binary plots will be updated soon. 
 
 ## Contributors:
 We welcome your interest in Capital One’s Open Source Projects (the “Project”). Any Contributor to the project must accept and sign a CLA indicating agreement to the license terms. Except for the license granted in this CLA to Capital One and to recipients of software distributed by Capital One, you reserve all right, title, and interest in and to your contributions; this CLA does not impact your rights to use your own contributions for any other purpose.
