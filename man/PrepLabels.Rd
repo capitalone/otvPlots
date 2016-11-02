@@ -7,35 +7,36 @@
 PrepLabels(labelFl, idx = 1:2)
 }
 \arguments{
-\item{labelFl}{Either the name (and possibly path) of a dataset containing labels, an R object 
-convertible to data.table (eg data frame) or NULL. If name is given, if the dataset is not in 
-your working directory then \code{labelFl} must include (relative or absolute) path to file.
-If NULL no labels will be used. Label dataset must contain at least 2 columns: variable names 
-and variable label.}
+\item{labelFl}{Either the name (and possibly path) of a dataset containing
+labels, an R object convertible to data.table (eg data frame) or NULL. If
+name is given, if the dataset is not in your working directory then
+\code{labelFl} must include (relative or absolute) path to file. If NULL no
+labels will be used. Label dataset must contain at least 2 columns:
+variable names and variable label.}
 
-\item{idx}{Vector of length 2 giving column index of variable names (first position) and 
-labels (second position)}
+\item{idx}{Vector of length 2 giving column index of variable names (first
+position) and labels (second position)}
 }
 \value{
 A data table formated for use by \code{PlotVar} function
 }
 \description{
-Prepares a dataset containing variable labels for use by otvPlots. To work correctly, input must
-contain names in first column and labels in second column. All other columns will be dropped. 
-Special characters will create errors and should be stripped outside of R. All labels will be 
-truncated at 145 characters.
+Prepares a dataset containing variable labels for use by otvPlots. To work
+correctly, input must contain names in first column and labels in second
+column. All other columns will be dropped. Special characters will create
+errors and should be stripped outside of R. All labels will be truncated at
+145 characters.
 }
 \section{License}{
-
-
-
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+ 
+Copyright 2016 Capital One Services, LLC Licensed under the
+Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the 
+License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 }
 \examples{
 data(bankLabels)

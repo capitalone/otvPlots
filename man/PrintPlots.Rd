@@ -9,66 +9,73 @@ PrintPlots(outFl, dataFl, sortVars, weightNm, dateNm, dateGp, dateGpBp,
   fuzzyLabelFn)
 }
 \arguments{
-\item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be saved to your working 
-directory unless path is included in \code{outFl} (e.g. "../plots/otvPlots.pdf")}
+\item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be
+saved to your working directory unless path is included in \code{outFl}
+(e.g. "../plots/otvPlots.pdf")}
 
-\item{dataFl}{A data.table containing at least the following column names: \code{myVar}, 
-\code{weightNm}, \code{dateGp}, \code{dateGpBp}, output of PrepData}
+\item{dataFl}{A data.table containing at least the following column names:
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
+PrepData}
 
-\item{sortVars}{A character vector of variable names in the order they will be plotted. Can be
-custom or if set to "R2", the output of otvPlots::OrderByR2.}
+\item{sortVars}{A character vector of variable names in the order they will
+be plotted. Can be custom or if set to "R2", the output of
+otvPlots::OrderByR2.}
 
-\item{weightNm}{Name of variable containing row weights or NULL for no weights (all
-rows recieve weight 1)}
+\item{weightNm}{Name of variable containing row weights or NULL for no
+weights (all rows recieve weight 1)}
 
 \item{dateNm}{Name of column containing date variable}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped by. Options are NULL, 
-"weeks", "months", "quarters", "years". See data.table::IDate. If NULL \code{dateNm} will be
-used.}
+\item{dateGp}{Name of the variable the time series plots should be grouped
+by. Options are NULL, "weeks", "months", "quarters", "years". See
+data.table::IDate. If NULL \code{dateNm} will be used.}
 
-\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same options as 
-\code{dateGp}. If NULL \code{dateGp} will be used.}
+\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
+options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 
-\item{labelFl}{A data.table containing variable labels, or NULL for no labels, output of 
-PrepLabels}
+\item{labelFl}{A data.table containing variable labels, or NULL for no 
+labels. Output of PrepLabels}
 
-\item{highlightNms}{Either NULL or a character vector of variables to recieve red label (e.g. 
-highly influential variables). Currently NULL means all variables will get a black legend. 
-Ignored if labelFl is null.}
+\item{highlightNms}{Either NULL or a character vector of variables to recieve
+red label. Currently NULL means all
+variables will get a black legend. Ignored if labelFl = NULL.}
 
-\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box plots of variables 
-whose skew exceeds 5 will be on a log10 scale if possible.
-If negative, 3 will be used as the cutoff.}
+\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box
+plots of variables whose skew exceeds 5 will be on a log10 scale if
+possible. If negative, 3 will be used as the cutoff. Default is NULL (no 
+transformation)}
 
-\item{kSample}{Either NULL or integer. If a number, indicates the sample size for both drawing
-boxplots and ordering numerical graphs by R2. For large datasets, setting this to a 
-reasonable (say 50K) value dramatically increases processing speed. In larger datasets 
-(e.g. > 10 percent system memory), this parameter should not be set to NULL, or boxplots 
-may take a very long time to render. This setting has no impact on the accuracy of time 
-series plots.}
+\item{kSample}{Either NULL or integer. If a number, indicates the sample size
+for both drawing boxplots and ordering numerical graphs by R2. For large
+datasets, setting this to a reasonable (say 50K) value dramatically
+increases processing speed. In larger datasets (e.g. > 10 percent system
+memory), this parameter should not be set to NULL, or boxplots may take a
+very long time to render. This setting has no impact on the accuracy of
+time series plots.}
 
-\item{fuzzyLabelFn}{either NULL or a function of 2 parameters: A label file in the format output
-by PrepLabels and a string giving a variable name. The function should return
-the label corresponding to the variable given by the second parameter. 
-This function should describe how fuzzy matching should be performed to find labels (see 
-examples). If NULL, only exact matches will be retuned.}
+\item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
+in the format output by PrepLabels and a string giving a variable name. The
+function should return the label corresponding to the variable given by the
+second parameter. This function should describe how fuzzy matching should be
+performed to find labels (see example below). If NULL, only exact matches 
+will be retuned.}
 }
 \value{
 A pdf of plots saved to \code{outFl}
 }
 \description{
-Creates plots and outputs results to a pdf named as \code{outFl}. Creates letter-sized output 
-with each page corresponding to a single variable.
+Creates plots and outputs results to a pdf named as \code{outFl}. Creates
+letter-sized output with each page corresponding to a single variable.
 }
 \section{License}{
 
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the  License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+or agreed to in writing, software distributed under the License is 
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+KIND, either express or implied. See the License for the specific language 
+governing permissions and limitations under the License.
 }
 

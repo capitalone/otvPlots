@@ -7,40 +7,43 @@
 PlotRates(meltdx, myVar, dateGp)
 }
 \arguments{
-\item{meltdx}{A data.table with missingrate and zerorate in long format, produced by 
-\code{\link{PlotVar}}}
+\item{meltdx}{A data.table with missingrate and zerorate in long format, 
+produced by \code{\link{PlotVar}}}
 
 \item{myVar}{Name of the variable to be plotted}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped by. Options are NULL, 
-"weeks", "months", "quarters", "years". See data.table::IDate. If NULL \code{dateNm} will be
-used.}
+\item{dateGp}{Name of the variable the time series plots should be grouped
+by. Options are NULL, "weeks", "months", "quarters", "years". See
+data.table::IDate. If NULL \code{dateNm} will be used.}
 }
 \value{
-A ggplot object with a \code{missingrate} and \code{zerorate} grouped by \code{dateGp}
+A ggplot object with a \code{missingrate} and \code{zerorate} grouped 
+by \code{dateGp}
 }
 \description{
 Plot zero and missing rates
 }
 \section{License}{
 
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the  License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+or agreed to in writing, software distributed under the License is 
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+KIND, either express or implied. See the License for the specific language 
+governing permissions and limitations under the License.
 }
 \examples{
 data(bankData)
 setDT(bankData)
 bankData[, months := round(date, "months")]
-bankDT = bankData[, {  list("zerorate"  = mean(balance==0) , 
-  "missingrate" = mean(is.na(balance))) } , by   = "months"]
-bankMT = melt(bankDT, id.vars = "months", measure.vars=c("zerorate", "missingrate"))
-#---- Long format for plotting
-bankMT
+bankDT = bankData[, {list("zerorate" = mean(balance == 0),
+                          "missingrate" = mean(is.na(balance)))}, 
+                 by = "months"]
+bankMT = melt(bankDT, id.vars = "months", 
+              measure.vars = c("zerorate", "missingrate"))
+# bankMT # Long format for plotting
 PlotRates(bankMT, "balance", "months")
 }
 

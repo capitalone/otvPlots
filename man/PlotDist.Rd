@@ -4,50 +4,59 @@
 \alias{PlotDist}
 \title{Simple grouped box plot}
 \usage{
-PlotDist(dataFl, myVar, dateGpBp, weightNm, skewOpt)
+PlotDist(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL)
 }
 \arguments{
-\item{dataFl}{Either the name of an object that can be converted using as.data.table (e.g. a 
-data frame) or a character string containing the name of dataset to be loaded using fread.
-If dataset is not in your working directory then \code{dataFl} must include (relative or}
+\item{dataFl}{Either the name of an object that can be converted using
+as.data.table (e.g. a ' data frame) or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+not in your working directory then \code{dataFl} must include (relative or 
+absolute) path to file}
 
 \item{myVar}{Name of the variable to be plotted}
 
-\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same options as 
-\code{dateGp}. If NULL \code{dateGp} will be used.}
+\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
+options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights or NULL for no weights (all
-rows recieve weight 1)}
+\item{weightNm}{Name of variable containing row weights or NULL for no
+weights (all rows recieve weight 1)}
 
-\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box plots of variables 
-whose skew exceeds 5 will be on a log10 scale if possible.
-If negative, 3 will be used as the cutoff.}
+\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box
+plots of variables whose skew exceeds 5 will be on a log10 scale if
+possible. If negative, 3 will be used as the cutoff. Default is NULL (no 
+transformation)}
 }
 \value{
-A ggplot object with a box plot of \code{myVar} grouped by \code{dateGpBp}
+A ggplot object with a box plot of \code{myVar} grouped by 
+\code{dateGpBp}
 }
 \description{
 Simple grouped box plot
 }
 \section{License}{
 
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the  License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+or agreed to in writing, software distributed under the License is 
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+KIND, either express or implied. See the License for the specific language 
+governing permissions and limitations under the License.
 }
 \examples{
 data(bankData)
 setDT(bankData)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", weightNm = NULL)
-PlotDist(bankData, "balance", "quarters", NULL, NULL)
-#---- The following attempt to log transform will fail due to negative values, 
- #---- and the untransformed version will be returned
-PlotDist(bankData, "balance", "quarters", NULL, 3)
-#---- This attempt should succeed, as the skew exceeds 3 and there are no negative values
-PlotDist(bankData, "duration", "quarters", NULL, 3)
+PrepData(dataFl = bankData, dateNm = "date", dateGp = "months", 
+         dateGpBp = "quarters")
+PlotDist(dataFl = bankData, myVar = "balance", dateGpBp = "quarters")
+# The following attempt to log transform will fail due to negative values,
+# and the untransformed version will be returned
+PlotDist(dataFl = bankData, myVar = "balance", dateGpBp = "quarters", 
+         skewOpt = 3)
+# This attempt should succeed, as the skew exceeds 3 and there are no 
+# negative values
+PlotDist(dataFl = bankData, myVar = "duration", dateGpBp = "quarters",
+         skewOpt = 3)
 }
 

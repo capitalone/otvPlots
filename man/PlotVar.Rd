@@ -2,76 +2,83 @@
 % Please edit documentation in R/otvPlotsFunctions.R
 \name{PlotVar}
 \alias{PlotVar}
-\title{Creates and plots a grid of ggplot objects}
+\title{Interactive creation of overtime variable plots}
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = NULL,
   fuzzyLabelFn = NULL)
 }
 \arguments{
-\item{dataFl}{A data.table containing at least the following column names: \code{myVar}, 
-\code{weightNm}, \code{dateGp}, \code{dateGpBp}, output of PrepData}
+\item{dataFl}{A data.table containing at least the following column names:
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
+PrepData}
 
 \item{myVar}{Name of the variable to be plotted}
 
-\item{weightNm}{Name of variable containing row weights or NULL for no weights (all
-rows recieve weight 1)}
+\item{weightNm}{Name of variable containing row weights or NULL for no
+weights (all rows recieve weight 1)}
 
 \item{dateNm}{Name of column containing date variable}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped by. Options are NULL, 
-"weeks", "months", "quarters", "years". See data.table::IDate. If NULL \code{dateNm} will be
-used.}
+\item{dateGp}{Name of the variable the time series plots should be grouped
+by. Options are NULL, "weeks", "months", "quarters", "years". See
+data.table::IDate. If NULL \code{dateNm} will be used.}
 
-\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same options as 
-\code{dateGp}. If NULL \code{dateGp} will be used.}
+\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
+options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 
-\item{labelFl}{A data.table containing variable labels, or NULL for no labels, output of 
-PrepLabels}
+\item{labelFl}{A data.table containing variable labels, or NULL for no 
+labels. Output of PrepLabels}
 
-\item{highlightNms}{Either NULL or a character vector of variables to recieve red label (e.g. 
-highly influential variables). Currently NULL means all variables will get a black legend. 
-Ignored if labelFl is null.}
+\item{highlightNms}{Either NULL or a character vector of variables to recieve
+red label. Currently NULL means all
+variables will get a black legend. Ignored if labelFl = NULL.}
 
-\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box plots of variables 
-whose skew exceeds 5 will be on a log10 scale if possible.
-If negative, 3 will be used as the cutoff.}
+\item{skewOpt}{Either numeric constant or NULL. If numeric, say 5, the box
+plots of variables whose skew exceeds 5 will be on a log10 scale if
+possible. If negative, 3 will be used as the cutoff. Default is NULL (no 
+transformation)}
 
-\item{kSample}{Either NULL or integer. If a number, indicates the sample size for both drawing
-boxplots and ordering numerical graphs by R2. For large datasets, setting this to a 
-reasonable (say 50K) value dramatically increases processing speed. In larger datasets 
-(e.g. > 10 percent system memory), this parameter should not be set to NULL, or boxplots 
-may take a very long time to render. This setting has no impact on the accuracy of time 
-series plots.}
+\item{kSample}{Either NULL or integer. If a number, indicates the sample size
+for both drawing boxplots and ordering numerical graphs by R2. For large
+datasets, setting this to a reasonable (say 50K) value dramatically
+increases processing speed. In larger datasets (e.g. > 10 percent system
+memory), this parameter should not be set to NULL, or boxplots may take a
+very long time to render. This setting has no impact on the accuracy of
+time series plots.}
 
-\item{fuzzyLabelFn}{either NULL or a function of 2 parameters: A label file in the format output
-by PrepLabels and a string giving a variable name. The function should return
-the label corresponding to the variable given by the second parameter. 
-This function should describe how fuzzy matching should be performed to find labels (see 
-examples). If NULL, only exact matches will be retuned.}
+\item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
+in the format output by PrepLabels and a string giving a variable name. The
+function should return the label corresponding to the variable given by the
+second parameter. This function should describe how fuzzy matching should be
+performed to find labels (see example below). If NULL, only exact matches 
+will be retuned.}
 }
 \value{
-A grid of ggplots. For discrete variables (or continuous variables with no more than 3 
-unique levels), frequency charts are used.  For discrete variables with <=9 levels, the grid 
-includes a frequency bar chart, a stacked frequency plot over time, and a stacked proportion 
-plot over time. For other discrete variables a single frequency bar chart is returned. For 
-continuous variables, returns a grid of ggplot objects including a boxplot grouped by 
-\code{dateGpBp}, a time series of p1, p50 and p99 grouped by \code{dateGp},
-a time series of mean and +-1 SD control limits grouped by \code{dateGp},
-and a time series of missing and zerorates grouped by \code{dateGp}
+A grid of ggplots. For discrete variables (including continuous 
+variables with no more than 2 unique levels not including NA), 
+frequency/rate graphs are used.  For discrete variables with <=9 levels, 
+the grid includes a frequency bar chart, a
+stacked frequency plot over time, and a stacked proportion plot over time.
+For other discrete variables a single frequency bar chart is returned. For 
+continuous variables, a grid of ggplot objects is returned including a 
+boxplot grouped by \code{dateGpBp}, a time series of p1, p50 and p99 grouped
+by \code{dateGp}, a time series of mean and +-1 SD control limits grouped by
+\code{dateGp}, and a time series of missing and zerorates grouped by
+\code{dateGp}
 }
 \description{
-Creates and plots a grid of ggplot objects
+Interactive creation of overtime variable plots
 }
 \section{License}{
-
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+ Copyright 2016 Capital One Services, LLC Licensed under the
+Apache License, Version 2.0 (the "License"); you may not use this file
+except in compliance with the License. You may obtain a copy of the  License
+at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
 }
 \examples{
 require(data.table)
@@ -80,45 +87,51 @@ setDT(bankData)
 data(bankLabels)
 setDT(bankLabels)
 PrepLabels(bankLabels)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", weightNm = NULL)
+PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
+         weightNm = NULL)
 
-#---- PlotVar will treat numeric and categorical data differently automatically. Binary data 
-#---- is treated as nominal.
+# PlotVar will treat numeric and categorical data differently automatically. 
+# Binary data is always treated as nominal.
 plot(PlotVar(bankData, "duration", NULL, "date", "months", "quarters"))
 plot(PlotVar(bankData, "job", NULL, "date", "months", "quarters"))
 plot(PlotVar(bankData, "loan", NULL, "date", "months", "quarters"))
 plot(PlotVar(bankData, "y", NULL, "date", "months", "quarters"))
 
-#---- It's possible to plot using dateNm as the grouping variable, 
-#---- but it might not be very pretty
+# It's possible to plot using dateNm as the grouping variable,
+# but it might not be very pretty
 plot(PlotVar(bankData, "y", NULL, "date", "date", "date"))
 
-#---- If labels are provided, they will be added. If the variable being plotted is in the 
-#---- "highlightNms", its label will be red.
-plot(PlotVar(bankData, myVar="balance", weightNm = NULL, dateNm = "date", dateGp = "months", 
-  dateGpBp = "quarters", labelFl = bankLabels))
-plot(PlotVar(bankData, myVar="balance", weightNm = NULL, dateNm = "date", dateGp = "months", 
-  dateGpBp = "quarters", highlightNms = c("balance"), labelFl = bankLabels))
+# If labels are provided, they will be added. If the variable being plotted 
+# is in the "highlightNms", its label will be red.
+plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
+             dateGp = "months", dateGpBp = "quarters", labelFl = bankLabels))
+plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
+             dateGp = "months", dateGpBp = "quarters", 
+             highlightNms = c("balance"), labelFl = bankLabels))
 
-#---- It is possible to define a function for fuzzy label matching. 
-#---- For example, if variables look like VAR_nameofvar, 
-#---- and the attribute dictionary contains defintions only for nameofvar, 
-#---- then a fuzzy matching function can be provided which would first attempt to match exactly, 
-#---- and then to attempt to match on the longest piece after splitting on the underscore:
+# It is possible to define a function for fuzzy label matching. For example, 
+# if variables look like VAR_nameofvar, and the attribute dictionary contains
+# defintions only for nameofvar, then a fuzzy matching function can be 
+# provided which would first attempt to match exactly, and then to attempt to 
+# match on the longest piece after splitting on the underscore:
 Fuzzy = function(LabelFl, myVar){
-   ll = labelFl[varCol == myVar, labelCol ] # exact match
-   if( ll == ""){
-       #---- split on "_", search for exact match of longest piece
-       shortNm = names(which.max(sapply(strsplit(myVar, "_")[[1]], nchar))) 
+   ll = labelFl[varCol == myVar, labelCol] # exact match
+   if (ll == ""){
+       # split on "_", search for exact match of longest piece
+       shortNm = names(which.max(sapply(strsplit(myVar, "_")[[1]], nchar)))
        ll = labelFl[varCol == shortNm, labelCol]
    }
    return(ll)
  }
- 
- #---- See ?PlotWrapper for additional examples
+
+ # See otvPlots::PlotWrapper for additional examples of non-interactive use
 
 }
 \seealso{
+\code{\link{PlotDiscreteVar}}
+
+\code{\link{PlotContVar}}
+
 \code{\link{PlotDist}}
 
 \code{\link{PlotQuantiles}}

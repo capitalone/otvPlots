@@ -11,27 +11,30 @@ CalcR2(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL)
 
 \item{dataFl}{A data.table containing myVar, dateNm and inweight}
 
-\item{dateNm}{Name of column containing date variable to be modeled as numeric}
+\item{dateNm}{Name of column containing date variable (to be modeled as 
+numeric)}
 
-\item{weightNm}{Name of column containing row weights. If all(w==1), lm.fit will be called,}
+\item{weightNm}{Name of column containing row weights. If all(w==1), lm.fit
+will be called, else lm.wfit will be called.}
 
-\item{imputeValue}{Either NULL or numeric. If NULL model will be fit on non-NA components of 
-myVar. (dateNm, inweight must not have NA cases). If numeric, missing cases of myVar will be imputed to imputeValue}
+\item{imputeValue}{Either NULL or numeric. If NULL model will be fit on
+non-NA components of myVar. (dateNm, inweight must not have NA cases). If
+numeric, missing cases of myVar will be imputed to imputeValue}
 }
 \description{
-Calculates weighted R2 of a univariate weighted linear model with \code{dateNm} as x and 
-\code{myVar} as y using the workhorse lm.fit and lm.wfit functions
+Calculates weighted R2 of a univariate weighted linear model with
+\code{dateNm} as x and \code{myVar} as y using the workhorse lm.fit and
+lm.wfit functions
 }
 \section{License}{
 
-
-
-Copyright 2016 Capital One Services, LLC Licensed under the Apache License, Version 2.0 
-(the "License");  you may not use this file except in compliance with the License. 
-You may obtain a copy of the  License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-either express or implied. See the License for the specific language governing permissions 
-and limitations under the License.
+Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the  License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+or agreed to in writing, software distributed under the License is 
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+KIND, either express or implied. See the License for the specific language 
+governing permissions and limitations under the License.
 }
 
