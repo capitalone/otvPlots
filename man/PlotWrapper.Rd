@@ -9,7 +9,7 @@ PlotWrapper(dataFl, labelFl = NULL, selectCols = NULL, dropCols = NULL,
   weightNm = NULL, buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
   kSample = NULL, outFl = "otvPlots.pdf", prepData = TRUE,
   varNms = NULL, fuzzyLabelFn = NULL, dropConstants = TRUE,
-  sortVars = NULL, ...)
+  sortVars = NULL, refactorInd = FALSE, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -121,6 +121,11 @@ variables should be plotted, "R2" in order to sort plots by strength of
 associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
 original ordering, with numeric variables ahead of categorical}
 
+\item{refactorInd}{Logical. Indicates whether discrete 
+\code{myVar} should be converted to factor as plotting time. Doing so will 
+ensure over time histogram plots are in the same order as other discrete 
+plots, but will substantially increase processing time for large data sets}
+
 \item{...}{Additional parameters to be passed to fread}
 }
 \value{
@@ -188,7 +193,7 @@ sortVars = sort(bankLabels[varCol!="date", varCol])
 PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-            sortVars = sortVars)
+            sortVars = sortVars, refactorInd = TRUE)
 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter

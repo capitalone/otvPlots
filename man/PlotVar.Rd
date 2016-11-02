@@ -6,7 +6,7 @@
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = NULL,
-  fuzzyLabelFn = NULL)
+  fuzzyLabelFn = NULL, refactorInd = FALSE)
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
@@ -53,6 +53,11 @@ function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
 will be retuned.}
+
+\item{refactorInd}{Logical. Indicates whether discrete 
+\code{myVar} should be converted to factor as plotting time. Doing so will 
+ensure over time histogram plots are in the same order as other discrete 
+plots, but will substantially increase processing time for large data sets}
 }
 \value{
 A grid of ggplots. For discrete variables (including continuous 

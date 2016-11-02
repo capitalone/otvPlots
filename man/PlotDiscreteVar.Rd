@@ -4,7 +4,8 @@
 \alias{PlotDiscreteVar}
 \title{Frequency and proportion plots for discrete variables}
 \usage{
-PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories = 5)
+PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories = 3,
+  refactorInd = FALSE)
 }
 \arguments{
 \item{myVar}{Name of the variable to be plotted}
@@ -22,9 +23,14 @@ weights (all rows recieve weight 1)}
 by. Options are NULL, "weeks", "months", "quarters", "years". See
 data.table::IDate. If NULL \code{dateNm} will be used.}
 
-\item{kCategories}{Number of categories to plot in over time histograms and 
-rate charts for categorical data -- the K most numerous categories in the 
-dataset will be plotted. Default is 5.}
+\item{kCategories}{Number of categories to plot in over time
+rate chart for categorical data -- the K most numerous categories in the 
+dataset will be plotted. Default is 3.}
+
+\item{refactorInd}{Logical. Indicates whether discrete 
+\code{myVar} should be converted to factor as plotting time. Doing so will 
+ensure over time histogram plots are in the same order as other discrete 
+plots, but will substantially increase processing time for large data sets}
 }
 \value{
 Histograms and rate charts for categorical data. For factors with <= 
@@ -56,11 +62,19 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters",
 # Single histogram is plotted for job type since there are 12 categories
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
                      dateNm = "date", dateGp = "months"))
-# Limit to top 9 job categories and plot top 3 over time
+# Limit to top 9 job categories and plot over time
 topJobs = rev(names(sort(table(bankData[, job]))))[1:9]
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
+                     weightNm = NULL, dateNm = "date", dateGp = "months"))
+
+# By default only the top 3 categories are plotted in the rate graph, but we
+# can have all categegories plotted. 
+# By setting refactorInd = TRUE, the histogram is put in order of
+# global volume and the colors will match the over time rate plot. However, 
+# this option can dramatically increase processing time in a large dataset. 
+plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-                     kCategories = 3))
+                     kCategories = 9, refactorInd = TRUE))
 
 #  binary data only gets two plots
 plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 

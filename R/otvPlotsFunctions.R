@@ -48,6 +48,7 @@
 #' @importFrom moments skewness
 #' @importFrom Hmisc wtd.quantile wtd.mean wtd.var
 #' @importFrom stringi stri_trans_general
+#' @importFrom scales hue_pal
 NULL
 
 ###########################################
@@ -64,6 +65,7 @@ NULL
 #' @inheritParams OrderByR2
 #' @inheritParams PlotVar
 #' @inheritParams PrintPlots
+#' @inheritParams PlotDiscreteVar
 #' @param sortVars Either a vector of variable names giving the order in which
 #' variables should be plotted, "R2" in order to sort plots by strength of
 #' associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
@@ -136,7 +138,7 @@ NULL
 #' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-#'             sortVars = sortVars)
+#'             sortVars = sortVars, refactorInd = TRUE)
 #' 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
@@ -154,7 +156,8 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
                         buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
                         kSample = NULL, outFl = "otvPlots.pdf", prepData = TRUE,
                         varNms = NULL, fuzzyLabelFn = NULL, 
-                        dropConstants = TRUE, sortVars = NULL, ...) {
+                        dropConstants = TRUE, sortVars = NULL, 
+                        refactorInd = FALSE, ...) {
 
   if (!is.null(sortVars) && sortVars != "R2" & !is.null(varNms) &
       !all(varNms %in% sortVars)) {
@@ -210,13 +213,14 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
                dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp,
                labelFl = labelFl, highlightNms = highlightNms,
                skewOpt = skewOpt, kSample = kSample,
-               fuzzyLabelFn = fuzzyLabelFn)
+               fuzzyLabelFn = fuzzyLabelFn, refactorInd = refactorInd)
   } else {
     PrintPlots(outFl = outFl, dataFl = dataFl, sortVars = sortVars,
                weightNm = weightNm, dateNm = dateNm, dateGp = dateGp,
                dateGpBp = dateGpBp, labelFl = labelFl,
                highlightNms = highlightNms, skewOpt = skewOpt,
-               kSample = kSample, fuzzyLabelFn = fuzzyLabelFn)
+               kSample = kSample, fuzzyLabelFn = fuzzyLabelFn,
+               refactorInd = refactorInd)
   }
   }
 
@@ -239,6 +243,7 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
 #' @inheritParams PlotVar
 #' @inheritParams OrderByR2
 #' @inheritParams PrepData
+#' @inheritParams PlotDiscreteVar
 #' @return A pdf of plots saved to \code{outFl}
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
@@ -252,14 +257,15 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
 #' @export
 PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
                        dateGpBp, labelFl = NULL, highlightNms = NULL,
-                       skewOpt = NULL, kSample = NULL, fuzzyLabelFn) {
+                       skewOpt = NULL, kSample = NULL, fuzzyLabelFn, 
+                       refactorInd = FALSE) {
   
   plotList <-
     lapply(sortVars, PlotVar,
            dataFl = dataFl, weightNm = weightNm, dateNm = dateNm,
            dateGp = dateGp, dateGpBp = dateGpBp, labelFl = labelFl,
            highlightNms = highlightNms, skewOpt = skewOpt,
-           fuzzyLabelFn = fuzzyLabelFn)
+           fuzzyLabelFn = fuzzyLabelFn, refactorInd = refactorInd)
   
   cairo_pdf(file = outFl,  width = 11, height = 8, pointsize = 12,
             onefile = TRUE)
@@ -300,6 +306,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
 #' performed to find labels (see example below). If NULL, only exact matches 
 #' will be retuned.
 #' @inheritParams OrderByR2
+#' @inheritParams PlotDiscreteVar
 #' @return A grid of ggplots. For discrete variables (including continuous 
 #' variables with no more than 2 unique levels not including NA), 
 #' frequency/rate graphs are used.  For discrete variables with <=9 levels, 
@@ -374,7 +381,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
 #'
 PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                    labelFl = NULL, highlightNms = NULL, skewOpt = NULL,
-                   kSample = NULL, fuzzyLabelFn = NULL) {
+                   kSample = NULL, fuzzyLabelFn = NULL, refactorInd = FALSE) {
   message(paste("plotting ", myVar))
   if (any(is.element(unlist(dataFl[, class(get(myVar))]),
                      c("Date", "IDate")))) {
@@ -391,7 +398,7 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   }
   
   if (inherits(dataFl[[myVar]], "dscrt")) {
-    p <- PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp)
+    p <- PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, refactorInd)
   } else {
     if (inherits(dataFl[[myVar]], "cntns")) {
       p <- PlotContVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt, 
@@ -402,7 +409,7 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   # if no fuzzy matching function provided, provide exact matches on the first
   # column, otherwise use logic defined in fuzzyLabelFn
   if (!is.null(labelFl)) {
-    if (! c("varCol", "labelCol") %in% names(labelFl)){
+    if (!all(c("varCol", "labelCol") %in% names(labelFl))) {
       message("Running PrepLabels on labelFl")
       PrepLabels(labelFl)
     }
@@ -437,9 +444,13 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' Frequency and proportion plots for discrete variables
 #'
 #' @inheritParams PlotVar
-#' @param kCategories Number of categories to plot in over time histograms and 
-#' rate charts for categorical data -- the K most numerous categories in the 
-#' dataset will be plotted. Default is 5.
+#' @param kCategories Number of categories to plot in over time  
+#' rate chart for categorical data -- the K most numerous categories in the 
+#' dataset will be plotted. Default is 3.
+#' @param refactorInd Logical. Indicates whether discrete 
+#' \code{myVar} should be converted to factor as plotting time. Doing so will 
+#' ensure over time histogram plots are in the same order as other discrete 
+#' plots, but will substantially increase processing time for large data sets
 #' @export
 #' @return Histograms and rate charts for categorical data. For factors with <= 
 #' 9 levels both a bar chart and barchart over time are returned. A single 
@@ -464,11 +475,19 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' # Single histogram is plotted for job type since there are 12 categories
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
-#' # Limit to top 9 job categories and plot top 3 over time
+#' # Limit to top 9 job categories and plot over time
 #' topJobs = rev(names(sort(table(bankData[, job]))))[1:9]
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job %in% topJobs], 
+#'                      weightNm = NULL, dateNm = "date", dateGp = "months"))
+#'
+#' # By default only the top 3 categories are plotted in the rate graph, but we
+#' # can have all categegories plotted. 
+#' # By setting refactorInd = TRUE, the histogram is put in order of
+#' # global volume and the colors will match the over time rate plot. However, 
+#' # this option can dramatically increase processing time in a large dataset. 
+#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job %in% topJobs], 
 #'                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-#'                      kCategories = 3))
+#'                      kCategories = 9, refactorInd = TRUE))
 #'
 #' #  binary data only gets two plots
 #' plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 
@@ -476,7 +495,7 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #'
 
 PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
-                            kCategories = 5) {
+                            kCategories = 3, refactorInd = FALSE) {
   if (is.null(weightNm)) {
     glbTotals <- dataFl[, .(count = .N), by = myVar]
   } else {
@@ -502,24 +521,24 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
   if (length(newLevels) <= 9) {
     topLevels <- newLevels[1:min(kCategories, length(newLevels))]
     if (is.null(weightNm)) {
-      rateData <- dataFl[get(myVar) %in% topLevels, .N, by = c(myVar, dateGp)]
-      rate1    <- dataFl[get(myVar) %in% topLevels, .N, by = dateGp]
-      rateData <- merge(rateData, rate1, by = dateGp)
-      rateData[, rate := N.x / N.y]
+      rateData <- dataFl[, .N, by = c(myVar, dateGp)][get(myVar) %in% topLevels]
+      rate1    <- dataFl[, .N, by = dateGp]
     } else {
-      rateData <- dataFl[get(myVar) %in% topLevels, .(N = sum(get(weightNm))),
-                         by = c(myVar, dateGp)]
-      rate1    <- dataFl[get(myVar) %in% topLevels, .(N = sum(get(weightNm))),
-                         by = dateGp]
-      rateData <- merge(rateData, rate1, by = dateGp)
-      rateData[, rate := N.x / N.y]
+      rateData <- dataFl[, .(N = sum(get(weightNm))), by = c(myVar, dateGp)][
+                        get(myVar) %in% topLevels]
+      rate1    <- dataFl[, .(N = sum(get(weightNm))), by = dateGp]
     }
+    
+    rateData <- merge(rateData, rate1, by = dateGp)
+    rateData[, rate := N.x / N.y]
+    rateData[, myVar := factor(get(myVar), levels = topLevels), with = FALSE]
     
     p2 <- ggplot2::ggplot(rateData,
                           ggplot2::aes_string(x = dateGp, y = "rate",
                                               colour = myVar, group = myVar)) +
       ggplot2::geom_line() +
-      ggplot2::ylab(NULL)
+      ggplot2::ylab(NULL) + 
+      ggplot2::scale_fill_manual(scales::hue_pal()(length(newLevels))[length(topLevels)])
     
     binW <- switch(
       dateGp,
@@ -534,13 +553,21 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     # the histogram, but is too resource intensive
     # TODO: Update if ggplot2 allows an alternative way to order plot levels
     
-    p3 <- ggplot2::ggplot(dataFl[get(myVar) %in% topLevels],
-                          ggplot2::aes_string(x = dateNm, weight = weightNm,
-                                              fill = myVar, group  = myVar)) +
+    if (refactorInd){
+      dataFl[, myVar := factor(get(myVar), levels = newLevels), with = FALSE]
+    }
+    
+    p3 <- ggplot2::ggplot(dataFl,
+                   ggplot2::aes_string(x = dateNm, weight = weightNm,
+                   fill = myVar, group  = myVar)) +
       ggplot2::geom_histogram(binwidth = binW, pad = TRUE) +
-      ggplot2::scale_fill_discrete(breaks = newLevels, name = myVar) +
+    
+      #  ggplot2::scale_fill_discrete(breaks = newLevels, name = myVar) + 
+      ggplot2::scale_fill_manual(values = scales::hue_pal()(length(newLevels)), 
+                                 breaks = newLevels) + 
       ggplot2::ylab("") +
       ggplot2::scale_x_date()
+    
     
     p3 <- rbind(ggplot2::ggplotGrob(p3), ggplot2::ggplotGrob(p2), size = "last")
     p  <- gridExtra::arrangeGrob(p, p3, widths = c(1, 2))
