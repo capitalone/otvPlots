@@ -5,7 +5,7 @@
 \title{Create pdf output with plots for each variable arranged on a single page}
 \usage{
 PrintPlots(outFl, dataFl, sortVars, weightNm, dateNm, dateGp, dateGpBp,
-  labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = NULL,
+  labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
   fuzzyLabelFn, refactorInd = FALSE)
 }
 \arguments{

@@ -5,7 +5,8 @@
 \title{Create variable ranking using R2 of simple linear model using date to predict
 variables}
 \usage{
-OrderByR2(dataFl, buildTm = NULL, dateNm, weightNm = NULL, kSample = NULL)
+OrderByR2(dataFl, buildTm = NULL, dateNm, weightNm = NULL,
+  kSample = 50000)
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:

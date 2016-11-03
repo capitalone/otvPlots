@@ -5,7 +5,7 @@
 \title{Boxplots and overtime plots of numeric variables}
 \usage{
 PlotContVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt = NULL,
-  kSample = NULL)
+  kSample = 50000)
 }
 \arguments{
 \item{myVar}{Name of the variable to be plotted}

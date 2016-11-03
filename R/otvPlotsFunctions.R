@@ -100,20 +100,20 @@ NULL
 #' 
 #' # PrepData should only be run once on a dataset, after that PlotWrapper 
 #' # should be run with PrepData = FALSE 
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = NULL)
 #' 
 #' # Different values of kSample can affect the appearance of boxplots (and 
 #' # possibly the order of variable output if sortVars = 'R2' is used), but does 
 #' # not affect the time series plots, which always use all of the data 
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = 500)
 #' 
 #' #  If weights are provided they will be used in all statistical calculations
 #' bankData[, weight := 1]
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
 #' 
@@ -127,7 +127,7 @@ NULL
 #' setDT(bankData)
 #' data(bankLabels) 
 #' setDT(bankLabels)
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 #' 
@@ -135,14 +135,14 @@ NULL
 #' # sortVars, but we must exclude the "date" column from sortVars or the 
 #' # function will stop with a message warning us it cannot plot dates
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
 #'             sortVars = sortVars, refactorInd = TRUE)
 #' 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
-#' PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
 #'             varNms = "age", sortVars = NULL)
@@ -150,11 +150,11 @@ NULL
 #' # See otvPlots::PlotVar for examples in interactive use, 
 #' # including use of the fuzzyLabels parameter
 #' 
-PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
-                        dropCols = NULL, dateNm, dateFt = "%d%h%Y",
+PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
+                        dropCols = NULL, dateFt = "%d%h%Y",
                         dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
                         buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
-                        kSample = NULL, outFl = "otvPlots.pdf", prepData = TRUE,
+                        kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
                         varNms = NULL, fuzzyLabelFn = NULL, 
                         dropConstants = TRUE, sortVars = NULL, 
                         refactorInd = FALSE, ...) {
@@ -167,8 +167,8 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
   
   if (prepData) {
     if (is.character(dataFl)) {
-      dataFl <- PrepData(dataFl = dataFl, selectCols = selectCols, dropCols =
-                           dropCols, dateNm = dateNm, dateFt = dateFt,
+      dataFl <- PrepData(dataFl = dataFl, selectCols = selectCols, 
+                         dropCols = dropCols, dateNm = dateNm, dateFt = dateFt,
                          dateGp = dateGp, dateGpBp = dateGpBp,
                          weightNm = weightNm, varNms = varNms,
                          dropConstants = dropConstants, ...)
@@ -257,7 +257,7 @@ PlotWrapper <- function(dataFl, labelFl = NULL, selectCols = NULL,
 #' @export
 PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
                        dateGpBp, labelFl = NULL, highlightNms = NULL,
-                       skewOpt = NULL, kSample = NULL, fuzzyLabelFn, 
+                       skewOpt = NULL, kSample = 50000, fuzzyLabelFn, 
                        refactorInd = FALSE) {
   
   plotList <-
@@ -381,7 +381,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
 #'
 PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                    labelFl = NULL, highlightNms = NULL, skewOpt = NULL,
-                   kSample = NULL, fuzzyLabelFn = NULL, refactorInd = FALSE) {
+                   kSample = 50000, fuzzyLabelFn = NULL, refactorInd = FALSE) {
   message(paste("plotting ", myVar))
   if (any(is.element(unlist(dataFl[, class(get(myVar))]),
                      c("Date", "IDate")))) {
@@ -606,7 +606,7 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
 #'                  skewOpt = NULL, kSample = NULL))
 #'
 PlotContVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp, 
-                        skewOpt = NULL, kSample = NULL) {
+                        skewOpt = NULL, kSample = 50000) {
 
   if (!is.null(weightNm)) {
     dx <- dataFl[, {
@@ -1242,7 +1242,7 @@ PrepLabels <- function(labelFl, idx = 1:2) {
 #' OrderByR2(bankData, dateNm = "date")
 #'
 OrderByR2 <- function(dataFl, buildTm = NULL, dateNm, weightNm = NULL, 
-                     kSample = NULL) {
+                     kSample = 50000) {
   # Convert buildTm to IDate format
   buildTm <- switch(as.character(length(buildTm)), "2" = as.IDate(buildTm),
     "3" = as.IDate(buildTm[1:2], buildTm[3]), 
@@ -1356,6 +1356,7 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
 #                   TODOS                 #
 ###########################################
 
+### TODO: put parameters without default first in function definition
 ### TODO: allow input datasets to be RDA files
 ### TODO: allow output of computed variable quantiles
 ### TODO: parallelize across columns

@@ -5,7 +5,7 @@
 \title{Interactive creation of overtime variable plots}
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
-  labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = NULL,
+  labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
   fuzzyLabelFn = NULL, refactorInd = FALSE)
 }
 \arguments{

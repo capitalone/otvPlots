@@ -4,10 +4,10 @@
 \alias{PlotWrapper}
 \title{Automated monitoring reports}
 \usage{
-PlotWrapper(dataFl, labelFl = NULL, selectCols = NULL, dropCols = NULL,
-  dateNm, dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL,
+PlotWrapper(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
+  dropCols = NULL, dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL,
   weightNm = NULL, buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
-  kSample = NULL, outFl = "otvPlots.pdf", prepData = TRUE,
+  kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
   varNms = NULL, fuzzyLabelFn = NULL, dropConstants = TRUE,
   sortVars = NULL, refactorInd = FALSE, ...)
 }
@@ -17,6 +17,8 @@ as.data.table (e.g. a ' data frame) or a character string containing the name
 of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
+
+\item{dateNm}{Name of column containing date variable}
 
 \item{labelFl}{Either the name (and possibly path) of a dataset containing
 labels, an R object convertible to data.table (eg data frame) or NULL. If
@@ -35,8 +37,6 @@ to indicate the column names to be plotted.}
 
 \item{dropCols}{Either NULL or a vector of variables not to read into memory.
 This parameter is passed directly to fread (see selectCols)}
-
-\item{dateNm}{Name of column containing date variable}
 
 \item{dateFt}{strptime format of date variable. Default is SAS format. See
 ?strptime}
@@ -155,20 +155,20 @@ PrepLabels(bankLabels)
 
 # PrepData should only be run once on a dataset, after that PlotWrapper 
 # should be run with PrepData = FALSE 
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = FALSE, kSample = NULL)
 
 # Different values of kSample can affect the appearance of boxplots (and 
 # possibly the order of variable output if sortVars = 'R2' is used), but does 
 # not affect the time series plots, which always use all of the data 
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = FALSE, kSample = 500)
 
 #  If weights are provided they will be used in all statistical calculations
 bankData[, weight := 1]
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
 
@@ -182,7 +182,7 @@ data(bankData)
 setDT(bankData)
 data(bankLabels) 
 setDT(bankLabels)
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 
@@ -190,14 +190,14 @@ PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date",
 # sortVars, but we must exclude the "date" column from sortVars or the 
 # function will stop with a message warning us it cannot plot dates
 sortVars = sort(bankLabels[varCol!="date", varCol])
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
             sortVars = sortVars, refactorInd = TRUE)
 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter
-PlotWrapper(dataFl = bankData, labelFl = bankLabels, dateNm = "date", 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
             varNms = "age", sortVars = NULL)
