@@ -97,10 +97,10 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters",
 
 # PlotVar will treat numeric and categorical data differently automatically. 
 # Binary data is always treated as nominal.
-plot(PlotVar(bankData, "duration", NULL, "date", "months", "quarters"))
-plot(PlotVar(bankData, "job", NULL, "date", "months", "quarters"))
-plot(PlotVar(bankData, "loan", NULL, "date", "months", "quarters"))
-plot(PlotVar(bankData, "y", NULL, "date", "months", "quarters"))
+plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, "date", dateNm = "months", dateGp =  "quarters"))
+plot(PlotVar(bankData, myVar = "job", weightNm = NULL, "date", dateNm = "months", dateGp = "quarters"))
+plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, "date", dateNm = "months", dateGp = "quarters"))
+plot(PlotVar(bankData, myVar = "y", weightNm = NULL, "date", dateNm = "months", dateGp = "quarters"))
 
 # It's possible to plot using dateNm as the grouping variable,
 # but it might not be very pretty

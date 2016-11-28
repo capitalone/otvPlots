@@ -345,14 +345,19 @@ PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
 #'
 #' # PlotVar will treat numeric and categorical data differently automatically. 
 #' # Binary data is always treated as nominal.
-#' plot(PlotVar(bankData, "duration", NULL, "date", "months", "quarters"))
-#' plot(PlotVar(bankData, "job", NULL, "date", "months", "quarters"))
-#' plot(PlotVar(bankData, "loan", NULL, "date", "months", "quarters"))
-#' plot(PlotVar(bankData, "y", NULL, "date", "months", "quarters"))
+#' plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, "date", 
+#'      dateNm = "months", dateGp =  "quarters"))
+#' plot(PlotVar(bankData, myVar = "job", weightNm = NULL, "date", 
+#'      dateNm = "months", dateGp = "quarters"))
+#' plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, "date", 
+#'      dateNm = "months", dateGp = "quarters"))
+#' plot(PlotVar(bankData, myVar = "y", weightNm = NULL, "date", 
+#'      dateNm = "months", dateGp = "quarters"))
 #'
-#' # It's possible to plot using dateNm as the grouping variable,
-#' # but it might not be very pretty
-#' plot(PlotVar(bankData, "y", NULL, "date", "date", "date"))
+#' # It's possible to plot using dateNm as the grouping variable, or another
+#' # custom grouping variable
+#' plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
+#'      dateGp = "date", dateGpBp = "date"))
 #'
 #' # If labels are provided, they will be added. If the variable being plotted 
 #' # is in the "highlightNms", its label will be red.
@@ -487,12 +492,11 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' # this option can dramatically increase processing time in a large dataset. 
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job %in% topJobs], 
 #'                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-#'                      kCategories = 9, refactorInd = TRUE))
+#'                      kCategories = 9, refactorInd = TRUE)) 
 #'
 #' #  binary data only gets two plots
 #' plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
-#'
 
 PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
                             kCategories = 3, refactorInd = FALSE) {
@@ -1102,6 +1106,11 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
   }
   
   if (length(discreteVars) > 0) {
+    for(z in vars[bin_ind])
+      if (is.integer(dataFl[[z]])) {
+        dataFl[, z := as.character(get(z)), with=FALSE]
+      }
+    
     invisible(lapply(1:length(discreteVars), function(z) 
       setattr(dataFl[[discreteVars[z]]], "class", 
               unique(c(class(dataFl[[discreteVars[z]]]), "dscrt")))))
@@ -1360,3 +1369,5 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
 ### TODO: allow input datasets to be RDA files
 ### TODO: allow output of computed variable quantiles
 ### TODO: parallelize across columns
+### TODO: allow for custom sorting *function* and instead of R2 make it the name
+#         of the sorting function to be used
