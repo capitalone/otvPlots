@@ -1106,9 +1106,8 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
   }
   
   if (length(discreteVars) > 0) {
-    for(z in vars[bin_ind])
-      if (is.integer(dataFl[[z]])) {
-        dataFl[, z := as.character(get(z)), with=FALSE]
+    for (z in vars[bin_ind]) {
+        dataFl[, z := as.character(get(z)), with = FALSE]
       }
     
     invisible(lapply(1:length(discreteVars), function(z) 
@@ -1371,3 +1370,4 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
 ### TODO: parallelize across columns
 ### TODO: allow for custom sorting *function* and instead of R2 make it the name
 #         of the sorting function to be used
+### TODO: remove reliance on case insensitivity (and add warnings about it now) 

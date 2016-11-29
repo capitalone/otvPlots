@@ -74,11 +74,10 @@ plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs],
 # this option can dramatically increase processing time in a large dataset. 
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-                     kCategories = 9, refactorInd = TRUE))
+                     kCategories = 9, refactorInd = TRUE)) 
 
 #  binary data only gets two plots
 plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
-
 }
 
