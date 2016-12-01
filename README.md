@@ -51,7 +51,7 @@ library(otvPlots)
 
 ## Test it's working
 ```
-example(PlotVlm)
+example(PlotVar)
 ```
 
 ## Simple usage example
@@ -61,7 +61,7 @@ example(PlotVlm)
  data(bankLabels);  setDT(bankLabels)
  
  PrepLabels(bankLabels)
- RunVlm(
+ PlotWrapper(
    dataFl   = bankData, 
    labelFl  = bankLabels, 
    dateNm   = "date", 
