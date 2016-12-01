@@ -6,7 +6,7 @@
 \usage{
 PrintPlots(outFl, dataFl, sortVars, weightNm, dateNm, dateGp, dateGpBp,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  fuzzyLabelFn, refactorInd = FALSE)
+  fuzzyLabelFn, kCategories = 3, refactorInd = FALSE)
 }
 \arguments{
 \item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be
@@ -59,6 +59,10 @@ function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
 will be retuned.}
+
+\item{kCategories}{Number of categories to plot in over time
+rate chart for categorical data -- the K most numerous categories in the 
+dataset will be plotted. Default is 3.}
 
 \item{refactorInd}{Logical. Indicates whether discrete 
 \code{myVar} should be converted to factor as plotting time. Doing so will 

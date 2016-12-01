@@ -9,7 +9,7 @@ PlotWrapper(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   weightNm = NULL, buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
   kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
   varNms = NULL, fuzzyLabelFn = NULL, dropConstants = TRUE,
-  sortVars = NULL, refactorInd = FALSE, ...)
+  sortVars = NULL, kCategories = 3, refactorInd = FALSE, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -121,6 +121,10 @@ variables should be plotted, "R2" in order to sort plots by strength of
 associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
 original ordering, with numeric variables ahead of categorical}
 
+\item{kCategories}{Number of categories to plot in over time
+rate chart for categorical data -- the K most numerous categories in the 
+dataset will be plotted. Default is 3.}
+
 \item{refactorInd}{Logical. Indicates whether discrete 
 \code{myVar} should be converted to factor as plotting time. Doing so will 
 ensure over time histogram plots are in the same order as other discrete 
@@ -157,7 +161,8 @@ PrepLabels(bankLabels)
 # should be run with PrepData = FALSE 
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-            prepData = FALSE, kSample = NULL)
+            prepData = FALSE, kSample = NULL, kCategories = 3, 
+            varNm = "marital")
 
 # Different values of kSample can affect the appearance of boxplots (and 
 # possibly the order of variable output if sortVars = 'R2' is used), but does 
@@ -167,7 +172,7 @@ PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             prepData = FALSE, kSample = 500)
 
 #  If weights are provided they will be used in all statistical calculations
-bankData[, weight := 1]
+bankData[, weight := rnorm(.N, 1, .1)]
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
@@ -193,7 +198,7 @@ sortVars = sort(bankLabels[varCol!="date", varCol])
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-            sortVars = sortVars, refactorInd = TRUE)
+            sortVars = sortVars, kCategories = 3, refactorInd = TRUE)
 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter

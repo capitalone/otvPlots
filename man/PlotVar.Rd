@@ -6,7 +6,7 @@
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  fuzzyLabelFn = NULL, refactorInd = FALSE)
+  fuzzyLabelFn = NULL, kCategories = 3, refactorInd = FALSE)
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
@@ -53,6 +53,10 @@ function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
 will be retuned.}
+
+\item{kCategories}{Number of categories to plot in over time
+rate chart for categorical data -- the K most numerous categories in the 
+dataset will be plotted. Default is 3.}
 
 \item{refactorInd}{Logical. Indicates whether discrete 
 \code{myVar} should be converted to factor as plotting time. Doing so will 

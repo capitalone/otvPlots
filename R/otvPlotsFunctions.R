@@ -102,7 +102,8 @@ NULL
 #' # should be run with PrepData = FALSE 
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             prepData = FALSE, kSample = NULL)
+#'             prepData = FALSE, kSample = NULL, kCategories = 3, 
+#'             varNm = "marital")
 #' 
 #' # Different values of kSample can affect the appearance of boxplots (and 
 #' # possibly the order of variable output if sortVars = 'R2' is used), but does 
@@ -112,7 +113,7 @@ NULL
 #'             prepData = FALSE, kSample = 500)
 #' 
 #' #  If weights are provided they will be used in all statistical calculations
-#' bankData[, weight := 1]
+#' bankData[, weight := rnorm(.N, 1, .1)]
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
@@ -138,7 +139,7 @@ NULL
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-#'             sortVars = sortVars, refactorInd = TRUE)
+#'             sortVars = sortVars, kCategories = 3, refactorInd = TRUE)
 #' 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
@@ -156,7 +157,7 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                         buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
                         kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
                         varNms = NULL, fuzzyLabelFn = NULL, 
-                        dropConstants = TRUE, sortVars = NULL, 
+                        dropConstants = TRUE, sortVars = NULL, kCategories = 3,
                         refactorInd = FALSE, ...) {
 
   if (!is.null(sortVars) && sortVars != "R2" & !is.null(varNms) &
@@ -213,14 +214,15 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp,
                labelFl = labelFl, highlightNms = highlightNms,
                skewOpt = skewOpt, kSample = kSample,
-               fuzzyLabelFn = fuzzyLabelFn, refactorInd = refactorInd)
+               fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories, 
+               refactorInd = refactorInd)
   } else {
     PrintPlots(outFl = outFl, dataFl = dataFl, sortVars = sortVars,
                weightNm = weightNm, dateNm = dateNm, dateGp = dateGp,
                dateGpBp = dateGpBp, labelFl = labelFl,
                highlightNms = highlightNms, skewOpt = skewOpt,
-               kSample = kSample, fuzzyLabelFn = fuzzyLabelFn,
-               refactorInd = refactorInd)
+               kSample = kSample, fuzzyLabelFn = fuzzyLabelFn, 
+               kCategories = kCategories,  refactorInd = refactorInd)
   }
   }
 
@@ -258,14 +260,15 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
 PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
                        dateGpBp, labelFl = NULL, highlightNms = NULL,
                        skewOpt = NULL, kSample = 50000, fuzzyLabelFn, 
-                       refactorInd = FALSE) {
+                       kCategories = 3, refactorInd = FALSE) {
   
   plotList <-
     lapply(sortVars, PlotVar,
            dataFl = dataFl, weightNm = weightNm, dateNm = dateNm,
            dateGp = dateGp, dateGpBp = dateGpBp, labelFl = labelFl,
            highlightNms = highlightNms, skewOpt = skewOpt,
-           fuzzyLabelFn = fuzzyLabelFn, refactorInd = refactorInd)
+           fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories, 
+           refactorInd = refactorInd)
   
   cairo_pdf(file = outFl,  width = 11, height = 8, pointsize = 12,
             onefile = TRUE)
@@ -386,7 +389,8 @@ PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
 #'
 PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                    labelFl = NULL, highlightNms = NULL, skewOpt = NULL,
-                   kSample = 50000, fuzzyLabelFn = NULL, refactorInd = FALSE) {
+                   kSample = 50000, fuzzyLabelFn = NULL, kCategories = 3,
+                   refactorInd = FALSE) {
   message(paste("plotting ", myVar))
   if (any(is.element(unlist(dataFl[, class(get(myVar))]),
                      c("Date", "IDate")))) {
@@ -403,7 +407,8 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   }
   
   if (inherits(dataFl[[myVar]], "dscrt")) {
-    p <- PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, refactorInd)
+    p <- PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories, 
+                         refactorInd)
   } else {
     if (inherits(dataFl[[myVar]], "cntns")) {
       p <- PlotContVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt, 
@@ -508,7 +513,7 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
   
   newLevels <- glbTotals[, myVar, with = FALSE][order(glbTotals[, count])]
   newLevels <- rev(unlist(newLevels))
-  glbTotals[, myVar := factor(get(myVar), levels = newLevels), with = FALSE]
+  glbTotals[, (myVar) := factor(get(myVar), levels = newLevels)]
   
   p <- ggplot2::ggplot(glbTotals, ggplot2::aes_string(x = myVar, y = "count",
                                                       group = myVar)) +
@@ -535,7 +540,7 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     
     rateData <- merge(rateData, rate1, by = dateGp)
     rateData[, rate := N.x / N.y]
-    rateData[, myVar := factor(get(myVar), levels = topLevels), with = FALSE]
+    rateData[, (myVar) := factor(get(myVar), levels = topLevels)]
     
     p2 <- ggplot2::ggplot(rateData,
                           ggplot2::aes_string(x = dateGp, y = "rate",
@@ -558,13 +563,13 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     # TODO: Update if ggplot2 allows an alternative way to order plot levels
     
     if (refactorInd){
-      dataFl[, myVar := factor(get(myVar), levels = newLevels), with = FALSE]
+      dataFl[, (myVar) := factor(get(myVar), levels = newLevels)]
     }
     
     p3 <- ggplot2::ggplot(dataFl,
                    ggplot2::aes_string(x = dateNm, weight = weightNm,
                    fill = myVar, group  = myVar)) +
-      ggplot2::geom_histogram(binwidth = binW, pad = TRUE) +
+      ggplot2::geom_histogram(binwidth = binW) +
     
       #  ggplot2::scale_fill_discrete(breaks = newLevels, name = myVar) + 
       ggplot2::scale_fill_manual(values = scales::hue_pal()(length(newLevels)), 
@@ -978,7 +983,18 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,  
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...) {
   if (is.character(dataFl)) {
-    dataFl <- fread(dataFl, select = selectCols, drop = dropCols, 
+    
+    if (!is.null(selectCols) | !is.null(dropCols)) {
+      origHeader = names(fread(dataFl, nrows = 0))
+      if (!is.null(selectCols)){
+        select = origHeader[match(tolower(selectCols), tolower(origHeader))]  
+      }
+      if (!is.null(dropCols)){
+       drop =  origHeader[-match(tolower(dropCols), tolower(origHeader))]  
+      }
+    }
+    
+    dataFl <- fread(dataFl, select = select, drop = drop, 
                    stringsAsFactors = FALSE, ...)
   } else {
     if (!is.data.table(dataFl)) {
@@ -987,10 +1003,18 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
   }
   
   stopifnot(tolower(c(dateNm, weightNm)) %in% tolower(names(dataFl)))
+  
   if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
-    stop ("PrepData has already been run on this data set. 
-          Rerun with PrepData = FALSE")
+    warning ("PrepData has already been run on this data set. Rerunning with 
+             PrepData = FALSE will be faster")
+  }
+  
+  if (!is.null(weightNm) ){
+    if( any(is.na(dataFl[[weightNm]])) ){
+      warning("Missings in weight column. Imputing to zero.")
+      dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
+  }
   
   # strip all special characters from column names (ggplot really dislikes them)
   setnames(dataFl, tolower(gsub("\\.|/|\\-|\"|\\s", "", names(dataFl))))
@@ -1091,7 +1115,7 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
   num_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z) is.numeric(z))
   # categorical variables
   nom_ind  <- vapply(dataFl[, c(vars), with = FALSE], function(z)
-    class(z) %in% c("character", "factor"), logical(1) )
+    class(z)[1] %in% c("character", "factor"), logical(1) )
   # binary variables (nominal or numeric)
   bin_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z)
     uniqueN(na.omit(z)) == 2)
@@ -1107,7 +1131,7 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
   
   if (length(discreteVars) > 0) {
     for (z in vars[bin_ind]) {
-        dataFl[, z := as.character(get(z)), with = FALSE]
+        dataFl[, (z) := as.character(get(z))]
       }
     
     invisible(lapply(1:length(discreteVars), function(z) 
@@ -1370,4 +1394,4 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
 ### TODO: parallelize across columns
 ### TODO: allow for custom sorting *function* and instead of R2 make it the name
 #         of the sorting function to be used
-### TODO: remove reliance on case insensitivity (and add warnings about it now) 
+### TODO: add warnings about case insensitivity 
