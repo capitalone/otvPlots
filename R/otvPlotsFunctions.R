@@ -98,8 +98,8 @@ NULL
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 #' PrepLabels(bankLabels)
 #' 
-#' # PrepData should only be run once on a dataset, after that PlotWrapper 
-#' # should be run with PrepData = FALSE 
+#' # PrepData should only need to be run once on a dataset, after that PlotWrapper 
+#' # can be run with PrepData = FALSE 
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = NULL, kCategories = 3)
@@ -167,14 +167,14 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   
   if (prepData) {
     if (is.character(dataFl)) {
-      dataFl <- PrepData(dataFl = dataFl, selectCols = selectCols, 
-                         dropCols = dropCols, dateNm = dateNm, dateFt = dateFt,
-                         dateGp = dateGp, dateGpBp = dateGpBp,
+      dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm, 
+                         selectCols = selectCols, dropCols = dropCols, 
+                         dateFt = dateFt, dateGp = dateGp, dateGpBp = dateGpBp,
                          weightNm = weightNm, varNms = varNms,
                          dropConstants = dropConstants, ...)
     } else {
-      PrepData(dataFl = dataFl, selectCols = selectCols, dropCols = dropCols,
-               dateNm = dateNm, dateFt = dateFt, dateGp = dateGp,
+      PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols, 
+               dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
                dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
                dropConstants = dropConstants,  ...)
     }
@@ -195,7 +195,7 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   
   
   if (!is.null(sortVars) && sortVars == "R2") {
-    sortVars <- OrderByR2(dataFl = dataFl, buildTm = buildTm, dateNm = dateNm,
+    sortVars <- OrderByR2(dataFl = dataFl, dateNm = dateNm, buildTm = buildTm, 
                           weightNm = weightNm, kSample = kSample)
   } else {
     if (is.null(sortVars)) {
@@ -209,22 +209,22 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
     PrintPlots(outFl = outFl,
                dataFl = dataFl[, c(varNms, dateNm,
                                     dateGp, dateGpBp, weightNm), with = FALSE],
-               sortVars = sortVars[sortVars %in% varNms], weightNm = weightNm,
-               dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp,
+               sortVars = sortVars[sortVars %in% varNms], dateNm = dateNm, 
+               dateGp = dateGp, dateGpBp = dateGpBp, weightNm = weightNm,
                labelFl = labelFl, highlightNms = highlightNms,
                skewOpt = skewOpt, kSample = kSample,
                fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories, 
                refactorInd = refactorInd)
   } else {
     PrintPlots(outFl = outFl, dataFl = dataFl, sortVars = sortVars,
-               weightNm = weightNm, dateNm = dateNm, dateGp = dateGp,
-               dateGpBp = dateGpBp, labelFl = labelFl,
+               dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp, 
+               weightNm = weightNm, labelFl = labelFl,
                highlightNms = highlightNms, skewOpt = skewOpt,
                kSample = kSample, fuzzyLabelFn = fuzzyLabelFn, 
                kCategories = kCategories,  refactorInd = refactorInd)
   }
   }
-
+  
 
 ###########################################
 #           Create Output                 #
@@ -256,8 +256,9 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
 #' @export
-PrintPlots <- function(outFl, dataFl, sortVars, weightNm, dateNm, dateGp,
-                       dateGpBp, labelFl = NULL, highlightNms = NULL,
+PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
+                       dateGpBp, weightNm = NULL, 
+                       labelFl = NULL, highlightNms = NULL,
                        skewOpt = NULL, kSample = 50000, fuzzyLabelFn, 
                        kCategories = 3, refactorInd = FALSE) {
   
@@ -559,7 +560,6 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     
     # setting dataFl[[myVar]] to factor would allow the levels to be ordered in 
     # the histogram, but is too resource intensive
-    # TODO: Update if ggplot2 allows an alternative way to order plot levels
     
     if (refactorInd){
       dataFl[, (myVar) := factor(get(myVar), levels = newLevels)]
@@ -886,7 +886,7 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
     ggplot2::scale_y_continuous() + 
     ggplot2::geom_rug(data = dataFl, 
                       mapping = ggplot2::aes_string(x = dateGpBp, 
-                                                    y = as.numeric(myVar)), 
+                                                    y = myVar), 
                       sides = "l", position = "jitter", inherit.aes = FALSE, 
                       colour = "#F8766D", alpha = .4)
   
@@ -980,7 +980,7 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
 #' # columns have been assigned a plotting class (cntns/dscrt)
 #' str(bankData) 
 #' 
-PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm, 
+PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,  
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   if (is.character(dataFl)) {
@@ -1282,7 +1282,7 @@ PrepLabels <- function(labelFl, idx = 1:2) {
 #' setDT(bankData)
 #' # Nothing will be returned because the variables are uncategorized. Run
 #' # PrepData first to get appropriate classes added to the columns.
-#' \dontrun{OrderByR2(bankData, buildTm = NULL, dateNm = "date")}
+#' \dontrun{OrderByR2(bankData, dateNm = "date", buildTm = NULL)}
 #' # The returned vector will have the numeric columns first, sorted (pdays,
 #' # previous, campaign, balance, duration, age) followed by the categorical
 #' # variables in the same order they appear in bankData (job, marital,
@@ -1290,7 +1290,7 @@ PrepLabels <- function(labelFl, idx = 1:2) {
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 #' OrderByR2(bankData, dateNm = "date")
 #'
-OrderByR2 <- function(dataFl, buildTm = NULL, dateNm, weightNm = NULL, 
+OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL, 
                      kSample = 50000) {
   # Convert buildTm to IDate format
   buildTm <- switch(as.character(length(buildTm)), "2" = as.IDate(buildTm),
@@ -1400,20 +1400,3 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
   tryCatch(as.double(Hmisc::wtd.quantile(x, weights, probs, ...)),
     error = function(e) rep(NA_real_, length(probs)))
 }
-
-###########################################
-#                   TODOS                 #
-###########################################
-
-### TODO: put parameters without default first in function definition
-### TODO: allow input datasets to be RDA files
-### TODO: allow output of computed variable quantiles
-### TODO: parallelize across columns
-### TODO: allow for custom sorting function and replace R2 option in sortVars
-#         with name of function to be used for sorting 
-### TODO: add warnings about case insensitivity 
-### TODO: unit tests
-### TODO: replace refactorInd with something that works, may depend on ggplot2
-### TODO: turn todos into github issues
-### TODO: remove reliance on Hmisc and moments package
-### TODO: return plotlist on failure 

@@ -4,7 +4,7 @@
 \alias{PrepData}
 \title{Clean an input dataset for plotting}
 \usage{
-PrepData(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
+PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
   varNms = NULL, dropConstants = TRUE, ...)
 }
@@ -14,6 +14,8 @@ as.data.table (e.g. a ' data frame) or a character string containing the name
 of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
+
+\item{dateNm}{Name of column containing date variable}
 
 \item{selectCols}{Either NULL, or a vector contaning names or indices of
 variables to read into memory -- must include \code{dateNm},
@@ -25,8 +27,6 @@ to indicate the column names to be plotted.}
 
 \item{dropCols}{Either NULL or a vector of variables not to read into memory.
 This parameter is passed directly to fread (see selectCols)}
-
-\item{dateNm}{Name of column containing date variable}
 
 \item{dateFt}{strptime format of date variable. Default is SAS format. See
 ?strptime}

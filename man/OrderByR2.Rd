@@ -5,13 +5,15 @@
 \title{Create variable ranking using R2 of simple linear model using date to predict
 variables}
 \usage{
-OrderByR2(dataFl, buildTm = NULL, dateNm, weightNm = NULL,
+OrderByR2(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
   kSample = 50000)
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
 \code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
+
+\item{dateNm}{Name of column containing date variable}
 
 \item{buildTm}{Vector identify time period for ranking/anomaly detection
 (most likely model build period). Allows for a subset of plotting time
@@ -35,8 +37,6 @@ period to be used for anomaly detection.
          \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
         }
 }}
-
-\item{dateNm}{Name of column containing date variable}
 
 \item{weightNm}{Name of variable containing row weights or NULL for no
 weights (all rows recieve weight 1)}
@@ -77,7 +77,7 @@ data(bankData)
 setDT(bankData)
 # Nothing will be returned because the variables are uncategorized. Run
 # PrepData first to get appropriate classes added to the columns.
-\dontrun{OrderByR2(bankData, buildTm = NULL, dateNm = "date")}
+\dontrun{OrderByR2(bankData, dateNm = "date", buildTm = NULL)}
 # The returned vector will have the numeric columns first, sorted (pdays,
 # previous, campaign, balance, duration, age) followed by the categorical
 # variables in the same order they appear in bankData (job, marital,

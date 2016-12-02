@@ -4,7 +4,7 @@
 \alias{PrintPlots}
 \title{Create pdf output with plots for each variable arranged on a single page}
 \usage{
-PrintPlots(outFl, dataFl, sortVars, weightNm, dateNm, dateGp, dateGpBp,
+PrintPlots(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, weightNm = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
   fuzzyLabelFn, kCategories = 3, refactorInd = FALSE)
 }
@@ -21,9 +21,6 @@ PrepData}
 be plotted. Can be custom or if set to "R2", the output of
 otvPlots::OrderByR2.}
 
-\item{weightNm}{Name of variable containing row weights or NULL for no
-weights (all rows recieve weight 1)}
-
 \item{dateNm}{Name of column containing date variable}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
@@ -32,6 +29,9 @@ data.table::IDate. If NULL \code{dateNm} will be used.}
 
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If NULL \code{dateGp} will be used.}
+
+\item{weightNm}{Name of variable containing row weights or NULL for no
+weights (all rows recieve weight 1)}
 
 \item{labelFl}{A data.table containing variable labels, or NULL for no 
 labels. Output of PrepLabels}

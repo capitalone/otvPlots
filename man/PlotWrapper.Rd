@@ -157,8 +157,8 @@ setDT(bankLabels)
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 PrepLabels(bankLabels)
 
-# PrepData should only be run once on a dataset, after that PlotWrapper 
-# should be run with PrepData = FALSE 
+# PrepData should only need to be run once on a dataset, after that PlotWrapper 
+# can be run with PrepData = FALSE 
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = FALSE, kSample = NULL, kCategories = 3)
