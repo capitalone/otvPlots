@@ -102,8 +102,7 @@ NULL
 #' # should be run with PrepData = FALSE 
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             prepData = FALSE, kSample = NULL, kCategories = 3, 
-#'             varNm = "marital")
+#'             prepData = FALSE, kSample = NULL, kCategories = 3)
 #' 
 #' # Different values of kSample can affect the appearance of boxplots (and 
 #' # possibly the order of variable output if sortVars = 'R2' is used), but does 
@@ -876,7 +875,8 @@ PlotRates <- function(meltdx, myVar, dateGp) {
 PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
   setkeyv(dataFl, dateGpBp)
   if (is.null(weightNm)) {
-    p <- ggplot2::ggplot(dataFl, ggplot2::aes_string(x = dateGpBp, y = myVar, 
+    p <- ggplot2::ggplot(dataFl, ggplot2::aes_string(x = dateGpBp, 
+                                                     y = myVar, 
                                                      group = dateGpBp))
   } else {
     p <- ggplot2::ggplot(dataFl, ggplot2::aes_string(
@@ -885,7 +885,8 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
   p <- p + ggplot2::geom_boxplot() + ggplot2::ylab(myVar) + 
     ggplot2::scale_y_continuous() + 
     ggplot2::geom_rug(data = dataFl, 
-                      mapping = ggplot2::aes_string(x = dateGpBp, y = myVar), 
+                      mapping = ggplot2::aes_string(x = dateGpBp, 
+                                                    y = as.numeric(myVar)), 
                       sides = "l", position = "jitter", inherit.aes = FALSE, 
                       colour = "#F8766D", alpha = .4)
   
@@ -981,21 +982,35 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
 #' 
 PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm, 
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,  
-                    weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...) {
+                    weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   if (is.character(dataFl)) {
-    
+    stopifnot(!(!is.null(selectCols) & !is.null(dropCols)))
     if (!is.null(selectCols) | !is.null(dropCols)) {
       origHeader = names(fread(dataFl, nrows = 0))
-      if (!is.null(selectCols)){
+        if (!is.null(selectCols)){
         select = origHeader[match(tolower(selectCols), tolower(origHeader))]  
+        drop = NULL
       }
       if (!is.null(dropCols)){
-       drop =  origHeader[-match(tolower(dropCols), tolower(origHeader))]  
+       drop = origHeader[-match(tolower(dropCols), tolower(origHeader))]  
+       select = NULL
       }
     }
     
+    # Global parameter change is currently necessary due to:
+    # 1. ggplot2 v2.2.0 cannot handle integer64 in box plots nor convert to 
+    #    numeric on the fly
+    # 2. data.table v1.9.8 integer64 parameter is seemingly not implemented 
+    # 3. data.table v1.9.8 fread(nrows = 0) seemingly not reading classes 
+    #    correctly, so colclasses cannot be used to allow more flexible handling
+    
+    warning("Temporarily changing global option datatable.integer64")
+    old.o <- options("datatable.integer64")
+    options(datatable.integer64 = "numeric")
     dataFl <- fread(dataFl, select = select, drop = drop, 
                    stringsAsFactors = FALSE, ...)
+    options(old.o)
+    
   } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
@@ -1009,9 +1024,9 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
              PrepData = FALSE will be faster")
   }
   
-  if (!is.null(weightNm) ){
-    if( any(is.na(dataFl[[weightNm]])) ){
-      warning("Missings in weight column. Imputing to zero.")
+  if (!is.null(weightNm)) {
+    if (dataFl[is.na(weightNm), .N ] > 0 ) {
+      warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
   }
@@ -1036,7 +1051,9 @@ PrepData <- function(dataFl, selectCols = NULL, dropCols = NULL, dateNm,
     selectCols <- tolower(gsub("\\.|/|\\-|\"|\\s", "", selectCols)) 
     selectCols <- unique(c(selectCols, dateNm, weightNm))
     stopifnot(c(dateNm, weightNm) %in% selectCols)
-    dataFl[, c(names(dataFl)[!names(dataFl) %in% selectCols]) := NULL]
+    if (length(setdiff(names(dataFl), selectCols)) > 0) {
+      dataFl[, c(names(dataFl)[!names(dataFl) %in% selectCols]) := NULL]
+    }
   }
   
   dateNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dateNm))
@@ -1392,6 +1409,11 @@ wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
 ### TODO: allow input datasets to be RDA files
 ### TODO: allow output of computed variable quantiles
 ### TODO: parallelize across columns
-### TODO: allow for custom sorting *function* and instead of R2 make it the name
-#         of the sorting function to be used
+### TODO: allow for custom sorting function and replace R2 option in sortVars
+#         with name of function to be used for sorting 
 ### TODO: add warnings about case insensitivity 
+### TODO: unit tests
+### TODO: replace refactorInd with something that works, may depend on ggplot2
+### TODO: turn todos into github issues
+### TODO: remove reliance on Hmisc and moments package
+### TODO: return plotlist on failure 

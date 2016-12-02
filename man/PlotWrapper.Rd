@@ -161,8 +161,7 @@ PrepLabels(bankLabels)
 # should be run with PrepData = FALSE 
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-            prepData = FALSE, kSample = NULL, kCategories = 3, 
-            varNm = "marital")
+            prepData = FALSE, kSample = NULL, kCategories = 3)
 
 # Different values of kSample can affect the appearance of boxplots (and 
 # possibly the order of variable output if sortVars = 'R2' is used), but does 

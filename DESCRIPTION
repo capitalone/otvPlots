@@ -11,6 +11,6 @@ Imports: moments, ggplot2 (>= 2.1.0), Hmisc (>= 3.17-4), grid (>= 3.2.0), gridEx
 License: file LICENSE
 LazyData: true
 Suggests:
-    knitr
+    knitr, bit64
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
