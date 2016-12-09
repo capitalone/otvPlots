@@ -989,12 +989,15 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       origHeader = names(fread(dataFl, nrows = 0))
         if (!is.null(selectCols)){
         select = origHeader[match(tolower(selectCols), tolower(origHeader))]  
-        drop = NULL
+        drop <- NULL
       }
       if (!is.null(dropCols)){
        drop = origHeader[-match(tolower(dropCols), tolower(origHeader))]  
-       select = NULL
+       select <- NULL
       }
+    } else {
+      select <- NULL
+      drop   <- NULL
     }
     
     # Global parameter change is currently necessary due to:
