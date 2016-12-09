@@ -29,7 +29,7 @@
 #' @seealso \code{\link{PlotDist}}
 #' @seealso \code{\link{PrepData}}
 #' @seealso \code{\link{PrepLabels}}
-#' @seealso \code{\link{OrderByR2Fn}}
+#' @seealso \code{\link{OrderByR2}}
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -62,15 +62,14 @@ NULL
 #' 
 #' @inheritParams PrepData
 #' @inheritParams PrepLabels
-#' @inheritParams OrderByR2Fn
+#' @inheritParams OrderByR2
 #' @inheritParams PlotVar
 #' @inheritParams PrintPlots
 #' @inheritParams PlotDiscreteVar
 #' @param sortVars Either a vector of variable names giving the order in which
-#' variables should be plotted, "OrderByR2Fn" in order to sort plots by strength of
-#' associate with date (see \code{\link[otvPlots]{OrderByR2}}), NULL to keep 
-#' original ordering (with numeric variables moved ahead of categorical/binary),
-#' or the name of a custom sorting function.
+#' variables should be plotted, "R2" in order to sort plots by strength of
+#' associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
+#' original ordering, with numeric variables ahead of categorical
 #' @param prepData logical. Indicates if data should be run through PrepData 
 #' function. If FALSE, dataFl must be a data.table containing variables 
 #' \code{weightNm, dateNm, dateGp} and \code{dateGpBp} (allows the user to use
@@ -79,7 +78,7 @@ NULL
 #' @export
 #' @seealso \code{\link[otvPlots]{PrepData}}
 #' @seealso \code{\link[otvPlots]{PrepLabels}}
-#' @seealso \code{\link[otvPlots]{OrderByR2Fn}}
+#' @seealso \code{\link[otvPlots]{OrderByR2}}
 #' @seealso \code{\link[otvPlots]{PrintPlots}}
 #' @seealso \code{\link[base]{strptime}}
 #' @seealso \code{\link[data.table]{IDate}}
@@ -196,7 +195,7 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   
   
   if (!is.null(sortVars) && sortVars == "R2") {
-    sortVars <- OrderByR2Fn(dataFl = dataFl, dateNm = dateNm, buildTm = buildTm, 
+    sortVars <- OrderByR2(dataFl = dataFl, dateNm = dateNm, buildTm = buildTm, 
                           weightNm = weightNm, kSample = kSample)
   } else {
     if (is.null(sortVars)) {
@@ -241,9 +240,9 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
 #' (e.g. "../plots/otvPlots.pdf")
 #' @param sortVars A character vector of variable names in the order they will
 #' be plotted. Can be custom or if set to "R2", the output of
-#' otvPlots::OrderByR2Fn.
+#' otvPlots::OrderByR2.
 #' @inheritParams PlotVar
-#' @inheritParams OrderByR2Fn
+#' @inheritParams OrderByR2
 #' @inheritParams PrepData
 #' @inheritParams PlotDiscreteVar
 #' @return A pdf of plots saved to \code{outFl}
@@ -309,7 +308,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' second parameter. This function should describe how fuzzy matching should be
 #' performed to find labels (see example below). If NULL, only exact matches 
 #' will be retuned.
-#' @inheritParams OrderByR2Fn
+#' @inheritParams OrderByR2
 #' @inheritParams PlotDiscreteVar
 #' @return A grid of ggplots. For discrete variables (including continuous 
 #' variables with no more than 2 unique levels not including NA), 
@@ -592,7 +591,7 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
 #' Boxplots and overtime plots of numeric variables
 #'
 #' @inheritParams PlotVar
-#' @inheritParams OrderByR2Fn
+#' @inheritParams OrderByR2
 #' @export
 #' @return A grid of ggplot objects including a boxplot grouped by 
 #' \code{dateGpBp}, a time series of  p1, p50 and p99 grouped by \code{dateGp},
@@ -1286,15 +1285,15 @@ PrepLabels <- function(labelFl, idx = 1:2) {
 #' setDT(bankData)
 #' # Nothing will be returned because the variables are uncategorized. Run
 #' # PrepData first to get appropriate classes added to the columns.
-#' \dontrun{OrderByR2Fn(bankData, dateNm = "date", buildTm = NULL)}
+#' \dontrun{OrderByR2(bankData, dateNm = "date", buildTm = NULL)}
 #' # The returned vector will have the numeric columns first, sorted (pdays,
 #' # previous, campaign, balance, duration, age) followed by the categorical
 #' # variables in the same order they appear in bankData (job, marital,
 #' # education, etc). Binary variables are always considered categorical.
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
-#' OrderByR2Fn(bankData, dateNm = "date")
+#' OrderByR2(bankData, dateNm = "date")
 #'
-OrderByR2Fn <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL, 
+OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL, 
                      kSample = 50000) {
   # Convert buildTm to IDate format
   buildTm <- switch(as.character(length(buildTm)), "2" = as.IDate(buildTm),
