@@ -499,8 +499,8 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #'                      weightNm = NULL, dateNm = "date", dateGp = "months", 
 #'                      kCategories = 9, refactorInd = TRUE)) 
 #'
-#' #  binary data only gets two plots
-#' plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 
+#' #  binary data is treated as categorical
+#' plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 
 PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
@@ -511,20 +511,13 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     glbTotals <- dataFl[, .(count = sum(get(weightNm))), by = myVar]
   }
   
-  newLevels <- glbTotals[, myVar, with = FALSE][order(glbTotals[, count])]
-  newLevels <- rev(unlist(newLevels))
+  newLevels <- unlist(glbTotals[, myVar, with = FALSE][order(glbTotals[, -count])])
   glbTotals[, (myVar) := factor(get(myVar), levels = newLevels)]
-  
-  p <- ggplot2::ggplot(glbTotals, ggplot2::aes_string(x = myVar, y = "count",
-                                                      group = myVar)) +
-    ggplot2::geom_bar(stat = "identity") +
-    ggplot2::scale_x_discrete(labels = abbreviate, breaks = newLevels) +
-    ggplot2::theme(text = ggplot2::element_text(size = 10))
-  
-  p <- ggplot2::ggplotGrob(p)
+ 
+  p <- ggplotGrob(PlotHistogram(glbTotals, myVar, newLevels))
   
   # If more than 9 levels only plot a single histogram (p)
-  # Otherwise plot a histogram and a category-rate plot over time (p3)
+  # Otherwise also plot the category rates over time (p3)
   # and a histogram over time (p2)
   
   if (length(newLevels) <= 9) {
@@ -541,44 +534,20 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm, dateNm, dateGp,
     rateData <- merge(rateData, rate1, by = dateGp)
     rateData[, rate := N.x / N.y]
     rateData[, (myVar) := factor(get(myVar), levels = topLevels)]
+	
+	hex = scales::hue_pal()(length(newLevels))[match(topLevels, dataFl[, sort(unique(get(myVar)))])]
     
-    p2 <- ggplot2::ggplot(rateData,
-                          ggplot2::aes_string(x = dateGp, y = "rate",
-                                              colour = myVar, group = myVar)) +
-      ggplot2::geom_line() +
-      ggplot2::ylab(NULL) + 
-      ggplot2::scale_fill_manual(scales::hue_pal()(length(newLevels))[length(topLevels)])
+    p2 = PlotCatRate(rateData, myVar, dateGp, hex = hex) 
+      
+    # setting dataFl[[myVar]] to factor via refactorInd = TRUE
+    # would allow the levels to be ordered in 
+    # the histogram, but is too resource intensive for any large dataset
+        
+    p3 <- PlotHistOverTime(dataFl, dateNm, dateGp, weightNm, myVar, 
+    					   newLevels, refactorInd)    
     
-    binW <- switch(
-      dateGp,
-      "weeks"    = 7,
-      "months"   = 30,
-      "quarters" = 90,
-      "years"    = 365,
-      1
-    )
-    
-    # setting dataFl[[myVar]] to factor would allow the levels to be ordered in 
-    # the histogram, but is too resource intensive
-    
-    if (refactorInd){
-      dataFl[, (myVar) := factor(get(myVar), levels = newLevels)]
-    }
-    
-    p3 <- ggplot2::ggplot(dataFl,
-                   ggplot2::aes_string(x = dateNm, weight = weightNm,
-                   fill = myVar, group  = myVar)) +
-      ggplot2::geom_histogram(binwidth = binW) +
-    
-      #  ggplot2::scale_fill_discrete(breaks = newLevels, name = myVar) + 
-      ggplot2::scale_fill_manual(values = scales::hue_pal()(length(newLevels)), 
-                                 breaks = newLevels) + 
-      ggplot2::ylab("") +
-      ggplot2::scale_x_date()
-    
-    
-    p3 <- rbind(ggplot2::ggplotGrob(p3), ggplot2::ggplotGrob(p2), size = "last")
-    p  <- gridExtra::arrangeGrob(p, p3, widths = c(1, 2))
+    p_r <- rbind(ggplot2::ggplotGrob(p3), ggplot2::ggplotGrob(p2), size = "last")
+    p  <- gridExtra::arrangeGrob(p, p_r, widths = c(1, 2))
   }
   return(p)
 }
@@ -744,7 +713,6 @@ PlotContVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' bankMT = rbindlist(list( bankMT, globalDT))
 #' # bankMT  # See long format used for plotting
 #' PlotQuantiles(bankMT, "balance", "months")
-
 PlotQuantiles <- function(meltdx, myVar, dateGp) {
   meltdx[, "group" := as.factor(ifelse(variable %in% c("p99", "p50", "p1"), 
                                        "by month", "global"))]
@@ -917,6 +885,199 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
 }
 
 
+#' Plot Histogram of Discrete Variable
+#'
+#' @param glbTotals A data.table with global counts of each category of \code{myVar}, 
+#' produced by \code{\link{PlotDiscreteVar}}
+#' @inheritParams PrepData
+#' @inheritParams PlotVar
+#' @param newLevels An optional vector naming the categories of \code{myVar} in 
+#' order of frequency  
+#' @export
+#' @return A ggproto object with a histogram of \code{myVar} ordered by category frequency
+#' @section License:
+#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Version 2.0 (the "License"); you may not use this file except in compliance
+#' with the License. You may obtain a copy of the  License at
+#' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+#' or agreed to in writing, software distributed under the License is 
+#' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+#' KIND, either express or implied. See the License for the specific language 
+#' governing permissions and limitations under the License.
+#' @examples
+#' data(bankData)
+#' setDT(bankData)
+#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
+#'          weightNm = NULL)
+#' glbTotals <- bankData[, .(count = .N), by = "job"]
+#' PlotHistogram(glbTotals, "job")
+#' 
+#' #--- Some work can be pre-computed 
+#' glbTotals <- bankData[, .(count = .N), by = "job"]
+#' newLevels <- glbTotals[, job][order(glbTotals[, count])]
+#' newLevels <- rev(unlist(newLevels))
+#' PlotHistogram(glbTotals, "job", newLevels)
+#' glbTotals[, ("job") := factor(job, levels = newLevels)]
+#' PlotHistogram(glbTotals, "job", newLevels)
+
+PlotHistogram <- function(glbTotals, myVar, newLevels = NULL){
+ 
+	if(is.null(newLevels)){
+		if(is.factor(glbTotals[[myVar]])){
+		  newLevels <- levels(glbTotals[[myVar]])
+		} else {
+		  newLevels <- as.character(glbTotals[[myVar]])[order(glbTotals[, count])]
+  		  newLevels <- rev(unlist(newLevels))
+		}
+	}
+	
+	if (!is.factor(glbTotals[[myVar]]) || (is.factor(glbTotals[[myVar]]) 
+		&& !isTRUE(all.equal(levels(glbTotals[[myVar]]), newLevels, check.names = FALSE)))) {
+		glbTotals[, (myVar) := factor(get(myVar), levels = newLevels)]
+	}
+
+	p <- ggplot2::ggplot(glbTotals, ggplot2::aes_string(x = myVar, 
+														y = "count",
+                                                      	group = myVar)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::scale_x_discrete(labels = abbreviate, breaks = newLevels) +
+    ggplot2::theme(text = ggplot2::element_text(size = 10))
+    return(p)
+}
+
+
+#' Plot Category Frequency Rates Over Time
+#'
+#' @param rateData A data.table with proportion of \code{myVar} following into the most
+#' frequent (globally) kCategories of \code{myVar} per time period (\code{dateGp}), 
+#' produced by \code{\link{PlotDiscreteVar}}, optionally weighted by \code{weightNm}
+#' @inheritParams PrepData
+#' @inheritParams PlotVar
+#' @inheritParams PlotHistogram
+#' @export
+#' @return A ggproto object with plotting the proportion of \code{myVar} per category over time, 
+#' for the most frequent (globally) \code{kCategories} of \code{myVar} 
+#' @section License:
+#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Version 2.0 (the "License"); you may not use this file except in compliance
+#' with the License. You may obtain a copy of the  License at
+#' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+#' or agreed to in writing, software distributed under the License is 
+#' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+#' KIND, either express or implied. See the License for the specific language 
+#' governing permissions and limitations under the License.
+#' @examples
+#' data(bankData)
+#' setDT(bankData)
+#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
+#'          weightNm = NULL)
+#' jobTable = rev(sort(bankData[, table(job)]))
+#' jobTable1 = order(bankData[, table(job)])
+#' nLevels = length(jobTable)
+#' kCategories = 3
+#' topLevels <- names(jobTable)[1:kCategories]
+#' rateData <- bankData[, .N, by = c("job", "months")][job %in% topLevels]
+#' rate1    <- bankData[, .N, by = "months"]
+#' rateData <- merge(rateData, rate1, by = "months")
+#' rateData[, rate := N.x / N.y]
+#' rateData[, ("job") := factor(job, levels = topLevels)]
+#' PlotCatRate(rateData, "job", "months", hex = NULL)
+#' # you can specify the colours of the plot
+#' 
+#' PlotCatRate(rateData, "job", "months", hex = c("#00BA38", "#00BFC4", "#619CFF"))
+PlotCatRate <- function(rateData, myVar, dateGp, hex = NULL){
+
+	if(is.null(hex)){
+		hex = scales::hue_pal()(length(rateData[, table(get(myVar))]))
+	}
+	
+    p <- ggplot2::ggplot(rateData,
+                          ggplot2::aes_string(x = dateGp, y = "rate",
+                                              colour = myVar, group = myVar)) +
+      ggplot2::geom_line() +
+      ggplot2::ylab(NULL) + 
+      ggplot2::scale_fill_manual(values = hex) + 
+      ggplot2::scale_colour_manual(values = hex)
+	return(p)
+}
+
+
+#' Plot Histogram of Discrete Variable Over Time
+#'
+#' @inheritParams PlotHistogram
+#' @inheritParams PrepData
+#' @inheritParams PlotVar
+#' @export
+#' @return A ggproto object with a histogram of \code{myVar} over time
+#' @section License:
+#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Version 2.0 (the "License"); you may not use this file except in compliance
+#' with the License. You may obtain a copy of the  License at
+#' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+#' or agreed to in writing, software distributed under the License is 
+#' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+#' KIND, either express or implied. See the License for the specific language 
+#' governing permissions and limitations under the License.
+#' @examples
+#' data(bankData)
+#' setDT(bankData)
+#' bankData[, weight := rpois(.N, 5)]
+#' bankData[, weight := weight/sum(weight)]
+#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
+#'          weightNm = "weight")
+#' PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = "weight", 
+#' 			myVar = "job", newLevels = NULL)
+#' 
+#' #--- newLevels can be precomputed
+#' glbTotals <- bankData[, .(count = .N), by = "job"]
+#' newLevels <- glbTotals[, job][order(glbTotals[, -count])]
+#' PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = NULL, 
+#'					myVar = "job", newLevels = newLevels)
+#' 
+#' # If refactorInd = TRUE, then the input dataFl[[myVar]] will be updated to be a factor 
+#' # with levels equal to newLevels, which will order the histogram by the global frequency
+#' # of the categories of myVar. It can be very resource intensive for large files. 
+#' PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = NULL, 
+#'					myVar = "job", newLevels = newLevels, refactorInd = TRUE)
+PlotHistOverTime <- function(dataFl, dateNm, dateGp, weightNm = NULL, myVar, newLevels = NULL, 
+							 refactorInd = FALSE){
+	 						 	
+	 if(is.null(newLevels)){
+	 	 if (is.null(weightNm)) {
+    		glbTotals <- dataFl[, .(count = .N), by = myVar]
+ 		 } else {
+  		    glbTotals <- dataFl[, .(count = sum(get(weightNm))), by = myVar]
+         }
+
+		newLevels <- glbTotals[[myVar]][order(glbTotals[, -count])]
+	 }
+	 
+	 if(refactorInd){
+      dataFl[, (myVar) := factor(get(myVar), levels = newLevels)]
+     }
+	 
+     binW <- switch(
+      dateGp,
+      "weeks"    = 7,
+      "months"   = 30,
+      "quarters" = 90,
+      "years"    = 365,
+      1
+    )
+	 
+	 p <- ggplot2::ggplot(dataFl,
+                   ggplot2::aes_string(x = dateNm, weight = weightNm,
+                   fill = myVar, group  = myVar)) +
+      ggplot2::geom_histogram(binwidth = binW) +
+      ggplot2::scale_fill_manual(values = scales::hue_pal()(length(newLevels)), 
+                                 breaks = newLevels) +
+      ggplot2::ylab("") +
+      ggplot2::scale_x_date()
+	return(p)
+}
+
+
+
 
 ###########################################
 #         Prepare Data                    #
@@ -974,9 +1135,7 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
 #' @examples
 #' data(bankData)
 #' setDT(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
-#' # view result
-#' bankData   
+#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 #' # columns have been assigned a plotting class (cntns/dscrt)
 #' str(bankData) 
 #' 
@@ -987,6 +1146,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
   
     origHeader <- names(fread(dataFl, nrows = 0))
+
     drop = c()
     select = origHeader
     
@@ -996,6 +1156,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       }
       if (!is.null(dropCols)){
        drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
+       select = c()
       }
     } 
     
@@ -1007,7 +1168,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     # 3. data.table v1.9.8 fread(nrows = 0) seemingly not reading classes 
     #    correctly, so colclasses cannot be used to allow more flexible handling
     
-    warning("Temporarily changing global option datatable.integer64")
+    message("Temporarily changing global option datatable.integer64")
     old.o <- options("datatable.integer64")
     options(datatable.integer64 = "numeric")
     dataFl <- fread(dataFl, select = select, drop = drop, 
@@ -1023,11 +1184,11 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   stopifnot(tolower(c(dateNm, weightNm)) %in% tolower(names(dataFl)))
   
   if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
-    warning ("PrepData has already been run on this data set. Rerunning with 
-             PrepData = FALSE will be faster")
+    message ("PrepData has already been run on this data set.")
   }
   
   if (!is.null(weightNm)) {
+  	stopifnot(is.numeric(dataFl[[weightNm]]))
     if (dataFl[is.na(weightNm), .N ] > 0 ) {
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
@@ -1060,7 +1221,15 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   }
   
   dateNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dateNm))
+  
+  # Convert date to IDate according to provided format and give warning if format
+  # produces NAs
+    
+  tmp.N = dataFl[is.na(get(dateNm)), .N]
   dataFl[, c(dateNm) := as.IDate(get(dateNm), format = dateFt)]
+  if( dataFl[is.na(get(dateNm)), .N] > tmp.N) {
+  	warning (paste0("Formatting ", dateNm, " as \"", dateFt, "\" produces NAs"))
+  }
   
   if (!is.null(dateGp) &&
       dateGp %in% c("weeks", "months", "quarters", "years")) {
@@ -1069,9 +1238,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     dataFl[, c(dateGp) := round(get(dateNm), dateGp)]
     setkeyv(dataFl, dateGp)
   } else {
-    message("Ungrouped data will be used for time series plotting. If this was 
-            not your intention, make sure dateGp is one of the IDate rounding 
-            functions ('weeks', 'months', 'quarters', 'years')")
+    message (paste0("Time series plots will be grouped by ", dateNm, ".  
+    If this was not your intention, make sure that dateGp is one of the 
+    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
     setkeyv(dataFl, dateNm)
   }
   
@@ -1081,10 +1250,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     # made for boxplots
     dataFl[, c(dateGpBp) := round(get(dateNm), dateGpBp)]
   } else {
-    message("Boxplots will not be grouped (ie there will be a box plot for every
-            instance of dateNm). If this was not your intention, make sure 
-            dateGpBp is one of the IDate rounding functions ('weeks', 'months', 
-            'quarters', 'years')")
+    message (paste0("Boxplots will be grouped by ", dateNm, ". 
+    If this was not your intention, make sure dateGpBp is one of the 
+    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
   }
   
   
@@ -1101,6 +1269,20 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   
   vars <- vars[!vars %in% c(dateNm, weightNm)]
   
+  # if current variable set to be weight/date has previously been given
+  # a plotting type, remove it now
+  
+  if (!is.null(weightNm)) {
+  	if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[weightNm]], "class"))) > 0) {
+  		attr(dataFl[[weightNm]], "class") <- attr(dataFl[[weightNm]], "class")[[1]]
+  	} 
+  }
+  
+  if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[dateNm]], "class"))) > 0) {
+  	attr(dataFl[[dateNm]], "class") <- attr(dataFl[[dateNm]], "class")[[1]]
+  } 
+
+  
   # check that this is working correctly
   # consider replacing the warning message with creating new missing indicators 
   # for variables with NA and 1 other unique value at least should export the 
@@ -1108,12 +1290,12 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   bad_ind <- vapply(dataFl[, c(vars), with = FALSE], 
                     function(x) all(duplicated(na.omit(x))[-1L]), logical(1))
   if (any(c(dateGp, dateGpBp) %in% vars[bad_ind])) {
-    message("no variability in grouping variables -- choose a different level")
+    warning ("No variability in grouping variables. Select a new grouping level.")
     }
   
   if (dropConstants){
     if (sum(bad_ind) > 0) {
-      message(paste(
+      warning (paste(
         c("The following variables have no variability and will be dropped: ",
           paste(vars[bad_ind], collapse = ", ")), collapse = ""))
       
@@ -1159,9 +1341,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
               unique(c(class(dataFl[[discreteVars[z]]]), "dscrt")))))
   }
   
-  cat(paste(c("The following variables will be plotted:\nNumeric:\n", 
-              continuousVars, "\nNominal or Binary:\n", discreteVars, "\n"), 
-            sep = " "))
+  message (paste(c("The following variables will be plotted:\nNumeric: ", 
+              paste0(continuousVars, collapse = " "), "\nDiscrete: ", 
+              paste0(discreteVars, collapse = " "),  "\n"), sep = " ") )
 
   return(dataFl)
 }
@@ -1295,20 +1477,31 @@ PrepLabels <- function(labelFl, idx = 1:2) {
 #'
 OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL, 
                      kSample = 50000) {
+           
+  if(!is.null(weightNm)){ 	                  	
+ 	 if (any(is.na(dataFl[[weightNm]]))) {
+ 	 	warning("Weights column contains NAs--will be deleted casewise")
+  	 }
+  }
+  
+  if (any(is.na(dataFl[[dateNm]]))) {
+  	warning("Date column contains NAs--will be deleted casewise")
+  }
+  
   # Convert buildTm to IDate format
   buildTm <- switch(as.character(length(buildTm)), "2" = as.IDate(buildTm),
     "3" = as.IDate(buildTm[1:2], buildTm[3]), 
     # avoid inheritence as list using [[]]
     dataFl[c(1, .N), dateNm, with = FALSE][[1]])  
   
-  num_vars <- names(dataFl)[sapply(dataFl, inherits, "cntns")]
-  cat_vars <- names(dataFl)[sapply(dataFl, inherits, "dscrt")]
+  num_vars <- names(Filter(is.cntns, dataFl)) 
+  cat_vars <- names(Filter(is.dscrt, dataFl))
   
   if (length(num_vars > 0)) {
     # Sorting by R2 only works for numeric variables.
-    
+  
     # Using sample directly in dataFl parameter for brevity, 
-    # which reorders the input to CalcR2 (should be fine)
+    # which reorders the input to CalcR2 but does not change output
     r2 <- vapply(num_vars, CalcR2, 
                 dataFl = dataFl[buildTm[1] <= get(dateNm) & 
                                   get(dateNm) <= buildTm[2], ][
@@ -1362,27 +1555,38 @@ CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
     # all missing. If there are less than 2 numeric values left after sampling 
     # we can't calculate R2
   } else {
+  	y <- dataFl[[myVar]]
+  	
+  	# if imputeValue is available, we impute everywhere Y is missing
     if (!is.null(imputeValue)) {
-      if (!is.null(weightNm)) {
-        w <- dataFl[[weightNm]]
-      }
-      y <- dataFl[[myVar]]
-      y[is.na(y)] <- imputeValue
-      x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
-    } else {
-      if (!is.null(weightNm)) {
-        w <- unlist(dataFl[!is.na(get(myVar)), weightNm, with = FALSE])
-      }
-      y <- unlist(dataFl[!is.na(get(myVar)), myVar, with = FALSE])
-      x <- cbind(1, 
-                 as.matrix(as.numeric(unlist(dataFl[!is.na(get(myVar)), 
-                                                    dateNm, with = FALSE])), 
-                           ncol = 1))
-    }
+    	y[is.na(y)] <- imputeValue
+   	} 
+   	yIdx <- which(is.na(y))
+
+	# We perform casewise deletion anywhere X, Y or W (if not null) is missing
+    if (!is.null(weightNm)) {
+      w <- dataFl[[weightNm]]
+      wIdx <- which(is.na(w))
+      yIdx = unique(c(yIdx, wIdx))
+    }    
     
+    x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
+    xIdx <- which(is.na(x[, 2]))
+    yIdx <- unique(c(xIdx, yIdx))
+      
+      
+    if (length(yIdx) > 0) {
+	  if (!is.null(weightNm)) {
+    		w <- w[-c(yIdx)]
+   	  } 
+    
+      y <- y[-c(yIdx)]
+      x <- x[-c(yIdx),]
+    } 
+          
     if (is.null(weightNm)) {
       mod <- lm.fit(x = x, y = y)
-      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))
+      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y)) ^ 2)
     } else {
       mod <- lm.wfit(x = x, y = y, w = w)
       r2  <- 1 - sum(w * 
@@ -1397,6 +1601,8 @@ CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
 #           Utility Functions             #
 ###########################################
 
+is.cntns <- function(x)  attr(x, "class")[2] == "cntns" 
+is.dscrt <- function(x)  attr(x, "class")[2] == "dscrt"
 
 wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1), 
                            na.rm = TRUE, normwt = TRUE, ...) {

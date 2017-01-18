@@ -76,8 +76,8 @@ plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs],
                      weightNm = NULL, dateNm = "date", dateGp = "months", 
                      kCategories = 9, refactorInd = TRUE)) 
 
-#  binary data only gets two plots
-plot(PlotDiscreteVar(myVar = "housing", dataFl = bankData, weightNm = NULL, 
+#  binary data is treated as categorical
+plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
 }
 

@@ -2,9 +2,12 @@
 
 export(CalcR2)
 export(OrderByR2)
+export(PlotCatRate)
 export(PlotContVar)
 export(PlotDiscreteVar)
 export(PlotDist)
+export(PlotHistOverTime)
+export(PlotHistogram)
 export(PlotMean)
 export(PlotQuantiles)
 export(PlotRates)

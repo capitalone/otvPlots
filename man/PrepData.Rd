@@ -73,9 +73,7 @@ governing permissions and limitations under the License.
 \examples{
 data(bankData)
 setDT(bankData)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
-# view result
-bankData   
+PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 # columns have been assigned a plotting class (cntns/dscrt)
 str(bankData) 
 
