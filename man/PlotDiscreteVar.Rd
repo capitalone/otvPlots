@@ -4,14 +4,14 @@
 \alias{PlotDiscreteVar}
 \title{Frequency and proportion plots for discrete variables}
 \usage{
-PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories = 3,
-  refactorInd = FALSE)
+PlotDiscreteVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
+  kCategories = 3)
 }
 \arguments{
 \item{myVar}{Name of the variable to be plotted}
 
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
 PrepData}
 
 \item{weightNm}{Name of variable containing row weights or NULL for no
@@ -26,11 +26,6 @@ data.table::IDate. If NULL \code{dateNm} will be used.}
 \item{kCategories}{Number of categories to plot in over time
 rate chart for categorical data -- the K most numerous categories in the 
 dataset will be plotted. Default is 3.}
-
-\item{refactorInd}{Logical. Indicates whether discrete 
-\code{myVar} should be converted to factor as plotting time. Doing so will 
-ensure over time histogram plots are in the same order as other discrete 
-plots, but will substantially increase processing time for large data sets}
 }
 \value{
 Histograms and rate charts for categorical data. For factors with <= 
@@ -69,12 +64,9 @@ plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs],
 
 # By default only the top 3 categories are plotted in the rate graph, but we
 # can have all categegories plotted. 
-# By setting refactorInd = TRUE, the histogram is put in order of
-# global volume and the colors will match the over time rate plot. However, 
-# this option can dramatically increase processing time in a large dataset. 
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-                     kCategories = 9, refactorInd = TRUE)) 
+                     kCategories = 9)) 
 
 #  binary data is treated as categorical
 plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 

@@ -5,7 +5,7 @@
 \title{Plot Histogram of Discrete Variable Over Time}
 \usage{
 PlotHistOverTime(dataFl, dateNm, dateGp, weightNm = NULL, myVar,
-  newLevels = NULL, refactorInd = FALSE)
+  newLevels = NULL)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -25,13 +25,8 @@ weights (all rows recieve weight 1)}
 
 \item{myVar}{Name of the variable to be plotted}
 
-\item{newLevels}{An optional vector naming the categories of \code{myVar} in 
-order of frequency}
-
-\item{refactorInd}{Logical. Indicates whether discrete 
-\code{myVar} should be converted to factor as plotting time. Doing so will 
-ensure over time histogram plots are in the same order as other discrete 
-plots, but will substantially increase processing time for large data sets}
+\item{newLevels}{A vector of the 9 most frequent categories of \code{myVar},
+in order of global frequency as calculated by PlotDiscreteVar}
 }
 \value{
 A ggproto object with a histogram of \code{myVar} over time
@@ -57,19 +52,8 @@ bankData[, weight := rpois(.N, 5)]
 bankData[, weight := weight/sum(weight)]
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
          weightNm = "weight")
-PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = "weight", 
-			myVar = "job", newLevels = NULL)
+PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", 
+weightNm = "weight", myVar = "job", newLevels = NULL)
 
-#--- newLevels can be precomputed
-glbTotals <- bankData[, .(count = .N), by = "job"]
-newLevels <- glbTotals[, job][order(glbTotals[, -count])]
-PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = NULL, 
-				myVar = "job", newLevels = newLevels)
-
-# If refactorInd = TRUE, then the input dataFl[[myVar]] will be updated to be a factor 
-# with levels equal to newLevels, which will order the histogram by the global frequency
-# of the categories of myVar. It can be very resource intensive for large files. 
-PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", weightNm = NULL, 
-				myVar = "job", newLevels = newLevels, refactorInd = TRUE)
 }
 

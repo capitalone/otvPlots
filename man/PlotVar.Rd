@@ -6,11 +6,11 @@
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  fuzzyLabelFn = NULL, kCategories = 3, refactorInd = FALSE)
+  fuzzyLabelFn = NULL, kCategories = 3)
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
 PrepData}
 
 \item{myVar}{Name of the variable to be plotted}
@@ -28,7 +28,7 @@ data.table::IDate. If NULL \code{dateNm} will be used.}
 options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 
 \item{labelFl}{A data.table containing variable labels, or NULL for no 
-labels. Output of PrepLabels}
+labels. outFl of PrepLabels}
 
 \item{highlightNms}{Either NULL or a character vector of variables to recieve
 red label. Currently NULL means all
@@ -48,7 +48,7 @@ very long time to render. This setting has no impact on the accuracy of
 time series plots.}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
-in the format output by PrepLabels and a string giving a variable name. The
+in the format outFl by PrepLabels and a string giving a variable name. The
 function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
@@ -57,11 +57,6 @@ will be retuned.}
 \item{kCategories}{Number of categories to plot in over time
 rate chart for categorical data -- the K most numerous categories in the 
 dataset will be plotted. Default is 3.}
-
-\item{refactorInd}{Logical. Indicates whether discrete 
-\code{myVar} should be converted to factor as plotting time. Doing so will 
-ensure over time histogram plots are in the same order as other discrete 
-plots, but will substantially increase processing time for large data sets}
 }
 \value{
 A grid of ggplots. For discrete variables (including continuous 
@@ -101,20 +96,20 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters",
 
 # PlotVar will treat numeric and categorical data differently automatically. 
 # Binary data is always treated as nominal.
-plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, "date", 
-     dateNm = "months", dateGp =  "quarters"))
-plot(PlotVar(bankData, myVar = "job", weightNm = NULL, "date", 
-     dateNm = "months", dateGp = "quarters"))
-plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, "date", 
-     dateNm = "months", dateGp = "quarters"))
-plot(PlotVar(bankData, myVar = "y", weightNm = NULL, "date", 
-     dateNm = "months", dateGp = "quarters"))
+plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, 
+     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
+plot(PlotVar(bankData, myVar = "job", weightNm = NULL,  
+     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
+plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, 
+     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
+plot(PlotVar(bankData, myVar = "y", weightNm = NULL, 
+     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
 
 # It's possible to plot using dateNm as the grouping variable, or another
 # custom grouping variable
-plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
+\dontrun{ plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
      dateGp = "date", dateGpBp = "date"))
-
+}
 # If labels are provided, they will be added. If the variable being plotted 
 # is in the "highlightNms", its label will be red.
 plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 

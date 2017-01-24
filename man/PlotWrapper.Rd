@@ -9,7 +9,7 @@ PlotWrapper(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   weightNm = NULL, buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
   kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
   varNms = NULL, fuzzyLabelFn = NULL, dropConstants = TRUE,
-  sortVars = NULL, kCategories = 3, refactorInd = FALSE, ...)
+  sortVars = NULL, kCategories = 3, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -91,7 +91,7 @@ memory), this parameter should not be set to NULL, or boxplots may take a
 very long time to render. This setting has no impact on the accuracy of
 time series plots.}
 
-\item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be
+\item{outFl}{Name of outFl file (by default "otvPlots.pdf"). PDF will be
 saved to your working directory unless path is included in \code{outFl}
 (e.g. "../plots/otvPlots.pdf")}
 
@@ -107,7 +107,7 @@ selectCols have been applied, if applicable, and not including dateGp,
 dateGpBp (which will be added to the data.table)}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
-in the format output by PrepLabels and a string giving a variable name. The
+in the format outFl by PrepLabels and a string giving a variable name. The
 function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
@@ -125,19 +125,14 @@ original ordering, with numeric variables ahead of categorical}
 rate chart for categorical data -- the K most numerous categories in the 
 dataset will be plotted. Default is 3.}
 
-\item{refactorInd}{Logical. Indicates whether discrete 
-\code{myVar} should be converted to factor as plotting time. Doing so will 
-ensure over time histogram plots are in the same order as other discrete 
-plots, but will substantially increase processing time for large data sets}
-
 \item{...}{Additional parameters to be passed to fread}
 }
 \value{
-A VLM report saved as \code{outFl}
+A VLM report saved as \code{outFlNm}
 }
 \description{
 Prepares input dataset and labels, sorts variables according to either user 
-input or correlation with time, and outputs the sorted plots to pdf
+input or correlation with time, and outFls the sorted plots to pdf
 }
 \section{License}{
  Copyright 2016 Capital One Services, LLC Licensed under the
@@ -154,7 +149,7 @@ data(bankData)
 setDT(bankData)
 data(bankLabels)
 setDT(bankLabels)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
+\dontrun{ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 PrepLabels(bankLabels)
 
 # PrepData should only need to be run once on a dataset, after that PlotWrapper 
@@ -162,20 +157,21 @@ PrepLabels(bankLabels)
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = TRUE, kSample = NULL, kCategories = 3)
-
+} 
 # Different values of kSample can affect the appearance of boxplots (and 
-# possibly the order of variable output if sortVars = 'R2' is used), but does 
+# possibly the order of variable outFl if sortVars = 'R2' is used), but does 
 # not affect the time series plots, which always use all of the data 
-PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+\dontrun{PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = FALSE, kSample = 500)
+}
 
 #  If weights are provided they will be used in all statistical calculations
-bankData[, weight := rnorm(.N, 1, .1)]
+\dontrun{bankData[, weight := rnorm(.N, 1, .1)]
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
-
+}
 # PlotWrapper is designed for non-interactive use, and both dataFl and
 # labelFl could be passed as strings giving the location of the datasets on 
 # disk, as long as they are able to be parsed by fread. Since the example 
@@ -186,24 +182,24 @@ data(bankData)
 setDT(bankData)
 data(bankLabels) 
 setDT(bankLabels)
-PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+\dontrun{ PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
-
+}
 # We can pass a vector of variable names to customize plotting order using
 # sortVars, but we must exclude the "date" column from sortVars or the 
 # function will stop with a message warning us it cannot plot dates
-sortVars = sort(bankLabels[varCol!="date", varCol])
+\dontrun{ sortVars = sort(bankLabels[varCol!="date", varCol])
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-            sortVars = sortVars, kCategories = 3, refactorInd = TRUE)
-
+            sortVars = sortVars, kCategories = 3)
+} 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-            outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
+            outFl = "bank.pdf", prepData = TRUE, kSample = NULL, 
             varNms = "age", sortVars = NULL)
 
 # See otvPlots::PlotVar for examples in interactive use, 

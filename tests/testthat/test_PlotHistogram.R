@@ -7,8 +7,7 @@ suppressMessages(PrepData(testData, dateNm = "date",
 				 dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
 
 test_that("expected plot elements are returned", {
-	glbTotals <- testData[, .(count = .N), by = "job"]
-	p <- PlotHistogram(glbTotals, "job")
+  p <- PlotHistogram(dataFl = testData, myVar =  "job", weightNm = "weight")
 	
   expect_is(p$layers[[1]], "ggproto")
   expect_is(p$layers[[1]]$geom, "GeomBar")
@@ -20,71 +19,28 @@ test_that("expected plot elements are returned", {
   expect_true( "x" %in% names(p$mapping)) 
   expect_true( "y" %in% names(p$mapping)) 
   expect_length(setdiff(c("group", "x", "y"), names(p$mapping)), 0)
-  expect_equal_to_reference(p, "../testthat/PlotHistogram.RDS")
 })
- 
- 
-test_that("expected plot elements are returned if newLevels are pre-computed", {
-	glbTotals <- testData[, .(count = .N), by = "job"]
-	newLevels <- glbTotals[, job][order(glbTotals[, count])]
- 	newLevels <- rev(unlist(newLevels))
 
-	p <- PlotHistogram(glbTotals, "job", newLevels)
+test_that("variable is put in expected order with and without weights", {
+	p <- PlotHistogram(dataFl = testData, myVar =  "job", weightNm = "weight")
+	o1 <- names(rev(sort(xtabs(weight~job, data=testData))))
+	o2 <- as.character(p$data[order(-count)][["job"]])
+	expect_equal(o1, o2)
 	
-  expect_is(p$layers[[1]], "ggproto")
-  expect_is(p$layers[[1]]$geom, "GeomBar")
-  expect_is(p$layers[[1]]$stat, "StatIdentity")
-  expect_identical(p$labels$x, "job")
-  expect_identical(p$labels$y, "count")
-  expect_is(p$scales$scales[[1]], "ScaleDiscrete")
-  expect_true( "group" %in% names(p$mapping)) 
-  expect_true( "x" %in% names(p$mapping)) 
-  expect_true( "y" %in% names(p$mapping)) 
-  expect_length(setdiff(c("group", "x", "y"), names(p$mapping)), 0)
-  expect_equal_to_reference(p, "../testthat/PlotHistogram.RDS")
-}) 
+	p <- PlotHistogram(dataFl = testData, myVar =  "job", weightNm = NULL)
+	o1 <- names(rev(sort(testData[, table(job)])))
+	o2 <- rev(as.character(p$data[order(count)][["job"]]))
+	expect_equal(o1, o2)
+})
 
- 
-test_that("expected plot elements are returned if glbTotals is a factor", {
-	glbTotals <- testData[, .(count = .N), by = "job"]
-	newLevels <- glbTotals[, job][order(glbTotals[, count])]
- 	newLevels <- rev(unlist(newLevels))
-	glbTotals[, ("job") := factor(job, levels = newLevels)]
-	p <- PlotHistogram(glbTotals, "job", newLevels)
-	
-  expect_is(p$layers[[1]], "ggproto")
-  expect_is(p$layers[[1]]$geom, "GeomBar")
-  expect_is(p$layers[[1]]$stat, "StatIdentity")
-  expect_identical(p$labels$x, "job")
-  expect_identical(p$labels$y, "count")
-  expect_is(p$scales$scales[[1]], "ScaleDiscrete")
-  expect_true( "group" %in% names(p$mapping)) 
-  expect_true( "x" %in% names(p$mapping)) 
-  expect_true( "y" %in% names(p$mapping)) 
-  expect_length(setdiff(c("group", "x", "y"), names(p$mapping)), 0)
-  expect_equal_to_reference(p, "../testthat/PlotHistogram.RDS")
-}) 
+test_that("global totals are calculated as expected", {
+	p1 <- PlotHistogram(dataFl = testData, myVar =  "job", weightNm = "weight")
+	expect_equal(as.numeric(p1$data[job=="retired"]$count), as.numeric(testData[job=="retired", sum(weight)]))
+	p2 <- PlotHistogram(dataFl = testData, myVar =  "job", weightNm = NULL)
+	expect_equal(as.numeric(p2$data[job=="entrepreneur"]$count), as.numeric(testData[job=="entrepreneur", .N]))
+})
 
 
-test_that("expected plot elements are returned if glbTotals is 
-		  a factor, newLevels not given", {
-	glbTotals <- testData[, .(count = .N), by = "job"]
-	newLevels <- glbTotals[, job][order(glbTotals[, count])]
- 	newLevels <- rev(unlist(newLevels))
-	glbTotals[, ("job") := factor(job, levels = newLevels)]
-	p <- PlotHistogram(glbTotals, "job")
-	
-    expect_is(p$layers[[1]], "ggproto")
-    expect_is(p$layers[[1]]$geom, "GeomBar")
-    expect_is(p$layers[[1]]$stat, "StatIdentity")
-    expect_identical(p$labels$x, "job")
-    expect_identical(p$labels$y, "count")
-    expect_is(p$scales$scales[[1]], "ScaleDiscrete")
-    expect_true( "group" %in% names(p$mapping)) 
-    expect_true( "x" %in% names(p$mapping)) 
-    expect_true( "y" %in% names(p$mapping)) 
-    expect_length(setdiff(c("group", "x", "y"), names(p$mapping)), 0)
-    expect_equal_to_reference(p, "../testthat/PlotHistogram.RDS")
-}) 
+
 
 

@@ -4,18 +4,30 @@
 \alias{PlotCatRate}
 \title{Plot Category Frequency Rates Over Time}
 \usage{
-PlotCatRate(rateData, myVar, dateGp, hex = NULL)
+PlotCatRate(dataFl, myVar, dateGp, kCategories, newLevels, weightNm = NULL)
 }
 \arguments{
-\item{rateData}{A data.table with proportion of \code{myVar} following into the most
-frequent (globally) kCategories of \code{myVar} per time period (\code{dateGp}), 
-produced by \code{\link{PlotDiscreteVar}}, optionally weighted by \code{weightNm}}
+\item{dataFl}{Either the name of an object that can be converted using
+as.data.table (e.g. a ' data frame) or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+not in your working directory then \code{dataFl} must include (relative or 
+absolute) path to file}
 
 \item{myVar}{Name of the variable to be plotted}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are NULL, "weeks", "months", "quarters", "years". See
 data.table::IDate. If NULL \code{dateNm} will be used.}
+
+\item{kCategories}{Number of categories to plot in over time
+rate chart for categorical data -- the K most numerous categories in the 
+dataset will be plotted. Default is 3.}
+
+\item{newLevels}{A vector of the 9 most frequent categories of \code{myVar},
+in order of global frequency as calculated by PlotDiscreteVar}
+
+\item{weightNm}{Name of variable containing row weights or NULL for no
+weights (all rows recieve weight 1)}
 }
 \value{
 A ggproto object with plotting the proportion of \code{myVar} per category over time, 
@@ -40,19 +52,8 @@ data(bankData)
 setDT(bankData)
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
          weightNm = NULL)
-jobTable = rev(sort(bankData[, table(job)]))
-jobTable1 = order(bankData[, table(job)])
-nLevels = length(jobTable)
-kCategories = 3
-topLevels <- names(jobTable)[1:kCategories]
-rateData <- bankData[, .N, by = c("job", "months")][job \%in\% topLevels]
-rate1    <- bankData[, .N, by = "months"]
-rateData <- merge(rateData, rate1, by = "months")
-rateData[, rate := N.x / N.y]
-rateData[, ("job") := factor(job, levels = topLevels)]
-PlotCatRate(rateData, "job", "months", hex = NULL)
-# you can specify the colours of the plot
-
-PlotCatRate(rateData, "job", "months", hex = c("#00BA38", "#00BFC4", "#619CFF"))
+newLevels = names(rev(sort(bankData[, table(job)])))
+PlotCatRate(dataFl = bankData, myVar = "job", dateGp = "months", 
+				kCategories = 3, newLevels = newLevels)
 }
 
