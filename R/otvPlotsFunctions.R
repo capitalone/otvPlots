@@ -62,7 +62,7 @@ NULL
 #' Automated monitoring reports
 #' 
 #' Prepares input dataset and labels, sorts variables according to either user 
-#' input or correlation with time, and outFls the sorted plots to pdf
+#' input or correlation with time, and outputs the sorted plots to pdf
 #' 
 #' @inheritParams PrepData
 #' @inheritParams PrepLabels
@@ -78,7 +78,7 @@ NULL
 #' function. If FALSE, dataFl must be a data.table containing variables 
 #' \code{weightNm, dateNm, dateGp} and \code{dateGpBp} (allows the user to use
 #' arbitrary groupings of data on the x-axis)
-#' @return A VLM report saved as \code{outFlNm}
+#' @return A VLM report saved as \code{outFl}
 #' @export
 #' @seealso \code{\link[otvPlots]{PrepData}}
 #' @seealso \code{\link[otvPlots]{PrepLabels}}
@@ -109,7 +109,7 @@ NULL
 #'             prepData = TRUE, kSample = NULL, kCategories = 3)
 #'} 
 #' # Different values of kSample can affect the appearance of boxplots (and 
-#' # possibly the order of variable outFl if sortVars = 'R2' is used), but does 
+#' # possibly the order of variable output if sortVars = 'R2' is used), but does 
 #' # not affect the time series plots, which always use all of the data 
 #'\dontrun{PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
@@ -230,19 +230,19 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   
 
 ###########################################
-#           Create outFl                 #
+#           Create output                 #
 ###########################################
 
-#' Create pdf outFl with plots for each variable arranged on a single page
+#' Create pdf output with plots for each variable arranged on a single page
 #'
-#' Creates plots and outFls results to a pdf named as \code{outFl}. Creates
-#' letter-sized outFl with each page corresponding to a single variable.
+#' Creates plots and outputs results to a pdf named as \code{outFl}. Creates
+#' letter-sized output with each page corresponding to a single variable.
 #'
-#' @param outFl Name of outFl file (by default "otvPlots.pdf"). PDF will be
+#' @param outFl Name of output file (by default "otvPlots.pdf"). PDF will be
 #' saved to your working directory unless path is included in \code{outFl}
 #' (e.g. "../plots/otvPlots.pdf")
 #' @param sortVars A character vector of variable names in the order they will
-#' be plotted. Can be custom or if set to "R2", the outFl of
+#' be plotted. Can be custom or if set to "R2", the output of
 #' otvPlots::OrderByR2.
 #' @inheritParams PlotVar
 #' @inheritParams OrderByR2
@@ -292,12 +292,12 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' Interactive creation of overtime variable plots
 #'
 #' @param dataFl A data.table containing at least the following column names:
-#' \code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
+#' \code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 #' PrepData
 #' @param myVar Name of the variable to be plotted
 #' @inheritParams PrepData
 #' @param labelFl A data.table containing variable labels, or NULL for no 
-#' labels. outFl of PrepLabels
+#' labels. Output of PrepLabels
 #' @param highlightNms Either NULL or a character vector of variables to recieve
 #' red label. Currently NULL means all
 #' variables will get a black legend. Ignored if labelFl = NULL.
@@ -306,7 +306,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' possible. If negative, 3 will be used as the cutoff. Default is NULL (no 
 #' transformation)
 #' @param fuzzyLabelFn Either NULL or a function of 2 parameters: A label file 
-#' in the format outFl by PrepLabels and a string giving a variable name. The
+#' in the format output by PrepLabels and a string giving a variable name. The
 #' function should return the label corresponding to the variable given by the
 #' second parameter. This function should describe how fuzzy matching should be
 #' performed to find labels (see example below). If NULL, only exact matches 
@@ -1494,7 +1494,7 @@ OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
     # Sorting by R2 only works for numeric variables.
   
     # Using sample directly in dataFl parameter for brevity, 
-    # which reorders the input to CalcR2 but does not change outFl
+    # which reorders the input to CalcR2 but does not change output
     r2 <- vapply(num_vars, CalcR2, 
                 dataFl = dataFl[buildTm[1] <= get(dateNm) & 
                                   get(dateNm) <= buildTm[2], ][
