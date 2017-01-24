@@ -2,23 +2,23 @@
 % Please edit documentation in R/otvPlotsFunctions.R
 \name{PrintPlots}
 \alias{PrintPlots}
-\title{Create pdf outFl with plots for each variable arranged on a single page}
+\title{Create pdf output with plots for each variable arranged on a single page}
 \usage{
 PrintPlots(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, weightNm = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
   fuzzyLabelFn, kCategories = 3)
 }
 \arguments{
-\item{outFl}{Name of outFl file (by default "otvPlots.pdf"). PDF will be
+\item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be
 saved to your working directory unless path is included in \code{outFl}
 (e.g. "../plots/otvPlots.pdf")}
 
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
 
 \item{sortVars}{A character vector of variable names in the order they will
-be plotted. Can be custom or if set to "R2", the outFl of
+be plotted. Can be custom or if set to "R2", the output of
 otvPlots::OrderByR2.}
 
 \item{dateNm}{Name of column containing date variable}
@@ -34,7 +34,7 @@ options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 weights (all rows recieve weight 1)}
 
 \item{labelFl}{A data.table containing variable labels, or NULL for no 
-labels. outFl of PrepLabels}
+labels. Output of PrepLabels}
 
 \item{highlightNms}{Either NULL or a character vector of variables to recieve
 red label. Currently NULL means all
@@ -54,7 +54,7 @@ very long time to render. This setting has no impact on the accuracy of
 time series plots.}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
-in the format outFl by PrepLabels and a string giving a variable name. The
+in the format output by PrepLabels and a string giving a variable name. The
 function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
@@ -68,8 +68,8 @@ dataset will be plotted. Default is 3.}
 A pdf of plots saved to \code{outFl}
 }
 \description{
-Creates plots and outFls results to a pdf named as \code{outFl}. Creates
-letter-sized outFl with each page corresponding to a single variable.
+Creates plots and outputs results to a pdf named as \code{outFl}. Creates
+letter-sized output with each page corresponding to a single variable.
 }
 \section{License}{
 

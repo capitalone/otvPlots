@@ -91,7 +91,7 @@ memory), this parameter should not be set to NULL, or boxplots may take a
 very long time to render. This setting has no impact on the accuracy of
 time series plots.}
 
-\item{outFl}{Name of outFl file (by default "otvPlots.pdf"). PDF will be
+\item{outFl}{Name of output file (by default "otvPlots.pdf"). PDF will be
 saved to your working directory unless path is included in \code{outFl}
 (e.g. "../plots/otvPlots.pdf")}
 
@@ -107,7 +107,7 @@ selectCols have been applied, if applicable, and not including dateGp,
 dateGpBp (which will be added to the data.table)}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
-in the format outFl by PrepLabels and a string giving a variable name. The
+in the format output by PrepLabels and a string giving a variable name. The
 function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
@@ -128,11 +128,11 @@ dataset will be plotted. Default is 3.}
 \item{...}{Additional parameters to be passed to fread}
 }
 \value{
-A VLM report saved as \code{outFlNm}
+A VLM report saved as \code{outFl}
 }
 \description{
 Prepares input dataset and labels, sorts variables according to either user 
-input or correlation with time, and outFls the sorted plots to pdf
+input or correlation with time, and outputs the sorted plots to pdf
 }
 \section{License}{
  Copyright 2016 Capital One Services, LLC Licensed under the
@@ -159,7 +159,7 @@ PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             prepData = TRUE, kSample = NULL, kCategories = 3)
 } 
 # Different values of kSample can affect the appearance of boxplots (and 
-# possibly the order of variable outFl if sortVars = 'R2' is used), but does 
+# possibly the order of variable output if sortVars = 'R2' is used), but does 
 # not affect the time series plots, which always use all of the data 
 \dontrun{PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 

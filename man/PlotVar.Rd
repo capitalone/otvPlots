@@ -10,7 +10,7 @@ PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
 
 \item{myVar}{Name of the variable to be plotted}
@@ -28,7 +28,7 @@ data.table::IDate. If NULL \code{dateNm} will be used.}
 options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 
 \item{labelFl}{A data.table containing variable labels, or NULL for no 
-labels. outFl of PrepLabels}
+labels. Output of PrepLabels}
 
 \item{highlightNms}{Either NULL or a character vector of variables to recieve
 red label. Currently NULL means all
@@ -48,7 +48,7 @@ very long time to render. This setting has no impact on the accuracy of
 time series plots.}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
-in the format outFl by PrepLabels and a string giving a variable name. The
+in the format output by PrepLabels and a string giving a variable name. The
 function should return the label corresponding to the variable given by the
 second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 

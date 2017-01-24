@@ -10,7 +10,7 @@ OrderByR2(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 }
 \arguments{
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
 
 \item{dateNm}{Name of column containing date variable}

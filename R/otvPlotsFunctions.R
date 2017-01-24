@@ -226,7 +226,7 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                kSample = kSample, fuzzyLabelFn = fuzzyLabelFn, 
                kCategories = kCategories)
   }
-  }
+}
   
 
 ###########################################

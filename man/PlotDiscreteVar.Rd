@@ -11,7 +11,7 @@ PlotDiscreteVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 \item{myVar}{Name of the variable to be plotted}
 
 \item{dataFl}{A data.table containing at least the following column names:
-\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. outFl of
+\code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
 
 \item{weightNm}{Name of variable containing row weights or NULL for no
