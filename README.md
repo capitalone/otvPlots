@@ -71,6 +71,14 @@ example(PlotVar)
 
 ```
 
+## Citations:
+
+All examples and unit tests for this package come from the [Bank Marketing data set](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) available at the UCI Machine Learning Repository. The UCI repository maintains a free collection of datasets for researchers at its [website](http://archive.ics.uci.edu/ml). 
+
+[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014
+
+Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+
 ## Contributors:
 We welcome your interest in Capital One’s Open Source Projects (the “Project”). Any Contributor to the project must accept and sign a CLA indicating agreement to the license terms. Except for the license granted in this CLA to Capital One and to recipients of software distributed by Capital One, you reserve all right, title, and interest in and to your contributions; this CLA does not impact your rights to use your own contributions for any other purpose.
 
