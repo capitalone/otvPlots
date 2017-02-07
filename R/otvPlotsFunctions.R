@@ -632,17 +632,17 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "Mean" = as.double(Hmisc::wtd.mean(get(myVar), get(weightNm),
                                            normwt = TRUE, na.rm = TRUE)),
         "zerorate"    = Hmisc::wtd.mean(get(myVar) == 0, get(weightNm),
-                                        na.rm = TRUE),
+                                        na.rm = TRUE, normwt = TRUE),
         "missingrate" = Hmisc::wtd.mean(is.na(get(myVar)), 
-                                        get(weightNm))
+                                        get(weightNm), normwt = TRUE)
       )
     }, by = c(dateGp)]
     qq <- dataFl[, wtd.quantile_NA(get(myVar), get(weightNm), 
                                   probs = c(.99, .5, .01))]
     cl <- dataFl[, c(Hmisc::wtd.mean(get(myVar), get(weightNm), 
-                                    na.rm = TRUE), 
+                                    na.rm = TRUE, normwt = TRUE), 
                     sqrt(Hmisc::wtd.var(get(myVar), 
-                                        get(weightNm), na.rm = TRUE)))]
+                                        get(weightNm), na.rm = TRUE, normwt = TRUE)))]
   } else {
     dx <- dataFl[, {
       tmp1 = quantile(get(myVar), probs = c(.01, .5, .99), na.rm = TRUE);
@@ -1185,6 +1185,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
+    # normalize weights for consistent treatment
+    dataFl[, (weightNm) := get(weightNm)/sum(get(weightNm))]
   }
   
   # strip all special characters from column names (ggplot really dislikes them)
@@ -1583,7 +1585,7 @@ CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
     } else {
       mod <- lm.wfit(x = x, y = y, w = w)
       r2  <- 1 - sum(w * 
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)
+                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w, normwt = TRUE)) ^ 2)
     }
     return(r2)
   }
@@ -1598,7 +1600,8 @@ is.cntns <- function(x)  attr(x, "class")[2] == "cntns"
 is.dscrt <- function(x)  attr(x, "class")[2] == "dscrt"
 
 wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1), 
-                           na.rm = TRUE, normwt = TRUE, ...) {
-  tryCatch(as.double(Hmisc::wtd.quantile(x, weights, probs, ...)),
+                            ...) {
+  tryCatch(as.double(Hmisc::wtd.quantile(x, weights, probs, 
+  	normwt=TRUE, na.rm=TRUE, ...)),
     error = function(e) rep(NA_real_, length(probs)))
 }
