@@ -4,7 +4,7 @@
 \name{otvPlots}
 \alias{otvPlots}
 \alias{otvPlots-package}
-\title{otvPlots: Over time variable plots}
+\title{Over time variable plots for predictive modeling (otvPlots)}
 \description{
 The otvPlots package uses data.table and ggplot2 packages to efficiently plot
 time series aggregated from large datasets. Plots are optionally returned
