@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and limitations 
 
 # Over-time variable plots for predictive modeling (otvPlots)
 
-## R data visualization package for predictive model building 
+## R data visualization package 
 
 An important part of every new predictive model build is the "proc-eyeball" sanity check. It can also be a painful part of the process when you are the data scientist tasked with creating and checking thousands of near-identical plots, searching for a small handful containing severe drift or instability. Over-time variable plots for predictive modeling (otvPlots) streamlines this process. otvPlots is an R package that turns a dataset into a monitoring report with minimal interaction by the user, with the output optionally ordered by strength of linear association with date, so that any severely abnormal time series will tend to be placed at the top of the pdf. The only real requirement of the user, other than to specify the location of a reasonably formatted input dataset, is to specify which column contains the date variable. 
 
@@ -40,8 +40,9 @@ devtools::install_github("rebeccapayne/otvPlots")
 library(otvPlots)
 ```
 
-## Check out the documentation to see all of the options, the parameters and their definitions, and many usage examples
+## Check out the documentation to see all of the options, the parameters and their definitions, and many examples
 ```
+help(package = "otvPlots")
 ?PlotWrapper
 ?PlotVar
 ```
