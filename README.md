@@ -40,7 +40,7 @@ devtools::install_github("rebeccapayne/otvPlots")
 library(otvPlots)
 ```
 
-## Check out the documentation to see all of the options, the parameters and their definitions, and many usage examples
+## Check out the documentation to see all of the options, the parameters and their definitions, and many examples
 ```
 ?PlotWrapper
 ?PlotVar
