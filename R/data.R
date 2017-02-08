@@ -27,6 +27,7 @@
 #'   \item{date}{last contact date}
 #' }
 #' @source \url{https://archive.ics.uci.edu/ml/datasets/Bank+Marketing}
+#' @source \cite{Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.}
 #' @source \cite{[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014}
 "bankData"
 

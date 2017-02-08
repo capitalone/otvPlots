@@ -15,8 +15,8 @@
 bankLabels
 }
 \description{
-A dataset containing the attribute labels also found in \code{\link{bankData}}. 
-This data set is used to illustrate the PrepLabels function and other label 
+A dataset containing the attribute labels also found in \code{\link{bankData}}.
+This data set is used to illustrate the PrepLabels function and other label
 functionality in the otvPlots package in R
 }
 \keyword{datasets}
