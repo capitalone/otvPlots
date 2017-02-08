@@ -7,7 +7,7 @@
 # express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-#' otvPlots: Over time variable plots
+#' Over time variable plots for predictive modeling (otvPlots)
 #'
 #' The otvPlots package uses data.table and ggplot2 packages to efficiently plot
 #' time series aggregated from large datasets. Plots are optionally returned
@@ -1139,19 +1139,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   
     origHeader <- names(fread(dataFl, nrows = 0))
 
-    drop = c()
     select = origHeader
-    
-    if (!is.null(selectCols) | !is.null(dropCols)) {
-        if (!is.null(selectCols)){
-        select <- origHeader[match(tolower(selectCols), tolower(origHeader))]  
-      }
-      if (!is.null(dropCols)){
-       drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
-       select = c()
-      }
-    } 
-    
     
     # Global parameter change is currently necessary due to:
     # 1. ggplot2 v2.2.0 cannot handle integer64 in box plots nor convert to 
@@ -1159,12 +1147,24 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     # 2. data.table v1.9.8 integer64 parameter is seemingly not implemented 
     # 3. data.table v1.9.8 fread(nrows = 0) seemingly not reading classes 
     #    correctly, so colclasses cannot be used to allow more flexible handling
-    
     message("Temporarily changing global option datatable.integer64")
     old.o <- options("datatable.integer64")
     options(datatable.integer64 = "numeric")
-    dataFl <- fread(dataFl, select = select, drop = drop, 
-                   stringsAsFactors = FALSE, ...)
+
+    if (!is.null(selectCols) | !is.null(dropCols)) {
+        if (!is.null(selectCols)){
+        select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
+        dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, ...)
+
+      }
+      if (!is.null(dropCols)){
+       drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
+ 	   dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, ...)
+      }
+    } else {
+    	dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, ...)
+    }
+     
     options(old.o)
     
   } else {

@@ -1,423 +1,1090 @@
-test()
-test()
-test()
-test()
-test()
-test()
-test()
-test()
-testData[, weight]
-sample(1:N, N, p=(.05, .95))
-sample(1:N, N)
-sample(1:100, 100)
-sample(1:100, 100)[1:10]
-idx = sample(1:100, 100)[1:10]
-testData[idx, weight := NA]
-testData
-out <- OrderByR2(dataFl = testData, #
-	dateNm = "date", buildTm = NULL, weightNm = NULL, kSample = NULL)
-cntnsVars <- names(Filter(is.cntns, testData))
-dscrtVars <- names(Filter(is.dscrt, testData))
-expect_equal(length(out), length(cntnsVars) + length(dscrtVars))#
-	cntnsOrder <- match(cntnsVars, out)#
-	dscrtOrder <- match(dscrtVars, out)#
-	#testing that all numeric variables appear before discrete#
-	expect_lt(max(cntnsOrder), min(dscrtOrder))#
-	#testing that all discrete variables appear in order#
-	expect_equal(order(dscrtOrder), 1:length(dscrtOrder))#
-	#testing that numeric variables appear in order#
-	rSq1 <- CalcR2(out[1] , dataFl = testData, dateNm = "date", weightNm = "weight", imputeValue = NULL)#
-	rSq2 <- CalcR2(out[2] , dataFl = testData, dateNm = "date", weightNm = "weight", imputeValue = NULL)
-out
-test()
-test()
-test()
-load_all()
-test()
-test()
-testData
-myVar = "balance"
-dataFl = testData
-dateNm = "date"
-imputeValue = 0
-w <- dataFl[[weightNm]]
-w
-wIdx = w[is.na(w)]
-wIdx
-wIdx = is.na(w)
-wIdx
-which(wIdx)
-wIdx = which(is.na(w))
-y <- dataFl[[myVar]]
-y
-y[is.na(y)] <- imputeValue
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
-x
-xIdx <- x[is.na(x[,2])]
-xIdx
-xwIdx = unique(c(xIdx, wIdx))
-y
-y[xwIdx] <- NULL
-xwIdx
-y[xwIdx]
-wIdx
-xIdx
-wIdx = which(is.na(w))
-xIdx <- which(is.na(x[, 2]))
-xwIdx = unique(c(xIdx, wIdx))
-xwIdx
-y[xwIdx]
-y[xwIdx] <- NULL
-y[-c(xwIdx)]
-setdiff(y, y[-c(xwIdx)])
-load_all()
-load_all()
-test()
-load_all()
-test()
-y <- dataFl[[myVar]]
-y
-if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-	} else {#
-		yIdx <- which(is.na(y))#
-	}
-y
-yIdx
-load_all()
-test()
-y <- dataFl[[myVar]]
-if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-    	yIdx = c()#
-	} else {#
-		yIdx <- which(is.na(y))#
-	}
-yIdx
-if (!is.null(weightNm)) {#
-      w <- dataFl[[weightNm]]#
-      wIdx <- which(is.na(w))#
-      wIdx = unique(c(yIdx, wIdx))#
-    }
-wIdx
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))#
-    xIdx <- which(is.na(x[, 2]))
-xIdx
-load_all()
-test()
-y <- dataFl[[myVar]]#
-  	# if imputeValue is available, we will impute everywhere Y is missing#
-    if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-    	yIdx = c()#
-	} else {#
-		yIdx <- which(is.na(y))#
-	}#
-#
-	# We perform casewise deletion anywhere X, Y or W (if not null) is missing#
-    if (!is.null(weightNm)) {#
-      w <- dataFl[[weightNm]]#
-      wIdx <- which(is.na(w))#
-      wIdx = unique(c(yIdx, wIdx))#
-    }
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))#
-    xIdx <- which(is.na(x[, 2]))#
-    if (!is.null(weightNm)) {#
-  		xIdx <- unique(c(xIdx, wIdx))#
-    	w <- w[-c(wIdx)]#
-    } #
-    y <- y[-c(xIdx)]#
-    x <- x[-c(xIdx),]
-w
-x
-y
-length(w)
-length(y)
-length(x)
-dim(x)
-if (is.null(weightNm)) {#
-      mod <- lm.fit(x = x, y = y)#
-      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))#
-    } else {#
-      mod <- lm.wfit(x = x, y = y, w = w)#
-      r2  <- 1 - sum(w * #
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)#
-    }
-r2
-imputeValue = NULL
-y <- dataFl[[myVar]]#
-  	# if imputeValue is available, we will impute everywhere Y is missing#
-    if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-    	yIdx = c()#
-	} else {#
-		yIdx <- which(is.na(y))#
-	}#
-#
-	# We perform casewise deletion anywhere X, Y or W (if not null) is missing#
-    if (!is.null(weightNm)) {#
-      w <- dataFl[[weightNm]]#
-      wIdx <- which(is.na(w))#
-      wIdx = unique(c(yIdx, wIdx))#
-    }    #
-    x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))#
-    xIdx <- which(is.na(x[, 2]))#
-    if (!is.null(weightNm)) {#
-  		xIdx <- unique(c(xIdx, wIdx))#
-    	w <- w[-c(wIdx)]#
-    } #
-    y <- y[-c(xIdx)]#
-    x <- x[-c(xIdx),]#
-    if (is.null(weightNm)) {#
-      mod <- lm.fit(x = x, y = y)#
-      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))#
-    } else {#
-      mod <- lm.wfit(x = x, y = y, w = w)#
-      r2  <- 1 - sum(w * #
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)#
-    }
-r2
-y
-CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {#
-  message("Calculating R2 of ", myVar)#
-  if (sum(!is.na(dataFl[[myVar]])) < 2) {#
-    return(Inf)#
-    # if kSample is not null, then we need to recheck that the subsample is not #
-    # all missing. If there are less than 2 numeric values left after sampling #
-    # we can't calculate R2#
-  } else {#
-  	y <- dataFl[[myVar]]#
-  	# if imputeValue is available, we impute everywhere Y is missing#
-    if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-    	yIdx = c()#
-	} else {#
-		yIdx <- which(is.na(y))#
-	}#
-#
-	# We perform casewise deletion anywhere X, Y or W (if not null) is missing#
-    if (!is.null(weightNm)) {#
-      w <- dataFl[[weightNm]]#
-      wIdx <- which(is.na(w))#
-      wIdx = unique(c(yIdx, wIdx))#
-    }    #
-    x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))#
-    xIdx <- which(is.na(x[, 2]))#
-    if (!is.null(weightNm)) {#
-  		xIdx <- unique(c(xIdx, wIdx))#
-    	w <- w[-c(wIdx)]#
-    } #
-    y <- y[-c(xIdx)]#
-    x <- x[-c(xIdx),]#
-    if (is.null(weightNm)) {#
-      mod <- lm.fit(x = x, y = y)#
-      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))#
-    } else {#
-      mod <- lm.wfit(x = x, y = y, w = w)#
-      r2  <- 1 - sum(w * #
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)#
-    }#
-    return(r2)#
-  }#
+where <- function(name, env=parent.frame()){#
+	if(identical(env, emptyenv())){stop("Can't find ", name, call. = FALSE)#
+		} else {#
+			if(exists(name, env, inherits = FALSE)){#
+				return(paste(name, "found in", environmentName(env)))#
+				} else {#
+					where(name, parent.env(env))#
+				}#
+		}	#
 }
-CalcR2("balance", testData, "date", "weight", NULL)
-CalcR2("age", testData, "date", "weight", NULL)
-data(bankData)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
-OrderByR2(bankData, dateNm = "date")
-dataFl = bankData
-dateNm = "date"
-buildTm = NULL; weightNm = NULL; #
-                     kSample = 50000
-buildTm <- switch(as.character(length(buildTm)), "2" = as.IDate(buildTm),#
-    "3" = as.IDate(buildTm[1:2], buildTm[3]), #
-    # avoid inheritence as list using [[]]#
-    dataFl[c(1, .N), dateNm, with = FALSE][[1]])
-num_vars <- names(Filter(is.cntns, dataFl))
-cat_vars <- names(Filter(is.dscrt, dataFl))
-length(num_vars)
-r2 <- vapply(num_vars, CalcR2, #
-                dataFl = dataFl[buildTm[1] <= get(dateNm) & #
-                                  get(dateNm) <= buildTm[2], ][#
-                                    sample(.N, min(.N, kSample))], #
-                dateNm = dateNm, weightNm = weightNm, imputeValue = NULL, #
-                numeric(1))
-CalcR2(myVar = "age",dataFl = dataFl[buildTm[1] <= get(dateNm) & #
-                                  get(dateNm) <= buildTm[2], ][#
-                                    sample(.N, min(.N, kSample))], #
-                dateNm = dateNm, weightNm = weightNm, imputeValue = NULL)
-CalcR2(myVar = "age",dataFl =dataFl, #
-                dateNm = dateNm, weightNm = weightNm, imputeValue = NULL)
-CalcR2(myVar = "age",dataFl =dataFl, #
-                dateNm = dateNm, weightNm = "weight", imputeValue = NULL)
-CalcR2(myVar = "age",dataFl =dataFl, #
-                dateNm = dateNm, weightNm = NULL, imputeValue = NULL)
-CalcR2("balance", testData, "date", NULL, NULL)
-load_all()
-test()
-CalcR2("balance", testData, "date", NULL, NULL)
-myVar="balance"
-dataFl = testData
-dateNm = "date"
-weightNm = NULL
-imputeValue = NULL
-y <- dataFl[[myVar]]
-yIdx <- which(is.na(y))
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
-xIdx <- which(is.na(x[, 2]))
-yIdx <- unique(c(xIdx, yIdx))
-y <- y[-c(yIdx)]
-x <- x[-c(yIdx),]
-x
-y
-y <- dataFl[[myVar]]
-yIdx <- which(is.na(y))
-yIdx
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
-y
-x
-xIdx <- which(is.na(x[, 2]))
-xIdx
-yIdx <- unique(c(xIdx, yIdx))
-yIdx
-y
-y <- y[-c(yIdx)]
-y
-load_all()
-test()
-test()
-test()
-test()
-testData[idx2, date := NA]
-idx2 = sample(1:100, 100)[1:10]
-testData[idx2, date := NA]
-test()
-test()
-test()
-load_all()
-test()
-load("testData.rda")#
-testData = setDT(testData)
-test()
-test()
-test()
-test()
-out <- OrderByR2(dataFl = testData, #
-	dateNm = "date", buildTm = NULL, weightNm = NULL, kSample = NULL)#
-	cntnsVars <- names(Filter(is.cntns, testData))#
-	dscrtVars <- names(Filter(is.dscrt, testData))
-testData
-out <- OrderByR2(dataFl = testData, #
-	dateNm = "date", buildTm = NULL, weightNm = NULL, kSample = NULL)
-out <- OrderByR2(dataFl = testData, #
-	dateNm = "date", buildTm = NULL, weightNm = "weight", kSample = NULL)
-out <- OrderByR2(dataFl = testData, #
-	dateNm = "date", buildTm = NULL, weightNm = NULL, kSample = NULL)
-traceback()
-load_all()
-test()
-testData
-testData <- testData[, .(age, weight, date)]
-testData
-load("../testthat/testData.rda")
-load("tests/testthat/testData.rda")
-testData <- setDT(testData)
-testData <- testData[, .(age, weight, date)]
-testData
-ans.R2 <- lm(age~date)$r.squared
-ans.R2 <- lm(age~date, data=testData)$r.squared
-expect_equal(test.R2, ans.R2)
-test.R2 <- CalcR2("age", testData, "date", weightNm = NULL, imputeValue = NULL)
-testData <- setDT(testData)
-testData <- testData[, .(age, weight, date)]
-testData
-test.R2 <- CalcR2("age", testData, "date", weightNm = NULL, imputeValue = NULL)
-load_all()
-test.R2 <- CalcR2("age", testData, "date", weightNm = NULL, imputeValue = NULL)
-myVar = "age"
-dataFl = testData
-dateNm = "date"
-weightNm = NULL
-imputeValue=NULL
-y <- dataFl[[myVar]]#
-  	# if imputeValue is available, we impute everywhere Y is missing#
-    if (!is.null(imputeValue)) {#
-    	y[is.na(y)] <- imputeValue#
-    	yIdx = c()#
-	} else {#
-		yIdx <- which(is.na(y))#
+where("z")
+where("mean")
+where("matrix")
+where("coxph")
+library(survival)
+where("coxph")
+ls()
+search()
+.GlobalEnv
+package:survival
+as.environment(package:stats)
+as.environment("package:stats")
+as.enviroment(.GlobalEnv)
+as.environment(.GlobalEnv)
+is.null(as.environment("package:stats")$name)
+is.null(attr(as.environment("package:stats"),"name"))
+where <- function(name, env=parent.frame()){#
+	out = list()#
+	if(identical(env, emptyenv())){return(out))#
+		} else {#
+			if(!is.null(attr(env),"name")){#
+				out = append(out, environmentName(env))#
+				where(name, parent.env(env))#
+				} else {#
+					where(name, parent.env(env))#
+				}#
+		}	#
+}
+where <- function(name, env=parent.frame()){#
+	out = list()#
+	if(identical(env, emptyenv())){return(out)#
+		} else {#
+			if(!is.null(attr(env),"name")){#
+				out = append(out, environmentName(env))#
+				where(name, parent.env(env))#
+				} else {#
+					where(name, parent.env(env))#
+				}#
+		}	#
+}
+where <- function(env=parent.frame()){#
+	out = list()#
+	if(identical(env, emptyenv())){return(out)#
+		} else {#
+			if(!is.null(attr(env),"name")){#
+				out = append(out, environmentName(env))#
+				where(parent.env(env))#
+				} else {#
+					where(parent.env(env))#
+				}#
+		}	#
+}
+where()
+where <- function(env=parent.frame()){#
+	out = list()#
+	if(identical(env, emptyenv())){return(out)#
+		} else {#
+			if(!is.null(attr(env,"name"))){#
+				out = append(out, environmentName(env))#
+				where(parent.env(env))#
+				} else {#
+					where(parent.env(env))#
+				}#
+		}	#
+}
+where()
+search()
+env=globalenv()
+out = list()
+if(!is.null(attr(env,"name"))){#
+				out = append(out, environmentName(env))
+}
+out
+is.null(attr(env,"name"))
+env=parent.env(env)
+is.null(attr(env,"name"))
+out = append(out, environmentName(env))
+out
+where <- function(env=parent.frame()){#
+	out = list()#
+	if(identical(env, emptyenv())){return(out)#
+		} else {#
+			if(!is.null(attr(env,"name"))){#
+				out = append(out, environmentName(env))#
+				where(parent.env(env))#
+				} else {#
+					where(parent.env(env))#
+				}#
+		}	#
+}
+where()
+where <- function(env=parent.frame()){#
+	if(identical(env, emptyenv())){return(out)#
+		} else {#
+			if(!is.null(attr(env,"name"))){#
+				print(environmentName(env))#
+				where(parent.env(env))#
+				} else {#
+					where(parent.env(env))#
+				}#
+		}	#
+}
+where()
+where <- function(env=parent.frame()){#
+	if(identical(env, emptyenv())){stop()#
+		} else {#
+			if(!is.null(attr(env,"name"))){#
+				print(environmentName(env))#
+				where(parent.env(env))#
+				} else {#
+					where(parent.env(env))#
+				}#
+		}	#
+}
+where()
+quickSort = function(aVector){#
+	if(length(aVector)<=1){return(aVector)}#
+	element = aVector[1]#
+	partition = aVector[-1]#
+	v1 = partition[partition < element]#
+	v2 = partition[partition >= element]#
+	v1 = quickSort(v1)#
+	v2 = quickSort(v2)#
+	return(c(v1,element,v2))#
+}
+quickSort(c(3,7,8,5,2,1,9,5,4))
+mergesort=function(v){#
+	if(length(v)<=1) return(v)#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	M = length(v)/2#
+	N = length(v)#
+	left = m[1:floor(M)]#
+	right = m[(floor(M+1):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] < right[1]){ return(c(left,right))#
+		} else { return (merge(left,right))}#
+}
+mergesort=function(v){#
+	if(length(v)<=1) return(v)#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	M = length(v)/2#
+	N = length(v)#
+	left = m[1:floor(M)]#
+	right = m[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] < right[1]){ return(c(left,right))#
+		} else { return (merge(left,right))}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){#
+	if(length(v)<=1) return(v)#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] < right[1]){ return(c(left,right))#
+		} else { return (merge(left,right))}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){#
+	if(length(v)<=1) return(v)#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ return(c(left,right))#
+		} else { return(merge(left,right))}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){#
+	if(length(v)<=1) return(v)#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<=right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ return(c(left,right))#
+		} else { return(merge(left,right))}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1]<=right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	if(length(v)<=1) {return(v)} else {#
+ 	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ return(c(left,right))#
+		} else { return(merge(left,right))}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	if(length(v)<=1) {return(v)} else {#
+ 	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ return(c(left,right))#
+		} else { return(merge(left,right))}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+v= c(3,8,7,1,2,4,9,3,5)
+merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
 	}
-y
-yIdx
-if (!is.null(weightNm)) {#
-      w <- dataFl[[weightNm]]#
-      wIdx <- which(is.na(w))#
-      yIdx = unique(c(yIdx, wIdx))#
-    }
-x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))#
-    xIdx <- which(is.na(x[, 2]))#
-    yIdx <- unique(c(xIdx, yIdx))
-x
-yIdx
-xIdx
-if (length(yIdx) > 0) {#
-	  if (!is.null(weightNm)) {#
-    		w <- w[-c(yIdx)]#
-   	  } #
-      y <- y[-c(yIdx)]#
-      x <- x[-c(yIdx),]#
-    }
-y
-x
-xIdx
-yIdx
-if (is.null(weightNm)) {#
-      mod <- lm.fit(x = x, y = y)#
-      r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))#
-    } else {#
-      mod <- lm.wfit(x = x, y = y, w = w)#
-      r2  <- 1 - sum(w * #
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w)) ^ 2)#
-    }
-r2
-test.R2 <- CalcR2("age", testData, "date", weightNm = NULL, imputeValue = NULL)
-mod <- lm.fit(x = x, y = y)
-r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y) ^ 2))
-r2
-yIdx <- which(is.na(y))
-yIdx
-xIdx <- which(is.na(x[, 2]))
-yIdx <- unique(c(xIdx, yIdx))
-length(yIdx)
-is.null(weightNm)
-load_all()
+M = length(v)/2
+N = length(v)
+left = v[1:floor(M)]
+right = v[(floor(M+1)):N]
+left
+right
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	if(length(v)<=1) v else {#
+ 	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ return(c(left,right))#
+		} else { return(merge(left,right))}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	if(length(v)<=1) v else {#
+ 	M = length(v)/2#
+	N = length(v)#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left[1])#
+		if(length(left)>0) result = c(result, right[1])#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(m)#
+#
+{#
+   merge_ <- function(left, right)#
+   # Recursive function to compare and append values in order#
+   {#
+      # Create a list to hold the results#
+      result <- c()#
+      # This is our stop condition. While left and right contain #
+      # a value, compare them#
+      while(length(left) > 0 && length(right) > 0)#
+      {#
+           # If left is less than or equal to right,#
+           # add it to the result list#
+         if(left[1] <= right[1])#
+         {#
+            result <- c(result, left[1])#
+            # Remove the value from the list#
+            left <- left[-1]#
+         } else#
+         {#
+            # When right is less than or equal to left,#
+            # add it to the result.#
+            result <- c(result, right[1])#
+            # Remove the appended integer from the list.#
+            right <- right[-1]#
+         }#
+      }#
+      # Keep appending the values to the result while left and right#
+      # exist.#
+      if(length(left) > 0) result <- c(result, left)#
+      if(length(right) > 0) result <- c(result, right)#
+      result#
+   }#
+#
+   # Below is our stop condition for the mergesort function.#
+   # When the length of the vector is 1, just return the integer. #
+   len <- length(m)#
+   if(len <= 1) m else#
+   {#
+      # Otherwise keep dividing the vector into two halves.#
+      middle <- length(m) / 2#
+      # Add every integer from 1 to the middle to the left#
+      left <- m[1:floor(middle)]#
+      right <- m[floor(middle+1):len]#
+      # Recursively call mergesort() on the left and right halves.#
+      left <- mergesort(left)#
+      right <- mergesort(right)#
+      # Order and combine the results.#
+      if(left[length(left)] <= right[1])#
+      {#
+         c(left, right)#
+      } else#
+      {#
+         merge_(left, right)#
+      }#
+   }#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(left)>0) result = c(result, right)#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(left)>0) result = c(result, right)#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort=function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(left)>0) result = c(result, right)#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(left)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(left)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ c(left,right)#
+		} else {merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(left)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left[1])#
+		if(length(left)>0) result <- c(result, right[1])#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left[1])#
+		if(length(left)>0) result <- c(result, right[1])#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(left)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort <- function(v){	#
+	merge <- function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left <- left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right <- right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(right)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(right)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left <- v[1:floor(M)]#
+	right <- v[(floor(M+1)):N]#
+	left <- mergesort(left)#
+	right <- mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result <- c(result, left)#
+		if(length(right)>0) result <- c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result <- c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(right)>0) result = c(result, right)#
+		result#
+	}#
+	N <- length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result <- c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result <- c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(right)>0) result = c(result, right)#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+mergesort = function(v){	#
+	merge = function(left, right){#
+		result = c()#
+		while(length(left)>0 && length(right)>0){#
+			if(left[1] <= right[1]) {#
+					result = c(result, left[1])#
+					left = left[-1]#
+				} else {#
+					result = c(result, right[1])#
+					right = right[-1]#
+				}#
+		}#
+		if(length(left)>0) result = c(result, left)#
+		if(length(right)>0) result = c(result, right)#
+		result#
+	}#
+	N = length(v)#
+	if(N<=1) v else {#
+ 	M = length(v)/2#
+	left = v[1:floor(M)]#
+	right = v[(floor(M+1)):N]#
+	left = mergesort(left)#
+	right = mergesort(right)#
+	if(left[length(left)] <= right[1]){ #
+		c(left,right)#
+		} else {#
+			merge(left,right)}#
+		}#
+}
+mergesort(c(3,8,7,1,2,4,9,3,5))
+result
+library(Rcpp)
+install.packages("~/Downloads/RVowpalWabbit_0.0.6.tar.gz",repos=NULL,type="source")
+.14*.045
+.17*.025
+.0063-.00425
+()-0.27 + 1 )/2
+(-0.27 + 1 )/2
+2*.365
+-1
+(0.27 + 1 )/2
+(1.3)/2
+1.24/2
+1.33/2
+1.32/2
+1.47/2
+1.38/2
+1.34/2
+1.15/2
+1.17/2
+2/9*.95
+.08*.92
+.003*1000000+.00002*3000000+.00035*3000000
+4110/7000000
+4110/7000000*100
+((0.03/100)*5000000)+((0.00001)*9000000)+((0.00001)*38000000)/(38000000+5000000+9000000)
+((0.03/100)*5000000)+(0.00001)*9000000)+((0.00001)*38000000))/(38000000+5000000+9000000)
+((0.03/100)*5000000+0.00001*9000000)+0.00001*38000000)/(38000000+5000000+9000000)
+((0.03/100)*5000000+0.00001*9000000+0.00001*38000000)/(38000000+5000000+9000000)
+8000000*27/57
+8000000*23/57
+(1.06+.81+1.74)*1000000/(26632+2276+10031)
+list.files("~/Downloads")
+list.files("~/Downloads", pattern=".tar.gz")
+install.packages("~/Downloads/Cairo_1.5-9.tar.gz", repos=NULL,type="source")
+system("echo $CAIRO_CFLAGS")
+system("echo $CAIRO_LIBS")
+system("export CAIRO_LIBS=-L${HOME}/usr/local/lib")
+system("export CAIRO_CFLAGS=-I${HOME}/usr/local/include")
+system("echo $CAIRO_LIBS")
+list.files("~/Downloads", pattern=".tar.gz")
+install.packages("~/Downloads/Cairo_1.5-9.tar.gz", repos=NULL, type="source")
+system("source ~/.bashrc")
+install.packages("~/Downloads/Cairo_1.5-9.tar.gz", repos=NULL, type="source")
+install.packages("Cairo")
+install.packages("cairo")
+install.packages("~/Downloads/Cairo_1.5-9.tar.gz", repos=NULL, type="source")
+install.packages("data.table")
+_fn = 5
+_fn = function(x) x
+??print.lm
+??print.glm
+?print
+install.packages("~/Downloads/h2o_3.8.3.3.tar.gz", repos=NULL, type="sourec")
+install.packages("~/Downloads/h2o_3.8.3.3.tar.gz", repos=NULL, type="sourc")
+install.packages("~/Downloads/h2o_3.8.3.3.tar.gz", repos=NULL, type="source")
+Sys.getenv("http")
+Sys.getenv("http_proxy")
+Sys.unsetenv("http_proxy")
+Sys.getenv("https_proxy")
+Sys.Unsetenv("https_proxy")
+Sys.unsetenv("https_proxy")
+Sys.getenv("https")
+install.packages("~/Downloads/h2o_3.8.3.3.tar.gz", repos=NULL, type="source")
+library(h2o)
+h2o.init()
+?h2o.importfile
+??h2o.importFile
+h2o.importFile("~/Downloads/LoanStat3.csv")
+h2o.importFile("~/LoanStat3.csv")
+h2o.importFile("/Users/sju922/LoanStat3.csv")
+h2o.importFile("/Users/sju922/h2o/LoanStat3.csv")
+h2oData = h2o.importFile("/Users/sju922/h2o/LoanStat3.csv")
+summary(h2oData)
+h2o.gbm(y = "loan_amt", x = "collection_recovery_fee", data = h2oData,#
+n.trees = 10, interaction.depth = 3   n.minobsinnode = 2, shrinkage = 0.2, distribution= "gaussian")
+h2o.gbm(y = "loan_amt", x = "collection_recovery_fee", data = h2oData, n.trees = 10, interaction.depth = 3   n.minobsinnode = 2, shrinkage = 0.2, distribution= "gaussian")
+h2o.gbm(y = "loan_amnt", x = "collection_recovery_fee", data = h2oData, n.trees = 10, interaction.depth = 3   n.minobsinnode = 2, shrinkage = 0.2, distribution= "gaussian")
+h2o.gbm(y = "loan_amnt", x = c("funded_amnt","collection_recovery_fee"), data = h2oData, n.trees = 10, interaction.depth = 3   n.minobsinnode = 2, shrinkage = 0.2, distribution= "gaussian")
+h2o.gbm(y = "loan_amnt", x = c("funded_amnt","collection_recovery_fee"), data = h2oData)
+h2o.gbm(y = "loan_amnt", x = c("funded_amnt","collection_recovery_fee"))
+?h2o.gbm
+h2o.gbm(y = "loan_amnt", x = c("funded_amnt","collection_recovery_fee"), h2oData)
+h2oData = h2o.importFile("~/Desktop/testVelma/efx_data_R.csv")
+h2oData = h2o.importFile("Users/sju922/Desktop/testVelma/efx_data_R.csv")
+h2oData = h2o.importFile("/Users/sju922/Desktop/testVelma/efx_data_R.csv")
+summary(h2oData)
+df <- h2o.importFile(path = "http://s3.amazonaws.com/h2o-public-test-data/smalldata/gbm_test/titanic.csv")
+mamData = fread("~/Downloads/mammographic.dat")
+library(data.table)
+mamData = fread("~/Downloads/mammographic.dat")
+mamData
+library(Velma)
+?RunVlm
+RunVlm(dataFl=mamData, labelFl=NULL, selectCols = NULL, dropCols = NULL, dateNm="date", dateFt=NULL,#
+  dateGp="weeks", dateGpBp = "months", weightNm = NULL, varCols = NULL, buildTm,#
+  topList = NULL, skewOpt = NULL, "~/Downloads/mam.pdf", doParallel = FALSE,#
+  kCore = NULL)
+RunVlm(dataFl="~/Downloads/mammographic.dat", labelFl=NULL, selectCols = NULL, dropCols = NULL, dateNm="date", dateFt=NULL,#
+  dateGp="weeks", dateGpBp = "months", weightNm = NULL, varCols = NULL, buildTm,#
+  topList = NULL, skewOpt = NULL, "~/Downloads/mam.pdf", doParallel = FALSE,#
+  kCore = NULL)
+PrepData
+install_github("sju922/Velma",  host="github.kdc.capitalone.com/api/v3")
+devtools::install_github("sju922/Velma",  host="github.kdc.capitalone.com/api/v3")
+library(Velma)
+example(PlotVlm)
+PlotVlm
+1822-14
+911 -14
+library(scales) show_col(hue_pal()(4))
+library(scales)
+?package::scales
+?package:::scales
+?scales
+gg_color_hue <- function(n) {#
+  hues = seq(15, 375, length = n + 1)#
+  hcl(h = hues, l = 65, c = 100)[1:n]#
+}
+gg_colour_hue(3)
+gg_color_hue(3)
+show_col(hue_pal()(3))
+hue_pal(3)
+hue_pal()(3)
+logit = function(x) x/(1-x)
+plot(x=seq(-1000,1000), logit(x))
+x=seq(-1000,1000)
+y=logit(x)
+plot(x,y)
+logit = function(x) log(x/(1-x))
+plot(x,y)
+y=logit(x)
+x=seq(0,1, by=.01)
+y=logit(x)
+plot(x,y)
+plot(y, x)
+plot(y, x, xlim=c(-10,10))
+plot(y, x, xlim=c(-100,100))
+plot(y, x, xlim=c(-100,100), ylim=c(-100,100))
+x=seq(0,1, by=.001)
+plot(y, x, xlim=c(-100,100), ylim=c(-100,100))
+y=logit(x)
+plot(y, x, xlim=c(-100,100), ylim=c(-100,100))
+expit = function(x) exp(x)/(1+exp(x))
+x=seq(-100,100)
+y=expit(x)
+plot(x,y)
+plot(x,y, ylim=c(-100,10))
+plot(x,y, ylim=c(-100,100))
+plot(x,y, ylim=c(-10,10), xlim=c(-10,10))
+x=seq(-10,10, by=.5)
+y=expit(x)
+plot(x,y, ylim=c(-10,10), xlim=c(-10,10))
+logit(1/2)
+getwd()
+setwd("~/Desktop/Velma/")
+library(devtools)
 test()
-test()
-load("tests/testthat/testData.rda")
-testData <- setDT(testData)
-testData <- testData[, .(age, weight, date)]
-testData
-test.R2 <- CalcR2("age", testData, "date", weightNm = NULL, imputeValue = NULL)
-test.R2
-ans.R2 <- lm(age~date, data=testData)$r.squared
-ans.R2
-ans.R2 <- lm(age~date, data=testData)
-ans.R2
-str(ans.R2)
-ans.R2 <- summary(lm(age~date, data=testData))$r.squared
-ans.R2
-ans.R2 <- summary(lm(age~date, weight="weight", data=testData))$r.squared
-testData
-ans.R2 <- summary(lm(age~date, weight=weight, data=testData))$r.squared
-ans.R2
-test.R2 <- CalcR2("age", testData, "date", weightNm = "weight", imputeValue = NULL)
-test.R2
-test.R2 <- CalcR2("age", testData, "date", weightNm = "weight", imputeValue = NULL)#
-	ans.R2 <- summary(lm(age~date, weight=weight, data=testData))$r.squared#
-	expect_equal(test.R2, ans.R2)
-sampl.int(1:100, 10)
-sample.int(1:100, 10)
-?sample.int
-sample.int(100, 10)
-test()
-test()
+document()

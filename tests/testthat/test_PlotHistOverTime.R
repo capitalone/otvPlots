@@ -3,6 +3,7 @@ library(proto)
 context("Plot histogram over time")
 load("../testthat/testData.rda")
 setDT(testData)
+require(ggplot2)
 suppressMessages(PrepData(testData, dateNm = "date", 
 				 dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
 p <- PlotHistOverTime(dataFl = testData, dateNm = "date", dateGp = "weeks", 
@@ -31,13 +32,9 @@ test_that("expected plot elements are returned", {
 
 test_that("Colours are as expected",{
 	colours = unique(layer_data(p)[, c("group", "fill")])
+	colours <- copy(colours)
 	setDT(colours)
+	setorder(colours, group)
 	expect_equal(colours[, fill], scales::hue_pal()(9))
-	# breaks = p$scales$scales[[1]]$breaks
-	# groupname = sort(breaks)
-	# colours[, groupname := groupname]
-	# expect_equal(colours[match(breaks, groupname)][, fill],
-				  # c("#DB72FB","#00BA38", "#D39200", "#F8766D", "#619CFF", 
-				  # "#00C19F", "#93AA00", "#FF61C3", "#00B9E3"))
 })
 
