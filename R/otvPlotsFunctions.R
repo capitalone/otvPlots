@@ -70,10 +70,14 @@ NULL
 #' @inheritParams PlotVar
 #' @inheritParams PrintPlots
 #' @inheritParams PlotDiscreteVar
-#' @param sortVars Either a vector of variable names giving the order in which
-#' variables should be plotted, "R2" in order to sort plots by strength of
-#' associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
-#' original ordering, with numeric variables ahead of categorical
+#' @param sortVars A pre-determined vector of variable names giving the order in which
+#' variables should be plotted, or NULL to keep original ordering except that
+#' numeric variables will come ahead of categorical and binary. sortVars should
+#' also be NULL when sortFn is used.
+#' @param sortFn Name of a function which returns sortVars as output. 
+#' The function may take the following variables as input: dataFl, dateNm, buildTm, 
+#' weightNm, kSample. OrderByR2 is included as an example, which sorts numeric plots
+#' in order of strength of linear association with date. 
 #' @param prepData logical. Indicates if data should be run through PrepData 
 #' function. If FALSE, dataFl must be a data.table containing variables 
 #' \code{weightNm, dateNm, dateGp} and \code{dateGpBp} (allows the user to use
@@ -161,13 +165,16 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                         buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
                         kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
                         varNms = NULL, fuzzyLabelFn = NULL, 
-                        dropConstants = TRUE, sortVars = NULL, kCategories = 3, ...) {
+                        dropConstants = TRUE, sortVars = NULL, sortFn = NULL, 
+                        kCategories = 3, ...) {
 
-  if (!is.null(sortVars) && sortVars != "R2" & !is.null(varNms) &
+  if (!is.null(sortVars) & !is.null(sortFn)) {
+  	stop ("Please choose between sortVars (predetermined order of plotting) and
+          sortFn (function to determine plotting order)")}
+          
+  if(!is.null(sortVars) & !is.null(varNms) &&
       !all(varNms %in% sortVars)) {
-    stop ("Please either (1) choose between sortVars (order of plotting) and
-          varNms (set of variables to plot), (2) set sortVars to 'R2', or (3)
-          make certain that varNms is a subset of sortVars")}
+    stop ("Please make certain that varNms is a subset of sortVars")}
   
   if (prepData) {
     if (is.character(dataFl)) {
@@ -197,10 +204,9 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
     PrepLabels(labelFl)
   }
   
-  
-  if (!is.null(sortVars) && sortVars == "R2") {
-    sortVars <- OrderByR2(dataFl = dataFl, dateNm = dateNm, buildTm = buildTm, 
-                          weightNm = weightNm, kSample = kSample)
+  if (!is.null(sortFn) && is.character(sortFn)) {
+  	sortVars <- do.call(sortFn, list(dataFl = dataFl, dateNm = dateNm, buildTm = buildTm, 
+                          weightNm = weightNm, kSample = kSample))                       
   } else {
     if (is.null(sortVars)) {
       num_vars <- names(dataFl)[sapply(dataFl, inherits, "cntns")]
@@ -242,8 +248,7 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
 #' saved to your working directory unless path is included in \code{outFl}
 #' (e.g. "../plots/otvPlots.pdf")
 #' @param sortVars A character vector of variable names in the order they will
-#' be plotted. Can be custom or if set to "R2", the output of
-#' otvPlots::OrderByR2.
+#' be plotted. 
 #' @inheritParams PlotVar
 #' @inheritParams OrderByR2
 #' @inheritParams PrepData

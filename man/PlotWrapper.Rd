@@ -9,7 +9,7 @@ PlotWrapper(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   weightNm = NULL, buildTm = NULL, highlightNms = NULL, skewOpt = NULL,
   kSample = 50000, outFl = "otvPlots.pdf", prepData = TRUE,
   varNms = NULL, fuzzyLabelFn = NULL, dropConstants = TRUE,
-  sortVars = NULL, kCategories = 3, ...)
+  sortVars = NULL, sortFn = NULL, kCategories = 3, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -116,10 +116,15 @@ will be retuned.}
 \item{dropConstants}{logical Indicates whether or not constant (all
 duplicated or NA) variables should be dropped from dataFl prior to plotting}
 
-\item{sortVars}{Either a vector of variable names giving the order in which
-variables should be plotted, "R2" in order to sort plots by strength of
-associate with date (see \code{\link[otvPlots]{OrderByR2}}), or NULL to keep 
-original ordering, with numeric variables ahead of categorical}
+\item{sortVars}{A pre-determined vector of variable names giving the order in which
+variables should be plotted, or NULL to keep original ordering except that
+numeric variables will come ahead of categorical and binary. sortVars should
+also be NULL when sortFn is used.}
+
+\item{sortFn}{Name of a function which returns sortVars as output. 
+The function may take the following variables as input: dataFl, dateNm, buildTm, 
+weightNm, kSample. OrderByR2 is included as an example, which sorts numeric plots
+in order of strength of linear association with date.}
 
 \item{kCategories}{Number of categories to plot in over time
 rate chart for categorical data -- the K most numerous categories in the 

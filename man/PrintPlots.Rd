@@ -18,8 +18,7 @@ saved to your working directory unless path is included in \code{outFl}
 PrepData}
 
 \item{sortVars}{A character vector of variable names in the order they will
-be plotted. Can be custom or if set to "R2", the output of
-otvPlots::OrderByR2.}
+be plotted.}
 
 \item{dateNm}{Name of column containing date variable}
 
