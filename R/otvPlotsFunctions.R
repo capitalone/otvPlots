@@ -188,15 +188,24 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
                dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
                dropConstants = dropConstants,  ...)
-    }
+    } 
+    
+       # ensure no integer64 types	
     dateNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dateNm))
     if (!is.null(weightNm)) {
       weightNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", weightNm))
     }
   } else {
+
     stopifnot(is.data.table(dataFl) && 
               all(tolower(c(weightNm, dateNm, dateGp, dateGpBp)) %in% 
                   tolower(names(dataFl))))
+    for (var in names(dataFl)) {
+  	  if (inherits(dataFl[[var]], "integer64")) {
+  		dataFl[, (var) := as.numeric(get(var))]
+  	  }
+    }
+
   }
   if (is.character(labelFl)) {
     labelFl <- PrepLabels(labelFl)
@@ -565,6 +574,7 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 PlotContVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp, 
                         skewOpt = NULL, kSample = 50000) {
   variable <- NULL
+  if(inherits(myVar, "integer64")) stop("Cannot plot integer64 type--cast to numeric")
   meltdx <- SummaryStats(myVar = myVar, dataFl = dataFl, dateGp = dateGp,
   						 weightNm = weightNm)
   
@@ -1146,32 +1156,20 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 
     select = origHeader
     
-    # Global parameter change is currently necessary due to:
-    # 1. ggplot2 v2.2.0 cannot handle integer64 in box plots nor convert to 
-    #    numeric on the fly
-    # 2. data.table v1.9.8 integer64 parameter is seemingly not implemented 
-    # 3. data.table v1.9.8 fread(nrows = 0) seemingly not reading classes 
-    #    correctly, so colclasses cannot be used to allow more flexible handling
-    message("Temporarily changing global option datatable.integer64")
-    old.o <- options("datatable.integer64")
-    options(datatable.integer64 = "numeric")
 
     if (!is.null(selectCols) | !is.null(dropCols)) {
         if (!is.null(selectCols)){
         select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
-        dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, ...)
-
+        dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
       }
       if (!is.null(dropCols)){
        drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
- 	   dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, ...)
+ 	   dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, integer64 = "double", ...)
       }
     } else {
-    	dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, ...)
+    	dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
     }
      
-    options(old.o)
-    
   } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
@@ -1179,6 +1177,14 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   }
   
   stopifnot(tolower(c(dateNm, weightNm)) %in% tolower(names(dataFl)))
+  
+  # ensure all integer64 types are treated as numeric
+ for (var in names(dataFl)) {
+  	if (inherits(dataFl[[var]], "integer64")) {
+  		dataFl[, (var) := as.numeric(get(var))]
+  	}
+  }
+  
   
   if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
     message ("PrepData has already been run on this data set.")

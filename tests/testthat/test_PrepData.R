@@ -115,6 +115,21 @@ test_that("dropConstants works as expected", {
     
 })
 	
+test_that("integer64 data doesn't cause problems", {
+	require(bit64)
+	out <- suppressWarnings(PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "months", dateFt = "%d-%m-%Y"))
+	out[ , balance := as.integer64(balance)]
+	PrepData(out, dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "months", dateFt = "%d-%m-%Y")
+	expect_false(is.integer64(out[, balance]))
+	
+	out <- suppressWarnings(PrepData("../testthat/rawData_bigint.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "months", dateFt = "%d-%m-%Y"))
+	expect_false(is.integer64(out[,bigint]))
+})
+
+
 
 #test_that("Non-ascii input acts as expected", {
 	#test  non-ascii in the header	
