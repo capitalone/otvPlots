@@ -54,9 +54,9 @@ second parameter. This function should describe how fuzzy matching should be
 performed to find labels (see example below). If NULL, only exact matches 
 will be retuned.}
 
-\item{kCategories}{Number of categories to plot in over time
-rate chart for categorical data -- the K most numerous categories in the 
-dataset will be plotted. Default is 3.}
+\item{kCategories}{If a categorical variable has more than kCategories, only 
+a global histogram will be plotted, rate plots for all categories will also be
+plotted.}
 }
 \value{
 A grid of ggplots. For discrete variables (including continuous 
@@ -107,7 +107,8 @@ plot(PlotVar(bankData, myVar = "y", weightNm = NULL,
 
 # It's possible to plot using dateNm as the grouping variable, or another
 # custom grouping variable
-\dontrun{ plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
+\dontrun{ 
+plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
      dateGp = "date", dateGpBp = "date"))
 }
 # If labels are provided, they will be added. If the variable being plotted 

@@ -41,5 +41,9 @@ setDT(bankData)
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
          weightNm = NULL)
 PlotHistogram(bankData, "job")
+
+# NA will be included as a category if any NA are present
+bankData[sample.int(.N)[1:1000], education := NA]
+PlotHistogram(bankData, "education")
 }
 

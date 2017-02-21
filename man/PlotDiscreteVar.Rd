@@ -5,7 +5,7 @@
 \title{Frequency and proportion plots for discrete variables}
 \usage{
 PlotDiscreteVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
-  kCategories = 3)
+  kCategories = 9, normBy = "time")
 }
 \arguments{
 \item{myVar}{Name of the variable to be plotted}
@@ -23,14 +23,23 @@ weights (all rows recieve weight 1)}
 by. Options are NULL, "weeks", "months", "quarters", "years". See
 data.table::IDate. If NULL \code{dateNm} will be used.}
 
-\item{kCategories}{Number of categories to plot in over time
-rate chart for categorical data -- the K most numerous categories in the 
-dataset will be plotted. Default is 3.}
+\item{kCategories}{If a categorical variable has more than kCategories, only 
+a global histogram will be plotted, rate plots for all categories will also be
+plotted.}
+
+\item{normBy}{"time" or "var"-- the normalization factor for rate plots. If "time" then 
+line plots will be normalized by month, that is, all caltegories will sum to one within
+ a particular month.  This allows you to compare the proportion of total coming from 
+different categories at 
+different points in time. For example, at month 1 10% volume came from category A and at 
+month 6 75%. If total volume was constant or decreasing, this represents an increase 
+in market share of category A. If "var", then each category is normalized independently. 
+In the same example, if category A shows a decreasing trend using the "var" normalization,
+this would imply that total volume is decreasing and category A market share is increasing. 
+This example occurs for the "retired" job category in the bankData example data set.}
 }
 \value{
-Histograms and rate charts for categorical data. For factors with <= 
-9 levels both a bar chart and barchart over time are returned. A single 
-global histogram is returned for variables with more than 9 categories.
+Histogram and rate charts (if less than kCategories) for categorical data.
 }
 \description{
 Frequency and proportion plots for discrete variables
@@ -57,18 +66,15 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters",
 # Single histogram is plotted for job type since there are 12 categories
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
                      dateNm = "date", dateGp = "months"))
+                     
 # Limit to top 9 job categories and plot over time
-topJobs = rev(names(sort(table(bankData[, job]))))[1:9]
-plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
-                     weightNm = NULL, dateNm = "date", dateGp = "months"))
+plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, 
+                     weightNm = NULL, dateNm = "date", dateGp = "months",
+                     kCategories = 9))
 
-# By default only the top 3 categories are plotted in the rate graph, but we
-# can have all categegories plotted. 
-plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job \%in\% topJobs], 
-                     weightNm = NULL, dateNm = "date", dateGp = "months", 
-                     kCategories = 9)) 
 
-#  binary data is treated as categorical
+# binary data is treated as categorical, and only the less frequent category 
+# is plotted over time
 plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
 }

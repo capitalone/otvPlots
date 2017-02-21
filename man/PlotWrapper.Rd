@@ -126,9 +126,9 @@ The function may take the following variables as input: dataFl, dateNm, buildTm,
 weightNm, kSample. OrderByR2 is included as an example, which sorts numeric plots
 in order of strength of linear association with date.}
 
-\item{kCategories}{Number of categories to plot in over time
-rate chart for categorical data -- the K most numerous categories in the 
-dataset will be plotted. Default is 3.}
+\item{kCategories}{If a categorical variable has more than kCategories, only 
+a global histogram will be plotted, rate plots for all categories will also be
+plotted.}
 
 \item{...}{Additional parameters to be passed to fread}
 }
@@ -154,19 +154,23 @@ data(bankData)
 setDT(bankData)
 data(bankLabels)
 setDT(bankLabels)
-\dontrun{ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
+\dontrun{ 
+
+PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 PrepLabels(bankLabels)
 
 # PrepData should only need to be run once on a dataset, after that PlotWrapper 
 # can be run with PrepData = FALSE 
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-            prepData = TRUE, kSample = NULL, kCategories = 3)
+            prepData = TRUE, kSample = NULL, kCategories = 12)
 } 
 # Different values of kSample can affect the appearance of boxplots (and 
 # possibly the order of variable output if sortVars = 'R2' is used), but does 
 # not affect the time series plots, which always use all of the data 
-\dontrun{PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+\dontrun{
+
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
             prepData = FALSE, kSample = 500)
 }
@@ -187,18 +191,20 @@ data(bankData)
 setDT(bankData)
 data(bankLabels) 
 setDT(bankLabels)
-\dontrun{ PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+\dontrun{ 
+PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 }
 # We can pass a vector of variable names to customize plotting order using
 # sortVars, but we must exclude the "date" column from sortVars or the 
 # function will stop with a message warning us it cannot plot dates
-\dontrun{ sortVars = sort(bankLabels[varCol!="date", varCol])
+\dontrun{ 
+sortVars = sort(bankLabels[varCol!="date", varCol])
 PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-            sortVars = sortVars, kCategories = 3)
+            sortVars = sortVars, kCategories = 9)
 } 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter

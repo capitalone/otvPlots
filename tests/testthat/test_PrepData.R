@@ -1,8 +1,8 @@
 library(otvPlots)
 context("Prepare Data")
-is.cntns <- function(x)  attr(x, "class")[2] == "cntns" 
-is.dscrt <- function(x)  attr(x, "class")[2] == "dscrt"
-is.IDate <- function(x)  class(x)[1] == "IDate"
+is.cntns <- function(x)  inherits(x, "cntns") 
+is.dscrt <- function(x)  inherits(x, "dscrt")
+is.IDate <- function(x)  inherits(x, "IDate")
 is.binary <- function(x) uniqueN(na.omit(x)) == 2
   
 test_that("Incorrect date format creates warnings", {

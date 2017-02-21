@@ -4,7 +4,7 @@
 \alias{PlotHistOverTime}
 \title{Plot Histogram of Discrete Variable Over Time}
 \usage{
-PlotHistOverTime(dataFl, dateNm, dateGp, weightNm = NULL, myVar,
+PlotHistOverTime(dataFl, dateGp, myVar, normBy = "time", weightNm = NULL,
   newLevels = NULL)
 }
 \arguments{
@@ -14,19 +14,27 @@ of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
 
-\item{dateNm}{Name of column containing date variable}
-
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are NULL, "weeks", "months", "quarters", "years". See
 data.table::IDate. If NULL \code{dateNm} will be used.}
 
+\item{myVar}{Name of the variable to be plotted}
+
+\item{normBy}{"time" or "var"-- the normalization factor for rate plots. If "time" then 
+line plots will be normalized by month, that is, all caltegories will sum to one within
+ a particular month.  This allows you to compare the proportion of total coming from 
+different categories at 
+different points in time. For example, at month 1 10% volume came from category A and at 
+month 6 75%. If total volume was constant or decreasing, this represents an increase 
+in market share of category A. If "var", then each category is normalized independently. 
+In the same example, if category A shows a decreasing trend using the "var" normalization,
+this would imply that total volume is decreasing and category A market share is increasing. 
+This example occurs for the "retired" job category in the bankData example data set.}
+
 \item{weightNm}{Name of variable containing row weights or NULL for no
 weights (all rows recieve weight 1)}
 
-\item{myVar}{Name of the variable to be plotted}
-
-\item{newLevels}{A vector of the 9 most frequent categories of \code{myVar},
-in order of global frequency as calculated by PlotDiscreteVar}
+\item{newLevels}{categories of myVar in order of global frequency}
 }
 \value{
 A ggproto object with a histogram of \code{myVar} over time
@@ -52,8 +60,10 @@ bankData[, weight := rpois(.N, 5)]
 bankData[, weight := weight/sum(weight)]
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
          weightNm = "weight")
-PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", 
-weightNm = "weight", myVar = "job", newLevels = NULL)
+PlotHistOverTime(dataFl = bankData, dateGp = "months", 
+weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "time")
+PlotHistOverTime(dataFl = bankData, dateGp = "months", 
+weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "var")
 
 }
 

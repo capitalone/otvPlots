@@ -103,19 +103,23 @@ NULL
 #' setDT(bankData)
 #' data(bankLabels)
 #' setDT(bankLabels)
-#'\dontrun{ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
+#'\dontrun{ 
+#' 
+#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 #' PrepLabels(bankLabels)
 #' 
 #' # PrepData should only need to be run once on a dataset, after that PlotWrapper 
 #' # can be run with PrepData = FALSE 
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             prepData = TRUE, kSample = NULL, kCategories = 3)
+#'             prepData = TRUE, kSample = NULL, kCategories = 12)
 #'} 
 #' # Different values of kSample can affect the appearance of boxplots (and 
 #' # possibly the order of variable output if sortVars = 'R2' is used), but does 
 #' # not affect the time series plots, which always use all of the data 
-#'\dontrun{PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#'\dontrun{
+#'
+#'PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = 500)
 #'}
@@ -136,18 +140,20 @@ NULL
 #' setDT(bankData)
 #' data(bankLabels) 
 #' setDT(bankLabels)
-#' \dontrun{ PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' \dontrun{ 
+#' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 #'}
 #' # We can pass a vector of variable names to customize plotting order using
 #' # sortVars, but we must exclude the "date" column from sortVars or the 
 #' # function will stop with a message warning us it cannot plot dates
-#'\dontrun{ sortVars = sort(bankLabels[varCol!="date", varCol])
+#'\dontrun{ 
+#' sortVars = sort(bankLabels[varCol!="date", varCol])
 #' PlotWrapper(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
-#'             sortVars = sortVars, kCategories = 3)
+#'             sortVars = sortVars, kCategories = 9)
 #'} 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
@@ -376,7 +382,8 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #'
 #' # It's possible to plot using dateNm as the grouping variable, or another
 #' # custom grouping variable
-#'\dontrun{ plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
+#'\dontrun{ 
+#'plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
 #'      dateGp = "date", dateGpBp = "date"))
 #'}
 #' # If labels are provided, they will be added. If the variable being plotted 
@@ -470,13 +477,12 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' Frequency and proportion plots for discrete variables
 #'
 #' @inheritParams PlotVar
-#' @param kCategories Number of categories to plot in over time  
-#' rate chart for categorical data -- the K most numerous categories in the 
-#' dataset will be plotted. Default is 3.
+#' @inheritParams PlotHistOverTime
+#' @param kCategories If a categorical variable has more than kCategories, only 
+#' a global histogram will be plotted, rate plots for all categories will also be
+#' plotted.
 #' @export
-#' @return Histograms and rate charts for categorical data. For factors with <= 
-#' 9 levels both a bar chart and barchart over time are returned. A single 
-#' global histogram is returned for variables with more than 9 categories.
+#' @return Histogram and rate charts (if less than kCategories) for categorical data. 
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -497,46 +503,37 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' # Single histogram is plotted for job type since there are 12 categories
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
+#'                      
 #' # Limit to top 9 job categories and plot over time
-#' topJobs = rev(names(sort(table(bankData[, job]))))[1:9]
-#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job %in% topJobs], 
-#'                      weightNm = NULL, dateNm = "date", dateGp = "months"))
+#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, 
+#'                      weightNm = NULL, dateNm = "date", dateGp = "months",
+#'                      kCategories = 9))
 #'
-#' # By default only the top 3 categories are plotted in the rate graph, but we
-#' # can have all categegories plotted. 
-#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData[job %in% topJobs], 
-#'                      weightNm = NULL, dateNm = "date", dateGp = "months", 
-#'                      kCategories = 9)) 
 #'
-#' #  binary data is treated as categorical
+#' # binary data is treated as categorical, and only the less frequent category 
+#' # is plotted over time
 #' plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 
 PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
-                            kCategories = 3) {
-  count <- NULL	
+                            kCategories = 9, normBy = "time") {
+  count <- NULL
+  
   p <- PlotHistogram(dataFl = dataFl, myVar = myVar, weightNm = weightNm) 
   newLevels <- as.character(p$data[order(-count)][[myVar]])
+
+  # If more than kCategories levels only plot a single histogram (p)
+  # Otherwise also plot the category rates over time (p2)
   
-  # If more than 9 levels only plot a single histogram (p)
-  # Otherwise also plot the category rates over time (p3)
-  # and a histogram over time (p2)
-  ## TODO remove magic number 9
-  
-  if (length(newLevels) <= 9) {    
-    p2 = PlotCatRate(dataFl = dataFl, myVar = myVar, dateGp = dateGp, 
-    				  kCategories = kCategories, newLevels = newLevels, 
-    				  weightNm = weightNm) 
+  if (!is.null(kCategories) && length(newLevels) <= kCategories) {    
       
-    # setting dataFl[[myVar]] to factor would allow the levels to be ordered in 
-    # the histogram, but is too resource intensive for any large dataset
-        
-    p3 <- PlotHistOverTime(dataFl = dataFl, dateNm = dateNm, dateGp = dateGp, 
-    					   weightNm = weightNm, myVar = myVar, newLevels = newLevels)    
+    p2 <- PlotHistOverTime(dataFl = dataFl, dateGp = dateGp, 
+    					   weightNm = weightNm, myVar = myVar, newLevels = newLevels, 
+    					   normBy = normBy)    
     
-    p_r <- rbind(ggplot2::ggplotGrob(p3), ggplot2::ggplotGrob(p2), size = "last")
-    p  <- gridExtra::arrangeGrob(ggplotGrob(p), p_r, widths = c(1, 2))
+    p  <- gridExtra::arrangeGrob(ggplotGrob(p), p2, widths = c(1, 2))
   }
+  
   return(p)
 }
 
@@ -938,6 +935,10 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
 #'          weightNm = NULL)
 #' PlotHistogram(bankData, "job")
+#' 
+#' # NA will be included as a category if any NA are present
+#' bankData[sample.int(.N)[1:1000], education := NA]
+#' PlotHistogram(bankData, "education")
 PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
 	count <- NULL
  	if (is.null(weightNm)) {
@@ -958,80 +959,23 @@ PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
     return(p)
 }
 
-#' Plot Category Frequency Rates Over Time
-#'
-#' @inheritParams PrepData
-#' @inheritParams PlotVar
-#' @param newLevels A vector of the 9 most frequent categories of \code{myVar},
-#' in order of global frequency as calculated by PlotDiscreteVar
-#' @export
-#' @return A ggproto object with plotting the proportion of \code{myVar} per category over time, 
-#' for the most frequent (globally) \code{kCategories} of \code{myVar} 
-#' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
-#' Version 2.0 (the "License"); you may not use this file except in compliance
-#' with the License. You may obtain a copy of the  License at
-#' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
-#' or agreed to in writing, software distributed under the License is 
-#' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
-#' KIND, either express or implied. See the License for the specific language 
-#' governing permissions and limitations under the License.
-#' @examples
-#' data(bankData)
-#' setDT(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
-#'          weightNm = NULL)
-#' newLevels = names(rev(sort(bankData[, table(job)])))
-#' PlotCatRate(dataFl = bankData, myVar = "job", dateGp = "months", 
-#' 				kCategories = 3, newLevels = newLevels)
-PlotCatRate <- function(dataFl, myVar, dateGp, kCategories, newLevels, weightNm = NULL){
-  count <- N <- rate <- N.x <- N.y <- NULL
-	 if(is.null(newLevels)){
-	 	 if (is.null(weightNm)) {
-    		glbTotals <- dataFl[, list(count = .N), by = myVar]
- 		 } else {
-  		    glbTotals <- dataFl[, list(count = sum(get(weightNm))), by = myVar]
-         }
-		newLevels <- glbTotals[[myVar]][order(glbTotals[, -count])]
-	 }
-	
-	topLevels <- newLevels[1:min(kCategories, length(newLevels))]
- 
-    if (is.null(weightNm)) {
-      rateData <- dataFl[, .N, by = c(myVar, dateGp)][get(myVar) %in% topLevels]
-      rate1    <- dataFl[, .N, by = dateGp]
-    } else {
-      rateData <- dataFl[, list(N = sum(get(weightNm))), by = c(myVar, dateGp)][
-                        get(myVar) %in% topLevels]
-      rate1    <- dataFl[, list(N = sum(get(weightNm))), by = dateGp]
-    }
-    
-    crossLevels <- CJ(unique(rateData[[dateGp]]), unique(rateData[[myVar]]))
-	setnames(crossLevels, c("V1", "V2"), c(dateGp, myVar))
-    rateData = merge(crossLevels, rateData, all.x=TRUE, by = c(dateGp, myVar))
-    rateData[is.na(N), N := 0]
-    
-    rateData <- merge(rateData, rate1, by = dateGp)
-    rateData[, rate := N.x / N.y]
-    rateData[, (myVar) := factor(get(myVar), levels = topLevels)]
-	
-	hex = scales::hue_pal()(length(newLevels))[match(topLevels, 
-													 dataFl[, sort(unique(get(myVar)))])]
-	
-    p <- ggplot2::ggplot(rateData,
-                          ggplot2::aes_string(x = dateGp, y = "rate",
-                                              colour = myVar, group = myVar)) +
-      ggplot2::geom_line() +
-      ggplot2::ylab(NULL) +  
-      ggplot2::scale_colour_manual(values = hex)
-	return(p)
-}
 
 #' Plot Histogram of Discrete Variable Over Time
 #'
-#' @inheritParams PlotCatRate
+#' @inheritParams PlotHistogram
 #' @inheritParams PrepData
 #' @inheritParams PlotVar
+#' @param normBy "time" or "var"-- the normalization factor for rate plots. If "time" then 
+#' line plots will be normalized by month, that is, all caltegories will sum to one within
+#'  a particular month.  This allows you to compare the proportion of total coming from 
+#' different categories at 
+#' different points in time. For example, at month 1 10% volume came from category A and at 
+#' month 6 75%. If total volume was constant or decreasing, this represents an increase 
+#' in market share of category A. If "var", then each category is normalized independently. 
+#' In the same example, if category A shows a decreasing trend using the "var" normalization,
+#' this would imply that total volume is decreasing and category A market share is increasing. 
+#' This example occurs for the "retired" job category in the bankData example data set. 
+#' @param newLevels categories of myVar in order of global frequency
 #' @export
 #' @return A ggproto object with a histogram of \code{myVar} over time
 #' @section License:
@@ -1050,40 +994,89 @@ PlotCatRate <- function(dataFl, myVar, dateGp, kCategories, newLevels, weightNm 
 #' bankData[, weight := weight/sum(weight)]
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
 #'          weightNm = "weight")
-#' PlotHistOverTime(dataFl = bankData, dateNm = "date", dateGp = "months", 
-#' weightNm = "weight", myVar = "job", newLevels = NULL)
+#' PlotHistOverTime(dataFl = bankData, dateGp = "months", 
+#' weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "time")
+#' PlotHistOverTime(dataFl = bankData, dateGp = "months", 
+#' weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "var")
 #' 
-PlotHistOverTime <- function(dataFl, dateNm, dateGp, weightNm = NULL, myVar, newLevels = NULL){
-	 count <- NULL						 	
-	 if(is.null(newLevels)){
-	 	 if (is.null(weightNm)) {
-    		glbTotals <- dataFl[, list(count = .N), by = myVar]
- 		 } else {
-  		    glbTotals <- dataFl[, list(count = sum(get(weightNm))), by = myVar]
-         }
+PlotHistOverTime <- function(dataFl, dateGp, myVar, 
+                             normBy = "time", weightNm = NULL, newLevels = NULL){
+   N.x <- NULL 
+   N.y <- NULL
+   rate <- NULL
+   N <- NULL
+   count <- NULL
+   
+	 dataSub = dataFl[, c(dateGp, myVar, weightNm), with = FALSE]
+	 dataSub[is.na(get(myVar)), (myVar) := "NA"]
+	 
+ 	 if(is.null(newLevels)){
+ 	 	 if (is.null(weightNm)) {
+     		glbTotals <- dataSub[, list(count = .N), by = myVar]
+  		 } else {
+   		    glbTotals <- dataSub[, list(count = sum(get(weightNm))), by = myVar]
+          }
 
-		newLevels <- glbTotals[[myVar]][order(glbTotals[, -count])]
+ 		newLevels <- glbTotals[[myVar]][order(glbTotals[, -count])]
+ 	 }
+
+	 hex = scales::hue_pal()(length(newLevels))[match(newLevels, c(dataFl[, sort(unique(get(myVar)))], "NA"))]
+   
+	 if (is.null(weightNm)) {
+	   countData <- dataSub[, .N, by = c(myVar, dateGp)]
+	   if(normBy == "time"){
+	     countBy <- dataSub[, .N, by = c(dateGp)]
+	   } else {
+	     if(normBy == "var") {
+	       countBy <- dataSub[, .N, by = c(myVar)]
+	     }
+	   }
+	 } else {
+	   countData <- dataSub[, list(N = sum(get(weightNm))), by = c(myVar, dateGp)]
+	   if(normBy == "time"){
+	     countBy <- dataSub[, list(N = sum(get(weightNm))), by = c(dateGp)]
+	   } else {
+	     if(normBy == "var") {
+	       countBy <- dataSub[, list(N = sum(get(weightNm))), by = c(myVar)]
+	     }
+	   }
+	 }
+	
+	 
+	 crossLevels <- CJ(unique(countData[[dateGp]]), unique(countData[[myVar]]))
+	 setnames(crossLevels, c("V1", "V2"), c(dateGp, myVar))
+	 countData = merge(crossLevels, countData, all.x=TRUE, by = c(dateGp, myVar))
+	 countData[is.na(N), N := 0]
+	 countData[, (myVar) := factor(get(myVar), levels = newLevels)]
+	 
+	 if(normBy == "time"){
+	   rateBy <- merge(countData, countBy, by = dateGp)
+	 } else {
+	   if(normBy == "var") {
+	     rateBy  <- merge(countData, countBy, by = myVar)
+	   }
+	 }
+	
+	 rateBy[, rate := N.x / N.y]
+	 rateBy[, (myVar) := factor(get(myVar), levels = newLevels)]
+   
+	 # Plot less frequent category only, helps when there is a large class imbalance
+	 if (length(newLevels) == 2) {
+	   rateBy <- rateBy[get(myVar) == newLevels[2]]
 	 }
 	 
-     binW <- switch(
-      dateGp,
-      "weeks"    = 7,
-      "months"   = 30,
-      "quarters" = 90,
-      "years"    = 365,
-      1
-    )
-	 
-	 p <- ggplot2::ggplot(dataFl,
-                   ggplot2::aes_string(x = dateNm, weight = weightNm,
-                   fill = myVar, group  = myVar)) +
-      ggplot2::geom_histogram(binwidth = binW) +
-      ggplot2::scale_fill_manual(values = scales::hue_pal()(length(newLevels)), 
-                                 breaks = newLevels) +
-      ggplot2::ylab("") +
-      ggplot2::scale_x_date()
+   p <- ggplot2::ggplot(rateBy,
+                        ggplot2::aes_string(x = dateGp, y = "rate")) +
+     ggplot2::geom_line(stat = "identity")  + 
+    facet_wrap(as.formula(paste("~", myVar))) +
+     ggplot2::ylab("") +
+     ggplot2::scale_x_date() 
+   
+  
 	return(p)
 }
+
+
 
 
 ###########################################
@@ -1607,8 +1600,8 @@ CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
 #           Utility Functions             #
 ###########################################
 
-is.cntns <- function(x)  attr(x, "class")[2] == "cntns" 
-is.dscrt <- function(x)  attr(x, "class")[2] == "dscrt"
+is.cntns <- function(x)  inherits(x, "cntns") 
+is.dscrt <- function(x)  inherits(x, "dscrt")
 
 wtd.quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1), 
                             ...) {
