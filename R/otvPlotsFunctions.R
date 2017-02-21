@@ -504,10 +504,9 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 #'                      
-#' # Limit to top 9 job categories and plot over time
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, 
 #'                      weightNm = NULL, dateNm = "date", dateGp = "months",
-#'                      kCategories = 9))
+#'                      kCategories = 12))
 #'
 #'
 #' # binary data is treated as categorical, and only the less frequent category 
