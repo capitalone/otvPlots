@@ -1,8 +1,4 @@
-# Velma
-
-## Please use the *otvPlots* branch 
-
-otvPlots is several features ahead of dev and master while we wait for approval to release Velma as open source. Please install from the otvPlots branch: 
+# Installation
 
 ```
 Sys.setenv(https_proxy="https://EID:SSO@proxy.kdc.capitalone.com:8099")
@@ -11,10 +7,10 @@ Sys.setenv(http_proxy="https://EID:SSO@proxy.kdc.capitalone.com:8099")
 # This isn't necessary on local, and results may vary on statgw
 options(repos = "https://mirror.las.iastate.edu/CRAN/")
 install.packages("devtools")
-devtools::install_github("sju922/Velma", host="github.kdc.capitalone.com/api/v3", ref = "otvPlots")
+devtools::install_github("sju922/Velma", host="github.kdc.capitalone.com/api/v3")
 ```
 
-You can also download the latest build from the issues page, or build the package yourself by cloning the repo, checking out the otvPlots branch, setting your working directory to the otvPlots folder and running `devtools::build() `. 
+You can also download the latest build from the issues page, or build the package yourself by cloning the repo, setting your working directory to the otvPlots folder and running `devtools::build() `. 
 
 Note that otvPlots does depend on R and several R packages to run. You can see a complete and up to date list of dependencies in the DESCRIPTION file in the otvPlots branch. 
 
@@ -27,14 +23,14 @@ Velma is efficiently implemented using data.table and ggplot2. Plots are automat
 Discrete and numeric variables are handled automatically and given separate treatment. Plots are customized for credit-type variables such as DMS attributes. 
 
 #### Here is an example of a numeric plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/unnamed-chunk-1-1.png" 
+<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/fig-1.png" 
      alt="numeric plot" 
    width="1285" 
    height="700">
 
 
 #### Here is an example of a discrete plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/unnamed-chunk-2-1.png" 
+<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/fig-2.png" 
      alt="discrete plot" 
    width="1285" 
    height="700">
