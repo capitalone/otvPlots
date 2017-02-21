@@ -23,14 +23,14 @@ Velma is efficiently implemented using data.table and ggplot2. Plots are automat
 Discrete and numeric variables are handled automatically and given separate treatment. Plots are customized for credit-type variables such as DMS attributes. 
 
 #### Here is an example of a numeric plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/fig-1.png" 
+<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/cntns_ex.png" 
      alt="numeric plot" 
    width="1285" 
    height="700">
 
 
 #### Here is an example of a discrete plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/fig-2.png" 
+<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/dscrt_ex.png" 
      alt="discrete plot" 
    width="1285" 
    height="700">
