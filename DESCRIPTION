@@ -1,7 +1,7 @@
 Package: otvPlots
 Title: Over time variable plots
 Version: 0.1
-Authors@R: "Rebecca Payne <rebecca.payne@capitalone.com> [aut], Capital One <OpenSourceOffice@capitalone.com> [cph], 
+Authors@R: "Rebecca Payne [aut], Capital One <OpenSourceOffice@capitalone.com> [cph], 
 Robert Cezeaux <robert.cezeaux@capitalone.com> [cre]"
 Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
     predictive model building.
