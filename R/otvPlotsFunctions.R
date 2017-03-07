@@ -1067,7 +1067,7 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar,
    p <- ggplot2::ggplot(rateBy,
                         ggplot2::aes_string(x = dateGp, y = "rate")) +
      ggplot2::geom_line(stat = "identity")  + 
-    facet_wrap(as.formula(paste("~", myVar))) +
+    facet_wrap(stats::as.formula(paste("~", myVar))) +
      ggplot2::ylab("") +
      ggplot2::scale_x_date() 
    

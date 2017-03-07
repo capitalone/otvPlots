@@ -16,7 +16,7 @@ test_that("expected plot elements are returned", {
   expect_identical(p$labels$x, "weeks")
   expect_identical(p$labels$y, "")
   expect_is(p$scales$scales[[1]], "ScaleContinuousDate")
-  expect_identical(as.character(p$facet[1][[1]]), "job")
+  expect_identical(as.character(p$facet$params$facets[[1]]), "job")
 })
 
 test_that("rates are calculated correctly normalized by time", {
