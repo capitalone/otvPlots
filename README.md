@@ -1,3 +1,6 @@
+# Bug Reports
+Velma is now being maintained by Zoey Zhu (Yixian.Zhu@capitalone.com)
+
 # Installation
 
 ```
@@ -10,9 +13,11 @@ install.packages("devtools")
 devtools::install_github("sju922/Velma", host="github.kdc.capitalone.com/api/v3")
 ```
 
-You can also download the latest build from the issues page, or build the package yourself by cloning the repo, setting your working directory to the otvPlots folder and running `devtools::build() `. 
+You can also download the latest build from the issues page, or build the package yourself by cloning the repo, setting your working directory to the otvPlots/Velma folder and running `devtools::build() `. 
 
-Note that otvPlots does depend on R and several R packages to run. You can see a complete and up to date list of dependencies in the DESCRIPTION file in the otvPlots branch. 
+Note that otvPlots/Velma does depend on R and several R packages to run. You can see a complete and up to date list of dependencies in the DESCRIPTION file in the otvPlots branch. 
+
+For running Velma on aws, there is an [ionize playbook](https://github.kdc.capitalone.com/CharlesDrotar/ionize-playbooks/tree/master/anaconda-r-velma-playbook) that automatically installs Velma. If you find that there are any out of date dependencies in this playbook, please reach out to the creater Charles Drotar at charles.drotar@capitalone.com.
 
 ## R package for variable level monitoring
 
