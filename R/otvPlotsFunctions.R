@@ -1142,26 +1142,27 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,  
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   if (is.character(dataFl)) {
-    stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
-  
-    origHeader <- names(fread(dataFl, nrows = 0))
-
-    select = origHeader
-    
-
-    if (!is.null(selectCols) | !is.null(dropCols)) {
+    fileExt = tolower(tools::file_ext(dataFl))
+    if (fileExt %in% c("rdata", "rda")){
+      dataFl <- readRDS(dataFl)
+      setDT(dataFl)
+    } else {
+      stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
+      origHeader <- names(fread(dataFl, nrows = 0))
+      select = origHeader
+      if (!is.null(selectCols) | !is.null(dropCols)) {
         if (!is.null(selectCols)){
-        select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
+          select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
+          dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
+        }
+        if (!is.null(dropCols)){
+          drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
+          dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, integer64 = "double", ...)
+        }
+      } else {
         dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
       }
-      if (!is.null(dropCols)){
-       drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
- 	   dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, integer64 = "double", ...)
-      }
-    } else {
-    	dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
     }
-     
   } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
