@@ -35,6 +35,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied. See the License for the specific language 
 governing permissions and limitations under the License.
 }
+
 \examples{
 data(bankData)
 setDT(bankData)
@@ -58,4 +59,3 @@ bankMT = rbindlist(list( bankMT, globalDT))
 # bankMT  # See long format used for plotting
 PlotQuantiles(bankMT, "balance", "months")
 }
-

@@ -13,8 +13,6 @@ OrderByR2(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 \code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}. Output of
 PrepData}
 
-\item{dateNm}{Name of column containing date variable}
-
 \item{buildTm}{Vector identify time period for ranking/anomaly detection
 (most likely model build period). Allows for a subset of plotting time
 period to be used for anomaly detection.
@@ -37,9 +35,6 @@ period to be used for anomaly detection.
          \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
         }
 }}
-
-\item{weightNm}{Name of variable containing row weights or NULL for no
-weights (all rows recieve weight 1)}
 
 \item{kSample}{Either NULL or integer. If a number, indicates the sample size
 for both drawing boxplots and ordering numerical graphs by R2. For large
@@ -72,6 +67,7 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 }
+
 \examples{
 data(bankData)
 setDT(bankData)
@@ -86,4 +82,3 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 OrderByR2(bankData, dateNm = "date")
 
 }
-

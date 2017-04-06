@@ -1088,16 +1088,15 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar,
 #' minimum, a date column \code{dateNm} and a variable to be plotted.
 #'
 #' @param dataFl Either the name of an object that can be converted using
-#' as.data.table (e.g. a ' data frame) or a character string containing the name
-#' of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+#' as.data.table (e.g. a ' data frame), or a character string containing the name
+#' of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
 #' not in your working directory then \code{dataFl} must include (relative or 
 #' absolute) path to file
 #' @param selectCols Either NULL, or a vector contaning names or indices of
 #' variables to read into memory -- must include \code{dateNm},
 #' \code{weightNm} (if not null) and all variables to be plotted. If both
 #' selectCols and dropCols are null, then all variables will be read in. Only
-#' used when dataFl is a string constant, because selectCols is passed as a
-#' parameter to fread. When dataFl is already a dataset in memory, use varNms
+#' used when dataFl is a string constant. When dataFl is already a dataset in memory, use varNms
 #' to indicate the column names to be plotted.
 #' @param dropCols Either NULL or a vector of variables not to read into memory.
 #' This parameter is passed directly to fread (see selectCols)
@@ -1142,26 +1141,34 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,  
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   if (is.character(dataFl)) {
-    stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
-  
-    origHeader <- names(fread(dataFl, nrows = 0))
-
-    select = origHeader
-    
-
-    if (!is.null(selectCols) | !is.null(dropCols)) {
-        if (!is.null(selectCols)){
-        select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
-        dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
-      }
-      if (!is.null(dropCols)){
-       drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
- 	   dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, integer64 = "double", ...)
+    fileExt = tolower(tools::file_ext(dataFl))
+    if (fileExt %in% c("rdata", "rda")){
+      dataFl <- readRDS(dataFl)
+      setDT(dataFl)
+      if (!is.null(selectCols) & !is.null(dropCols)) {
+        stop('Dont\'t assign value to both selectCols and dropCols.')
+      } else if (!is.null(selectCols)){
+        dataFl <- dataFl[ , (names(dataFl) %in% selectCols)]
+      } else if (!is.null(dropCols)){
+        dataFl <- dataFl[ , !(names(dataFl) %in% dropCols)]
       }
     } else {
-    	dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
+      stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
+      origHeader <- names(fread(dataFl, nrows = 0))
+      select = origHeader
+      if (!is.null(selectCols) | !is.null(dropCols)) {
+        if (!is.null(selectCols)){
+          select <- origHeader[match(tolower(selectCols), tolower(origHeader))] 
+          dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
+        }
+        if (!is.null(dropCols)){
+          drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]  
+          dataFl <- fread(dataFl, drop = drop, stringsAsFactors = FALSE, integer64 = "double", ...)
+        }
+      } else {
+        dataFl <- fread(dataFl, select = select, stringsAsFactors = FALSE, integer64 = "double", ...)
+      }
     }
-     
   } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)

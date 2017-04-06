@@ -10,8 +10,8 @@ PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame) or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+as.data.table (e.g. a ' data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
 
@@ -21,8 +21,7 @@ absolute) path to file}
 variables to read into memory -- must include \code{dateNm},
 \code{weightNm} (if not null) and all variables to be plotted. If both
 selectCols and dropCols are null, then all variables will be read in. Only
-used when dataFl is a string constant, because selectCols is passed as a
-parameter to fread. When dataFl is already a dataset in memory, use varNms
+used when dataFl is a string constant. When dataFl is already a dataset in memory, use varNms
 to indicate the column names to be plotted.}
 
 \item{dropCols}{Either NULL or a vector of variables not to read into memory.
@@ -70,6 +69,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied. See the License for the specific language 
 governing permissions and limitations under the License.
 }
+
 \examples{
 data(bankData)
 setDT(bankData)
@@ -81,4 +81,3 @@ str(bankData)
 \seealso{
 \code{\link{fread}}
 }
-

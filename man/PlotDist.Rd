@@ -8,8 +8,8 @@ PlotDist(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame) or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+as.data.table (e.g. a ' data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
 
@@ -44,6 +44,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied. See the License for the specific language 
 governing permissions and limitations under the License.
 }
+
 \examples{
 data(bankData)
 setDT(bankData)
@@ -59,4 +60,3 @@ PlotDist(dataFl = bankData, myVar = "balance", dateGpBp = "quarters",
 PlotDist(dataFl = bankData, myVar = "duration", dateGpBp = "quarters",
          skewOpt = 3)
 }
-

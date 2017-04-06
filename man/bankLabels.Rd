@@ -20,4 +20,3 @@ This data set is used to illustrate the PrepLabels function and other label
 functionality in the otvPlots package in R
 }
 \keyword{datasets}
-

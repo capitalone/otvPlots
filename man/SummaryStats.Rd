@@ -10,8 +10,8 @@ SummaryStats(myVar, dataFl, dateGp, weightNm = NULL)
 \item{myVar}{Name of the variable to be plotted}
 
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame) or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file). ' If dataset is
+as.data.table (e.g. a ' data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
 not in your working directory then \code{dataFl} must include (relative or 
 absolute) path to file}
 
@@ -40,6 +40,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied. See the License for the specific language 
 governing permissions and limitations under the License.
 }
+
 \examples{
 data(bankData)
 setDT(bankData)
@@ -50,4 +51,3 @@ plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g",
 plot(PlotMean(mdx[variable \%in\% c("Mean", "cl1", "cl2")], "age", "months"))
 plot(PlotRates(mdx, "age", "months"))
 }
-
