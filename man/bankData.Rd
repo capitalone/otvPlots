@@ -40,4 +40,3 @@ would be ('yes') or not ('no') subscribed.
 Examples are ordered by date (from May 2008 to November 2010), similar to data analyzed in [Moro et al., 2014]
 }
 \keyword{datasets}
-
