@@ -1146,6 +1146,13 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     if (fileExt %in% c("rdata", "rda")){
       dataFl <- readRDS(dataFl)
       setDT(dataFl)
+      if (!is.null(selectCols) & !is.null(dropCols)) {
+        stop('Dont\'t assign value to both selectCols and dropCols.')
+      } else if (!is.null(selectCols)){
+        dataFl <- dataFl[ , (names(dataFl) %in% selectCols)]
+      } else if (!is.null(dropCols)){
+        dataFl <- dataFl[ , !(names(dataFl) %in% dropCols)]
+      }
     } else {
       stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
       origHeader <- names(fread(dataFl, nrows = 0))
