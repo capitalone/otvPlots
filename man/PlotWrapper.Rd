@@ -37,8 +37,9 @@ to indicate the column names to be plotted.}
 \item{dropCols}{Either NULL or a vector of variables not to read into memory.
 This parameter is passed directly to fread (see selectCols)}
 
-\item{dateFt}{strptime format of date variable. Default is SAS format. See
-?strptime}
+\item{dateFt}{strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
+input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
+be changed to "\%Y-\%m-\%d" automaticallly. See ?strptime}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are NULL, "weeks", "months", "quarters", "years". See
