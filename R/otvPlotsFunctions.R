@@ -1101,8 +1101,9 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar,
 #' @param dropCols Either NULL or a vector of variables not to read into memory.
 #' This parameter is passed directly to fread (see selectCols)
 #' @param dateNm Name of column containing date variable
-#' @param dateFt strptime format of date variable. Default is SAS format. See
-#' ?strptime
+#' @param dateFt strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
+#' input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
+#' be changed to "\%Y-\%m-\%d" automaticallly. See ?strptime
 #' @param dateGp Name of the variable the time series plots should be grouped
 #' by. Options are NULL, "weeks", "months", "quarters", "years". See
 #' data.table::IDate. If NULL \code{dateNm} will be used.
@@ -1230,6 +1231,12 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   # produces NAs
     
   tmp.N = dataFl[is.na(get(dateNm)), .N]
+  nonNADateIndex <- which(!is.na(dataFl[, ..dateNm]))
+  firstNonNA <- min(nonNADateIndex)
+  nonNADate <- dataFl[firstNonNA, ..dateNm]
+  if (grepl("([0-9]{4}-[0-9]{2}-[0-9]{2})", nonNADate[[1]])) {
+    dateFt = "%Y-%m-%d"
+  }
   dataFl[, c(dateNm) := as.IDate(get(dateNm), format = dateFt)]
   if( dataFl[is.na(get(dateNm)), .N] > tmp.N) {
   	warning (paste0("Formatting ", dateNm, " as \"", dateFt, "\" produces NAs"))

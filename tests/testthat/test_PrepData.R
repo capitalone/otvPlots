@@ -4,6 +4,21 @@ is.cntns <- function(x)  inherits(x, "cntns")
 is.dscrt <- function(x)  inherits(x, "dscrt")
 is.IDate <- function(x)  inherits(x, "IDate")
 is.binary <- function(x) uniqueN(na.omit(x)) == 2
+ 
+test_that("Parse SAS (eg. 07Apr2017) default date format correctly", {
+  out <- PrepData(dataFl = "../testthat/drugSASDate.csv", dateNm = "date", 
+                dateGp   = "months", dateGpBp = "quarters")
+  expect_false(all(is.na(out[, "date"])), 'Fail to parse SAS date format')
+  }
+)
+
+test_that("Parse R (eg. 2017-04-17) default date format correctly", {
+  out <- PrepData(dataFl = "../testthat/drugRDate.csv", dateNm = "date", 
+                dateGp   = "months", dateGpBp = "quarters")
+  expect_false(all(is.na(out[, "date"])), 'Fail to parse R date format')
+  }
+)
+
   
 test_that("Incorrect date format creates warnings with csv input file", {
   expect_warning(
