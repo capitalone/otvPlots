@@ -1229,8 +1229,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   
   # Convert date to IDate according to provided format and give warning if format
   # produces NAs
-    
-  tmp.N = dataFl[is.na(get(dateNm)), .N]
+  tmp.N = dataFl[is.na(get(dateNm)), .N] + dataFl[as.character(get(dateNm))=="", .N]
   nonNADateIndex <- which(!is.na(dataFl[, ..dateNm]))
   firstNonNA <- min(nonNADateIndex)
   nonNADate <- dataFl[firstNonNA, ..dateNm]
