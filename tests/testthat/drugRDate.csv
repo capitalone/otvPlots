@@ -1,18 +1,18 @@
 CaseNumber,date,Sex,Race,Age,Residence City,Residence State,Residence County,Death City,Death State,Death County,Location,DescriptionofInjury,InjuryPlace,ImmediateCauseA,Heroin,Cocaine,Fentanyl,Oxycodone,Oxymorphone,EtOH,Hydro-codeine,Benzodiazepine,Methadone,Amphet,Tramad,Morphine_not_heroin,Other,Any Opioid,MannerofDeath,DeathLoc
-Dec-43,2012-03-23,Male,White,22,ONECO,,WINDHAM,MOOSUP,,WINDHAM,Other,Empty,Other,Heroin Toxicity,Y,,,,,,,,,,,,,,Accident,"Moosup, CT(41.712872, -71.881207)"
+Dec-43,2012-02-21,Male,White,22,ONECO,,WINDHAM,MOOSUP,,WINDHAM,Other,Empty,Other,Heroin Toxicity,Y,,,,,,,,,,,,,,Accident,"Moosup, CT(41.712872, -71.881207)"
 8-Dec,2012-02-21,Male,White,28,WINCHESTER,,LITCHFIELD,WINCHESTER,,LITCHFIELD,,Empty,Other,Oxycodone Toxicity,,,,Y,,,,,,,,,,,Accident,"Winchester, CT(41.901973, -73.133851)"
-,2016-05-20,Male,White,36,AVON,CT,HARTFORD,AVON,CT,HARTFORD,Residence,Empty,Residence,Acute Oxycodone Intoxication,,,,Y,,,,,,,,,,,Accident,"Avon, CT(41.809641, -72.830547)"
+,,Male,White,36,AVON,CT,HARTFORD,AVON,CT,HARTFORD,Residence,Empty,Residence,Acute Oxycodone Intoxication,,,,Y,,,,,,,,,,,Accident,"Avon, CT(41.809641, -72.830547)"
 15-13536,2015-08-20,Male,Black,63,NEW HAVEN,CT,NEW HAVEN,NEW HAVEN,CT,NEW HAVEN,Residence,Empty,Residence,Liver Failure due to cirrhosis due to chronic hepatitis C (OSC Heroin),Y,,,,,,,,,,,,,Y,Accident,"New Haven, CT(41.308252, -72.924161)"
 12-12217,2012-08-29,Male,White,39,MIDDLETOWN,,MIDDLESEX,MIDDLETOWN,,MIDDLESEX,Residence,Empty,Residence,Opiate Toxicity,,,,Y,Y,,Y,,,,,,,,Accident,"Middletown, CT(41.544654, -72.651713)"
 15-6342,2015-04-11,Male,White,46,NEWTOWN,CT,FAIRFIELD,NEWTOWN,CT,FAIRFIELD,Residence,Empty,Residence,"Intoxication due to the Combined Effects of Diazepam, Temazepam, and Fentanyl",,,Y,,,,,Y,,,,,,Y,Accident,"Newtown, CT(41.413516, -73.308842)"
-15-12442,2015-07-30,Male,White,24,HAMDEN,CT,NEW HAVEN,HAMDEN,CT,NEW HAVEN,Residence,Empty,Residence,Acute Heroin Toxicity,Y,,,,,,,,,,,,,Y,Accident,"Hamden, CT(41.382918, -72.907743)"
+15-12442,,Male,White,24,HAMDEN,CT,NEW HAVEN,HAMDEN,CT,NEW HAVEN,Residence,Empty,Residence,Acute Heroin Toxicity,Y,,,,,,,,,,,,,Y,Accident,"Hamden, CT(41.382918, -72.907743)"
 13-6486,2013-04-25,Male,White,31,NEW HAVEN,,NEW HAVEN,NEW HAVEN,,NEW HAVEN,Residence,Empty,Residence,Acute Heroin Toxicity,Y,,,,,,,,,,,,,,Accident,"New Haven, CT(41.308252, -72.924161)"
 15-12174,2015-07-26,Male,"Hispanic, White",38,MERIDEN,CT,NEW HAVEN,MERIDEN,CT,NEW HAVEN,Hospital,Empty,Hospital,Acute Cocaine and Heroin Intoxication,Y,Y,,,,,,,,,,,,Y,Accident,"Meriden, CT(41.537589, -72.8011)"
 12-378,2012-01-07,Male,White,45,HARTFORD,,HARTFORD,HARTFORD,,HARTFORD,Residence,Empty,Residence,Heroin Toxicity,Y,,,,,,,,,,,,,,Accident,"Hartford, CT(41.765775, -72.673356)"
 15-6278,2015-04-10,Female,White,45,MERIDEN,CT,NEW HAVEN,NEW HAVEN,CT,NEW HAVEN,Hospital,Empty,Residence,"Intoxication due to the Combined Effects of Fentanyl, Morphine and Oxycodone",,,Y,Y,,,,,,,,Y,MORPHINE RX,Y,Accident,"New Haven, CT(41.308252, -72.924161)"
 Dec-80,2012-07-05,Female,White,59,NORTH CANAAN,,LITCHFIELD,NORTH CANAAN,,LITCHFIELD,Residence,Empty,Residence,Multiple Drug Toxicity,,,,Y,Y,,,Y,,,,,,,Accident,"North Canaan, CT(42.025992, -73.32814)"
 14-7272,2014-05-07,Female,White,54,WETHERSFIELD,,,WETHERSFIELD,,HARTFORD,Residence,Empty,Residence,"Intoxication due to the Combined Effects of Ethanol Zolpidem, and Diphenydramine",,,,,,Y,,,,,,,ZOLPIDEM,,Accident,"Wethersfield, CT(41.712487, -72.663607)"
-Dec-33,2012-05-06,Male,White,32,STAMFORD,,FAIRFIELD,STAMFORD,,FAIRFIELD,Hospital,Empty,Residence,Oxymorphone Toxicity,,,,,Y,,,,,,,, ,,Accident,"Stamford, CT(41.051924, -73.539475)"
+Dec-33,,Male,White,32,STAMFORD,,FAIRFIELD,STAMFORD,,FAIRFIELD,Hospital,Empty,Residence,Oxymorphone Toxicity,,,,,Y,,,,,,,, ,,Accident,"Stamford, CT(41.051924, -73.539475)"
 14-8711,2014-06-04,Male,White,53,ENFIELD,,,ENFIELD,,HARTFORD,Residence,Empty,Residence,"Acute intoxication due to the combined effects of cocaine, ethanol and Clonazepam",,Y,,,,Y,,Y,,,,,,,Accident,"Enfield, CT(41.976501, -72.591985)"
 15-12656,2015-08-03,Female,"Hispanic, White",45,NEW HAVEN,CT,NEW HAVEN,NEW HAVEN,CT,NEW HAVEN,Hospital,Empty,Hospital,"Acute Intoxication due to the combined effects of Heroin, Alprazolam and Clonazepam",Y,,,,,,,Y,,,,,,Y,Accident,"New Haven, CT(41.308252, -72.924161)"
 12-13002,2012-09-15,Female,"Hispanic, White",59,WATERBURY,,NEW HAVEN,WATERBURY,,NEW HAVEN,Residence,Empty,Residence,Multiple Drug Toxicity,,Y,,,,,,,,,,,,,Accident,"Waterbury, CT(41.554261, -73.043069)"
