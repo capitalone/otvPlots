@@ -448,10 +448,11 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
     }
     subHeight <- grid::unit(12, "points")
     if (is.null(fuzzyLabelFn)) {
-      ll <- paste0(labelFl[varCol == myVar, labelCol], "\n")
+      ll <- paste0(labelFl[varCol == myVar, labelCol])
     } else {
       ll <- fuzzyLabelFn(labelFl, myVar)
     }
+    ll <- paste0(myVar, " (", ll, ")", "\n")
     
     if (!is.null(highlightNms) && myVar %in% highlightNms) {
       # variables in highlightNms get red legend
@@ -461,9 +462,9 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
       subCol <- "black"
     }
     
-    subText <- grid::textGrob(ll, gp = grid::gpar(fontsize = 10, col = subCol))
+    subText <- grid::textGrob(ll, gp = grid::gpar(col = subCol, fontface="bold"))
     grobHeights <- grid::unit.c(grid::unit(1, "npc") - subHeight, subHeight)
-    p <- gridExtra::arrangeGrob(p, subText, heights = grobHeights)
+    p <- gridExtra::arrangeGrob(p, top = subText)
   }
   
   return(p)
@@ -1069,7 +1070,8 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar,
      ggplot2::geom_line(stat = "identity")  + 
     facet_wrap(stats::as.formula(paste("~", myVar))) +
      ggplot2::ylab("") +
-     ggplot2::scale_x_date() 
+     ggplot2::scale_x_date() +
+     ggplot2::theme(axis.text.x=element_text(angle = 30, hjust = 1))
    
   
 	return(p)
