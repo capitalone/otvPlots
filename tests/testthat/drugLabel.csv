@@ -1,0 +1,33 @@
+CaseNumber,The case number
+date,Date of the test
+Sex,Gender of  the patient
+Race,Race of the patient
+Age,Age of the patient
+Residence City,
+Residence State,
+Residence County,
+Death City,
+,Wrong result
+Death State,
+Death County,
+Location,
+DescriptionofInjury,The kind of injury the patient has
+InjuryPlace,The place the injury exists
+ImmediateCauseA,The cause of the injury
+Heroin,Level of heroin used
+Cocaine,Level of Cocaine used
+Fentanyl,Level of Fentanyl used
+Oxycodone,Level of Oxycodone used
+Oxymorphone,Level of Oxymorphone used
+EtOH,Level of EtOH used
+Hydro-codeine,Level of Hydro-codeine used
+Benzodiazepine,Level of Benzodiazepine used
+Methadone,Level of Methadone used
+Amphet,Level of Amphet used
+Tramad,Level of Tramad used
+Morphine_not_heroin,Morphine not heroin
+Other,Other things
+Any Opioid,Whether there is opioid
+MannerofDeath,Manner of death
+AmendedMannerofDeath,Amended Manner of Death
+DeathLoc,The death location

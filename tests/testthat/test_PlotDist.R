@@ -6,7 +6,7 @@ setDT(testData)
 suppressMessages(PrepData(dataFl = testData, dateNm = "date", dateGp = "weeks", dateGpBp = "weeks"))
 
 test_that("Plot layers match expectations",{
-  p <- PlotDist(dataFl = testData, myVar = "balance", dateGpBp = "weeks")  
+  p <- PlotDist(dataFl = testData, myVar = "balance", dateGpBp = "weeks", weightNm = "weight")  
   expect_is(p$layers[[1]], "ggproto")
   expect_is(p$layers[[1]]$geom, "GeomBoxplot")
   expect_is(p$layers[[1]]$stat, "StatBoxplot")

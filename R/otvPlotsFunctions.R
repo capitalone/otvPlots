@@ -1149,9 +1149,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       if (!is.null(selectCols) & !is.null(dropCols)) {
         stop('Dont\'t assign value to both selectCols and dropCols.')
       } else if (!is.null(selectCols)){
-        dataFl <- dataFl[ , (names(dataFl) %in% selectCols)]
+        dataFl <- dataFl[ , (tolower(names(dataFl)) %in% selectCols), with=FALSE]
       } else if (!is.null(dropCols)){
-        dataFl <- dataFl[ , !(names(dataFl) %in% dropCols)]
+        dataFl <- dataFl[ , !(tolower(names(dataFl)) %in% dropCols), with=FALSE]
       }
     } else {
       stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )

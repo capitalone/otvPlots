@@ -1,13 +1,15 @@
 library(otvPlots)
 context("Prepare Data")
+data(bankData);  setDT(bankData)
 is.cntns <- function(x)  inherits(x, "cntns") 
 is.dscrt <- function(x)  inherits(x, "dscrt")
 is.IDate <- function(x)  inherits(x, "IDate")
 is.binary <- function(x) uniqueN(na.omit(x)) == 2
+
  
 test_that("Parse SAS (eg. 07Apr2017) default date format correctly", {
   out <- PrepData(dataFl = "../testthat/drugSASDate.csv", dateNm = "date", 
-                dateGp   = "months", dateGpBp = "quarters")
+                  dateGp = "months", dateGpBp = "quarters")
   expect_false(all(is.na(out[, "date"])), 'Fail to parse SAS date format')
   }
 )
@@ -84,7 +86,7 @@ test_that("varNms parameter works", {
 })
 
 
-test_that("selectCols and dropCols work together as expected", {
+test_that("selectCols and dropCols work together as expected for csv file", {
 	
 	# Test that selectCols works alone
 	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
@@ -110,6 +112,38 @@ test_that("selectCols and dropCols work together as expected", {
  		
  	# Test that selectCols and dropCols together give an error	   
 	expect_error(PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   selectCols = c("age", "balance", "date", "weight"),
+ 		   dropCols = c("default")))
+
+})
+
+test_that("selectCols and dropCols work together as expected for RData file", {
+	
+	# Test that selectCols works alone
+	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
+			dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   	selectCols = c("age", "balance", "date", "weight"))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
+ 	
+ 	# test that dropCols works alone
+ 	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   dropCols = c("job", "marital", "default"))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
+ 		
+ 	# Test that selectCols and dropCols together give an error	   
+	expect_error(PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
  		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
  		   selectCols = c("age", "balance", "date", "weight"),
  		   dropCols = c("default")))
@@ -150,37 +184,3 @@ test_that("integer64 data doesn't cause problems", {
  		   dateGp = "weeks", dateGpBp = "months", dateFt = "%d-%m-%Y"))
 	expect_false(is.integer64(out[,bigint]))
 })
-
-
-
-#test_that("Non-ascii input acts as expected", {
-	#test  non-ascii in the header	
-	#test  non-ascii input in body 
-#})
-
-#test_that("Function is agnostic to header capitalization",{
-	#header
-	#selectCols
-	#dropCols
-	#varNms
-	#dateNm
-	#weightNm
-#})
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
