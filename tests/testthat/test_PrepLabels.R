@@ -1,9 +1,29 @@
 library(otvPlots)
 context("Prepare Labels")
+data(bankData);  setDT(bankData)
+data(bankLabels);  setDT(bankLabels)
 
-# test_that("Incorrect date format creates warnings", {
-#   expect_warning(
-#     PrepData("../testthat/rawData.csv", dateNm = "date", weightNm ="weight", 
-#              dateGp = "weeks", dateGpBp = "weeks"), "Formatting date as ")
-# }
-# )
+test_that("Prepare Label function can add title to the label file", {
+	testFl <- PrepLabels("../testthat/drugLabel.csv")
+	expect_identical(names(testFl), c("varCol", "labelCol"),
+		"\"varCol\" and \"labelCol\" are not set correctly.")
+})
+
+test_that("PrepLabels function can delete rows with empty \"varCol\"", {
+	labelFl <- fread("../testthat/drugLabel.csv",
+		select = 1:2, stringsAsFactors = FALSE)
+	testFl <- PrepLabels("../testthat/drugLabel.csv")
+	nrow_before <- nrow(labelFl)
+	nrow_deleted <- labelFl[as.character(labelFl[,1][[1]])=="", .N]
+	nrow_after <- nrow(testFl)
+	expect_identical(nrow_before - nrow_deleted, nrow_after, "")
+})
+
+test_that("PlotVar function works good with label file", {
+	dataFl <- PrepData(bankData, dateNm = "date",
+             		   dateGp = "months", dateGpBp = "quarters")
+	p <- PlotVar(dataFl, "balance", weightNm = NULL, dateNm = "date",
+             	dateGp = "months", dateGpBp = "quarters",
+             	labelFl = bankLabels)
+	expect_is(p, "gtable")
+})

@@ -7,7 +7,7 @@ require(ggplot2)
 suppressMessages(PrepData(testData, dateNm = "date", 
 				 dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
 p <- PlotHistOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
-  	weightNm = "weight", newLevels = NULL)
+    weightNm = "weight", newLevels = NULL)
 test_that("expected plot elements are returned", {	
   expect_is(p$layers[[1]], "ggproto")
   expect_is(p$layers[[1]]$geom, "GeomLine")
