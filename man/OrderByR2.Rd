@@ -31,9 +31,9 @@ period to be used for anomaly detection.
      \item The following are equivalent ways of selecting
        all of 2014:
      \itemize{
-      \item \code{c("2014-01-01","2014-12-31")}
-         \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
-        }
+       \item \code{c("2014-01-01","2014-12-31")}
+       \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
+     }
 }}
 
 \item{kSample}{Either NULL or integer. If a number, indicates the sample size

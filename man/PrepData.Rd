@@ -10,22 +10,20 @@ PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame), or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
-not in your working directory then \code{dataFl} must include (relative or 
-absolute) path to file}
+as.data.table (e.g. a data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path 
+of Rdata file. If dataset is not in your working directory then \code{dataFl}
+must include (relative or absolute) path to file}
 
-\item{dateNm}{Name of column containing date variable}
+\item{dateNm}{Name of column containing \code{date} variable}
 
-\item{selectCols}{Either NULL, or a vector contaning names or indices of
+\item{selectCols}{Either NULL, or a vector of names or indices of
 variables to read into memory -- must include \code{dateNm},
 \code{weightNm} (if not null) and all variables to be plotted. If both
-selectCols and dropCols are null, then all variables will be read in. Only
-used when dataFl is a string constant. When dataFl is already a dataset in memory, use varNms
-to indicate the column names to be plotted.}
+selectCols and dropCols are null, then all variables will be read in.}
 
-\item{dropCols}{Either NULL or a vector of variables not to read into memory.
-This parameter is passed directly to fread (see selectCols)}
+\item{dropCols}{Either NULL, or a vector of variables names or indices of
+variablesnot to read into memory.}
 
 \item{dateFt}{strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
 input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
@@ -41,11 +39,11 @@ options as \code{dateGp}. If NULL \code{dateGp} will be used.}
 \item{weightNm}{Name of variable containing row weights or NULL for no
 weights (all rows recieve weight 1)}
 
-\item{varNms}{Either NULL or a vector of column names to be plotted. If null,
-will default to all columns which are not \code{dateNm} or \code{weightNm}.
-Can also be a vector of indices of the column names, after dropCols or
-selectCols have been applied, if applicable, and not including dateGp,
-dateGpBp (which will be added to the data.table)}
+\item{varNms}{Either NULL or a vector of names or indices of variables to 
+be plotted. If null, will default to all columns which are not \code{dateNm}
+or \code{weightNm}. Can also be a vector of indices of the column names,
+after dropCols or selectCols have been applied, if applicable, and not 
+including dateGp, dateGpBp (which will be added to the data.table)}
 
 \item{dropConstants}{logical Indicates whether or not constant (all
 duplicated or NA) variables should be dropped from dataFl prior to plotting}

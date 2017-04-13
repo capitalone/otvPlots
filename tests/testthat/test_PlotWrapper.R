@@ -12,25 +12,19 @@ test_that("varNms is a subset of sortVars", {
   							sortVars = c("age", "residencecity"), varNms = c("age")))
 }) 
 
-test_that("Names of the variables are transformed correctly", {
-  out <- PrepData(dataFl = "../testthat/drugRDate.csv", dateNm = "date",
-               	  dateGp = "months", dateGpBp = "quarters")
-  expect_equal(names(out)[6], "residencecity")
-})
-  
 test_that("Incorrect file input when prepData is False", {
-  expect_error(PlotWrapper(dataFl = drugSASDate, dateNm = "date",
-                          prepData = FALSE))
+  expect_error(PlotWrapper(dataFl = "../testthat/drugRDate.csv", dateNm = "date",
+                           prepData = FALSE))
 }) 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
+test_that("selectCols and dropCols together give an error", {   
+	expect_error(PlotWrapper("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   selectCols = c("age", "balance", "date", "weight"),
+ 		   dropCols = c("default"), varNms = c("age")))
+
+	expect_error(PlotWrapper("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   selectCols = c("age", "balance", "date", "weight"),
+ 		   dropCols = c("default")))
+})

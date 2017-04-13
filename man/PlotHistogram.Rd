@@ -8,10 +8,10 @@ PlotHistogram(dataFl, myVar, weightNm = NULL)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame), or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
-not in your working directory then \code{dataFl} must include (relative or 
-absolute) path to file}
+as.data.table (e.g. a data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path 
+of Rdata file. If dataset is not in your working directory then \code{dataFl}
+must include (relative or absolute) path to file}
 
 \item{myVar}{Name of the variable to be plotted}
 

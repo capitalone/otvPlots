@@ -20,7 +20,7 @@ PrepData}
 \item{sortVars}{A character vector of variable names in the order they will
 be plotted.}
 
-\item{dateNm}{Name of column containing date variable}
+\item{dateNm}{Name of column containing \code{date} variable}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are NULL, "weeks", "months", "quarters", "years". See

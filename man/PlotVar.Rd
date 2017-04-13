@@ -18,7 +18,7 @@ PrepData}
 \item{weightNm}{Name of variable containing row weights or NULL for no
 weights (all rows recieve weight 1)}
 
-\item{dateNm}{Name of column containing date variable}
+\item{dateNm}{Name of column containing \code{date} variable}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are NULL, "weeks", "months", "quarters", "years". See

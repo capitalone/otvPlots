@@ -1,4 +1,4 @@
-CaseNumber,date,Sex,Race,Age,Residence City,Residence State,Residence County,Death City,Death State,Death County,Location,DescriptionofInjury,InjuryPlace,ImmediateCauseA,Heroin,Cocaine,Fentanyl,Oxycodone,Oxymorphone,EtOH,Hydro-codeine,Benzodiazepine,Methadone,Amphet,Tramad,Morphine_not_heroin,Other,Any Opioid,MannerofDeath,DeathLoc
+CaseNumber,date,Sex,Race,Age,"Re""side-nce .City",Residence State,Residence County,Death City,Death State,Death County,Location,DescriptionofInjury,InjuryPlace,ImmediateCauseA,Heroin,Cocaine,Fentanyl,Oxycodone,Oxymorphone,EtOH,Hydro-codeine,Benzodiazepine,Methadone,Amphet,Tramad,Morphine_not_heroin,Other,Any Opioid,MannerofDeath,DeathLoc
 Dec-43,2012-02-21,Male,White,22,ONECO,,WINDHAM,MOOSUP,,WINDHAM,Other,Empty,Other,Heroin Toxicity,Y,,,,,,,,,,,,,,Accident,"Moosup, CT(41.712872, -71.881207)"
 8-Dec,2012-02-21,Male,White,28,WINCHESTER,,LITCHFIELD,WINCHESTER,,LITCHFIELD,,Empty,Other,Oxycodone Toxicity,,,,Y,,,,,,,,,,,Accident,"Winchester, CT(41.901973, -73.133851)"
 ,,Male,White,36,AVON,CT,HARTFORD,AVON,CT,HARTFORD,Residence,Empty,Residence,Acute Oxycodone Intoxication,,,,Y,,,,,,,,,,,Accident,"Avon, CT(41.809641, -72.830547)"

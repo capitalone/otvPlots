@@ -53,7 +53,6 @@
 #' @importFrom graphics par
 #' @importFrom stats lm.fit lm.wfit quantile sd var
 #' @importFrom utils tail
-NULL
 
 ###########################################
 #          Wrapper Function               #
@@ -183,6 +182,10 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
     stop ("Please make certain that varNms is a subset of sortVars")
   }
 
+  if (!is.null(selectCols) & !is.null(dropCols)) {
+    stop("Please choose between selectCols or dropCols.")
+  }
+
   if (prepData) {
     if (is.character(dataFl)) {
       dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
@@ -191,28 +194,20 @@ PlotWrapper <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                          weightNm = weightNm, varNms = varNms,
                          dropConstants = dropConstants, ...)
     } else {
-      PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols,
-               dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
-               dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
-               dropConstants = dropConstants,  ...)
-    }
-
-       # ensure no integer64 types
-    dateNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dateNm))
-    if (!is.null(weightNm)) {
-      weightNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", weightNm))
+      dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols,
+                         dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
+                         dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
+                         dropConstants = dropConstants,  ...)
     }
   } else {
-
     stopifnot(is.data.table(dataFl) &&
-              all(tolower(c(weightNm, dateNm, dateGp, dateGpBp)) %in%
-                  tolower(names(dataFl))))
+              all(c(weightNm, dateNm, dateGp, dateGpBp) %in%
+                  names(dataFl)))
     for (var in names(dataFl)) {
       if (inherits(dataFl[[var]], "integer64")) {
       dataFl[, (var) := as.numeric(get(var))]
       }
     }
-
   }
   if (is.character(labelFl)) {
     labelFl <- PrepLabels(labelFl)
@@ -432,41 +427,36 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
 
   if (inherits(dataFl[[myVar]], "dscrt")) {
     p <- PlotDiscreteVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories)
-  } else {
-    if (inherits(dataFl[[myVar]], "cntns")) {
-      p <- PlotContVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt,
-                       kSample)
-    }
+  } else if (inherits(dataFl[[myVar]], "cntns")) {
+    p <- PlotContVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt,
+                    kSample)
   }
 
   # if no fuzzy matching function provided, provide exact matches on the first
   # column, otherwise use logic defined in fuzzyLabelFn
+  ll <- myVar
+  subHeight <- grid::unit(12, "points")
   if (!is.null(labelFl)) {
-    if (!all(c("varCol", "labelCol") %in% names(labelFl))) {
-      message("Running PrepLabels on labelFl")
-      PrepLabels(labelFl)
-    }
-    subHeight <- grid::unit(12, "points")
     if (is.null(fuzzyLabelFn)) {
       ll <- paste0(labelFl[varCol == myVar, labelCol])
     } else {
       ll <- fuzzyLabelFn(labelFl, myVar)
     }
     ll <- paste0(myVar, " (", ll, ")", "\n")
-
-    if (!is.null(highlightNms) && myVar %in% highlightNms) {
-      # variables in highlightNms get red legend
-      subCol <- "red"
-    } else {
-      # should add other ways to trigger red labels
-      subCol <- "black"
-    }
-
-    subText <- grid::textGrob(ll, gp = grid::gpar(col = subCol, fontface="bold"))
-    grobHeights <- grid::unit.c(grid::unit(1, "npc") - subHeight, subHeight)
-    p <- gridExtra::arrangeGrob(p, top = subText)
   }
-
+  subCol <- "black"
+  if (!is.null(highlightNms)) {
+    highlightNms <- gsub("/|\\-|\"|\\s", "", highlightNms)
+    if (myVar %in% highlightNms) {
+      # should add other ways to trigger red labels
+      subCol <- "red"
+    }
+  }
+  
+  subText <- grid::textGrob(ll, gp = grid::gpar(col = subCol, fontface="bold"))
+  grobHeights <- grid::unit.c(grid::unit(1, "npc") - subHeight, subHeight)
+  p <- gridExtra::arrangeGrob(p, top = subText)
+  
   return(p)
 }
 
@@ -1089,19 +1079,17 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
 #' minimum, a date column \code{dateNm} and a variable to be plotted.
 #'
 #' @param dataFl Either the name of an object that can be converted using
-#' as.data.table (e.g. a ' data frame), or a character string containing the name
-#' of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
-#' not in your working directory then \code{dataFl} must include (relative or 
-#' absolute) path to file
-#' @param selectCols Either NULL, or a vector contaning names or indices of
+#' as.data.table (e.g. a data frame), or a character string containing the name
+#' of dataset that can be loaded using fread (e.g. a csv file), or a file path 
+#' of Rdata file. If dataset is not in your working directory then \code{dataFl}
+#' must include (relative or absolute) path to file
+#' @param selectCols Either NULL, or a vector of names or indices of
 #' variables to read into memory -- must include \code{dateNm},
 #' \code{weightNm} (if not null) and all variables to be plotted. If both
-#' selectCols and dropCols are null, then all variables will be read in. Only
-#' used when dataFl is a string constant. When dataFl is already a dataset in memory, use varNms
-#' to indicate the column names to be plotted.
-#' @param dropCols Either NULL or a vector of variables not to read into memory.
-#' This parameter is passed directly to fread (see selectCols)
-#' @param dateNm Name of column containing date variable
+#' selectCols and dropCols are null, then all variables will be read in.
+#' @param dropCols Either NULL, or a vector of variables names or indices of
+#' variablesnot to read into memory.
+#' @param dateNm Name of column containing \code{date} variable
 #' @param dateFt strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
 #' input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
 #' be changed to "\%Y-\%m-\%d" automaticallly. See ?strptime
@@ -1112,11 +1100,11 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
 #' options as \code{dateGp}. If NULL \code{dateGp} will be used.
 #' @param weightNm Name of variable containing row weights or NULL for no
 #' weights (all rows recieve weight 1)
-#' @param varNms Either NULL or a vector of column names to be plotted. If null,
-#' will default to all columns which are not \code{dateNm} or \code{weightNm}.
-#' Can also be a vector of indices of the column names, after dropCols or
-#' selectCols have been applied, if applicable, and not including dateGp,
-#' dateGpBp (which will be added to the data.table)
+#' @param varNms Either NULL or a vector of names or indices of variables to 
+#' be plotted. If null, will default to all columns which are not \code{dateNm}
+#' or \code{weightNm}. Can also be a vector of indices of the column names,
+#' after dropCols or selectCols have been applied, if applicable, and not 
+#' including dateGp, dateGpBp (which will be added to the data.table)
 #' @param dropConstants logical Indicates whether or not constant (all
 #' duplicated or NA) variables should be dropped from dataFl prior to plotting
 #' @param ... Additional parameters to be passed to fread
@@ -1142,48 +1130,74 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
+  
+  dateNm <- gsub("/|\\-|\"|\\s", "", dateNm)
+
+  if (!is.null(selectCols) & !is.character(selectCols) & !is.numeric(selectCols)) {
+    stop("selectCols can only be a vector of names/indices of variables")
+  }
+  if (!is.null(dropCols) & !is.character(dropCols) & !is.numeric(dropCols)) {
+    stop("dropCols can only be a vector of names/indices of variables")
+  }
+
+  if (!is.null(weightNm)) {
+    weightNm <- gsub("/|\\-|\"|\\s", "", weightNm)
+  }
+
+  csvfile = FALSE
   if (is.character(dataFl)) {
     fileExt <- tolower(tools::file_ext(dataFl))
-    if (fileExt %in% c("rdata", "rda")){
+    if (fileExt %in% c("csv")) {
+      if (!is.null(dropCols)) {
+        dataFl <- fread(dataFl, drop = dropCols,stringsAsFactors = FALSE,
+                        integer64 = "double", ...)
+      } else if (!is.null(selectCols)) {
+        dataFl <- fread(dataFl, select = selectCols, stringsAsFactors = FALSE,
+                        integer64 = "double", ...)
+      } else {
+        dataFl <- fread(dataFl, stringsAsFactors = FALSE,
+                        integer64 = "double",...)
+      }
+      csvfile = TRUE
+    } else if (fileExt %in% c("rdata", "rda")) {
       dataFl <- readRDS(dataFl)
       setDT(dataFl)
-      if (!is.null(selectCols) & !is.null(dropCols)) {
-        stop("Dont\'t assign value to both selectCols and dropCols.")
-      } else if (!is.null(selectCols)){
-        dataFl <- dataFl[ , (tolower(names(dataFl)) %in% selectCols), with=FALSE]
-      } else if (!is.null(dropCols)){
-        dataFl <- dataFl[ , !(tolower(names(dataFl)) %in% dropCols), with=FALSE]
-      }
     } else {
-      stopifnot(! (!is.null(selectCols) & !is.null(dropCols)) )
-      origHeader <- names(fread(dataFl, nrows = 0))
-      select <- origHeader
-      if (!is.null(selectCols) | !is.null(dropCols)) {
-        if (!is.null(selectCols)){
-          select <- origHeader[match(tolower(selectCols), tolower(origHeader))]
-          dataFl <- fread(dataFl, select = select,
-                          stringsAsFactors = FALSE, integer64 = "double", ...)
-        }
-        if (!is.null(dropCols)){
-          drop <- origHeader[match(tolower(dropCols), tolower(origHeader))]
-          dataFl <- fread(dataFl, drop = drop,
-                          stringsAsFactors = FALSE, integer64 = "double", ...)
-        }
-      } else {
-        dataFl <- fread(dataFl, select = select,
-                        stringsAsFactors = FALSE, integer64 = "double", ...)
-      }
+      stop("Please make sure the input file is a csv file or Rdata file.")
     }
   } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
     }
   }
+  
+  # clean up all special characters from column names
+  setnames(dataFl, gsub("/|\\-|\"|\\s", "", names(dataFl)))
+  if (!is.null(selectCols) & is.character(selectCols)) {
+    selectCols <- gsub("/|\\-|\"|\\s", "", selectCols)
+  }
+  if (!is.null(dropCols) & is.character(dropCols)) {
+    dropCols <- gsub("/|\\-|\"|\\s", "", dropCols)
+  }
+  if (!csvfile) {
+    if (!is.null(selectCols)) {
+      if (is.character(selectCols)) {
+        selectCols <- selectCols[selectCols %in% names(dataFl)]
+      }
+      dataFl <- dataFl[, selectCols, with=FALSE]
+    } else if (!is.null(dropCols)) {
+      if (is.character(dropCols)) {
+        dataFl <- dataFl[, !(names(dataFl) %in% dropCols), with=FALSE]
+      } else {
+        dataFl <- dataFl[, -dropCols, with=FALSE]
+      }
+    }
+  }
 
-  stopifnot(tolower(c(dateNm, weightNm)) %in% tolower(names(dataFl)))
+  stopifnot(c(dateNm, weightNm) %in% names(dataFl))
 
   # ensure all integer64 types are treated as numeric
- for (var in names(dataFl)) {
+  for (var in names(dataFl)) {
     if (inherits(dataFl[[var]], "integer64")) {
       dataFl[, (var) := as.numeric(get(var))]
     }
@@ -1195,6 +1209,11 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 
   if (!is.null(weightNm)) {
     stopifnot(is.numeric(dataFl[[weightNm]]))
+    # if current variable set to be weight/date has previously been given
+    # a plotting type, remove it now
+    if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[weightNm]], "class"))) > 0) {
+      attr(dataFl[[weightNm]], "class") <- attr(dataFl[[weightNm]], "class")[[1]]
+    }
     if (dataFl[is.na(weightNm), .N ] > 0 ) {
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
@@ -1202,34 +1221,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     # normalize weights for consistent treatment
     dataFl[, (weightNm) := get(weightNm) / sum(get(weightNm))]
   }
-
-  # strip all special characters from column names (ggplot really dislikes them)
-  setnames(dataFl, tolower(gsub("\\.|/|\\-|\"|\\s", "", names(dataFl))))
-
-  if (!is.null(dropCols)) {
-    # make sure any unwanted columns are dropped
-    dropCols <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dropCols))
-    stopifnot(!c(dateNm, weightNm) %in% dropCols)
-    if (any(dropCols %in% names(dataFl))) {
-      dropCols <- dropCols[dropCols %in% names(dataFl)]
-      dataFl[, c(dropCols) := NULL]
-    }
-  }
-
-  # keep just a subset of columns, without throwing away the date
-  # and weight columns
-  if (!is.null(selectCols)) {
-    #strip special characters before trying to match
-    selectCols <- tolower(gsub("\\.|/|\\-|\"|\\s", "", selectCols))
-    selectCols <- unique(c(selectCols, dateNm, weightNm))
-    stopifnot(c(dateNm, weightNm) %in% selectCols)
-    if (length(setdiff(names(dataFl), selectCols)) > 0) {
-      dataFl[, c(names(dataFl)[!names(dataFl) %in% selectCols]) := NULL]
-    }
-  }
-
-  dateNm <- tolower(gsub("\\.|/|\\-|\"|\\s", "", dateNm))
-
   # Convert date to IDate according to provided format and give warning
   # if format produces NAs
   tmp.N <-
@@ -1241,7 +1232,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     dateFt <- "%Y-%m-%d"
   }
   dataFl[, c(dateNm) := as.IDate(get(dateNm), format = dateFt)]
-  if ( dataFl[is.na(get(dateNm)), .N] > tmp.N) {
+  if (dataFl[is.na(get(dateNm)), .N] > tmp.N) {
     warning (paste0("Formatting ", dateNm, " as \"", dateFt, "\" produces NAs"))
   }
 
@@ -1270,7 +1261,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   }
 
   if (is.null(varNms)) {
-    # if null, use all variables except date, weight
     vars <- names(dataFl)
   } else {
     if (is.numeric(varNms)) {
@@ -1281,50 +1271,37 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   }
 
   vars <- vars[!vars %in% c(dateNm, weightNm)]
-
-  # if current variable set to be weight/date has previously been given
-  # a plotting type, remove it now
-
-  if (!is.null(weightNm)) {
-    if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[weightNm]], "class"))) > 0) {
-      attr(dataFl[[weightNm]], "class") <- attr(dataFl[[weightNm]], "class")[[1]]
-    }
-  }
-
+  
   if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[dateNm]], "class"))) > 0) {
     attr(dataFl[[dateNm]], "class") <- attr(dataFl[[dateNm]], "class")[[1]]
   }
 
-  # check that this is working correctly
-  # consider replacing the warning message with creating new missing indicators
-  # for variables with NA and 1 other unique value at least should export the
-  # message in a more concrete way so it's not missed
   bad_ind <- vapply(dataFl[, c(vars), with = FALSE],
-                    function(x) all(duplicated(stats::na.omit(x))[-1L]), logical(1))
+                    function(x) all(length(unique(x)) == 1,
+                                  sum(is.na(x)) == 0), logical(1))
+
   if (any(c(dateGp, dateGpBp) %in% vars[bad_ind])) {
     warning ("No variability in grouping variables. Select a new grouping level.")
-    }
-
+  }
+  if (length(vars[!bad_ind]) == 0) {
+    stop("All the variables selected have no variability")
+  }
+  
   if (dropConstants){
     if (sum(bad_ind) > 0) {
       warning (paste(
         c("The following variables have no variability and will be dropped: ",
           paste(vars[bad_ind], collapse = ", ")), collapse = ""))
-
       badVars <- vars[bad_ind]
+      vars <- vars[!bad_ind]
       dataFl[, c(badVars) := NULL]
     }
   }
 
-  vars <- vars[!bad_ind] # exclude variables with no variance
-  stopifnot(length(vars) > 0) # stop if no variables to plot
-
   date_ind <- sapply(dataFl[, c(vars), with = FALSE], inherits, "Date")
 
   # we do not want to plot any dates
-  vars <- vars[date_ind == 0]
-  # stop if no variables to plot
-  stopifnot(length(vars) > 0)
+  vars <- vars[!date_ind]
   # numeric variables
   num_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z) is.numeric(z))
   # categorical variables
@@ -1372,12 +1349,10 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' errors and should be stripped outside of R. All labels will be truncated at
 #' 145 characters.
 #'
-#' @param labelFl Either the name (and possibly path) of a dataset containing
-#' labels, an R object convertible to data.table (eg data frame) or NULL. If
-#' name is given, if the dataset is not in your working directory then
-#' \code{labelFl} must include (relative or absolute) path to file. If NULL no
-#' labels will be used. Label dataset must contain at least 2 columns:
-#' variable names and variable label.
+#' @param labelFl Either the path of a dataset (csv or Rdata file) containing
+#' labels, an R object convertible to data.table (e.g. data frame) or NULL. If
+#' NULL no labels will be used. Label dataset must contain at least 2 columns:
+#' varCol (variable names) and labelCol (variable label).
 #' @param idx Vector of length 2 giving column index of variable names (first
 #' position) and labels (second position)
 #' @export
@@ -1399,7 +1374,15 @@ PrepLabels <- function(labelFl, idx = 1:2) {
   varCol <- labelCol <- NULL
   if (!is.null(labelFl)) {
     if (is.character(labelFl)) {
-      labelFl <- fread(labelFl, select = idx, stringsAsFactors = FALSE)
+      fileExt <- tolower(tools::file_ext(labelFl))
+      if (fileExt %in% c("csv")) {
+        labelFl <- fread(labelFl, select = idx, stringsAsFactors = FALSE)
+      } else if (fileExt %in% c("rdata", "rda")) {
+        labelFl <- readRDS(labelFl)
+        setDT(labelFl)
+      } else {
+        stop("Please make sure the input file is a csv file or Rdata file.")
+      }
     } else {
       setDT(labelFl)
       vec <- 1:ncol(labelFl)
@@ -1409,7 +1392,7 @@ PrepLabels <- function(labelFl, idx = 1:2) {
     }
     setnames(labelFl, c("varCol", "labelCol"))
     labelFl <- subset(labelFl, subset = (!varCol == ""))
-    labelFl[, varCol := tolower(gsub("\\.|/|\\-|\"|\\s", "", varCol))]
+    labelFl[, varCol := gsub("/|\\-|\"|\\s", "", varCol)]
     labelFl[, labelCol := stringi::stri_trans_general(labelCol, "latin-ascii")]
     labelFl[, labelCol := strtrim(labelCol, 145)]
     labelFl[nchar(labelCol) > 144, labelCol := paste0(labelCol, "...")]

@@ -13,29 +13,25 @@ PlotWrapper(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a ' data frame), or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file), or a file path of Rdata file. ' If dataset is
-not in your working directory then \code{dataFl} must include (relative or 
-absolute) path to file}
+as.data.table (e.g. a data frame), or a character string containing the name
+of dataset that can be loaded using fread (e.g. a csv file), or a file path 
+of Rdata file. If dataset is not in your working directory then \code{dataFl}
+must include (relative or absolute) path to file}
 
-\item{dateNm}{Name of column containing date variable}
+\item{dateNm}{Name of column containing \code{date} variable}
 
-\item{labelFl}{Either the name (and possibly path) of a dataset containing
-labels, an R object convertible to data.table (eg data frame) or NULL. If
-name is given, if the dataset is not in your working directory then
-\code{labelFl} must include (relative or absolute) path to file. If NULL no
-labels will be used. Label dataset must contain at least 2 columns:
-variable names and variable label.}
+\item{labelFl}{Either the path of a dataset (csv or Rdata file) containing
+labels, an R object convertible to data.table (e.g. data frame) or NULL. If
+NULL no labels will be used. Label dataset must contain at least 2 columns:
+varCol (variable names) and labelCol (variable label).}
 
-\item{selectCols}{Either NULL, or a vector contaning names or indices of
+\item{selectCols}{Either NULL, or a vector of names or indices of
 variables to read into memory -- must include \code{dateNm},
 \code{weightNm} (if not null) and all variables to be plotted. If both
-selectCols and dropCols are null, then all variables will be read in. Only
-used when dataFl is a string constant. When dataFl is already a dataset in memory, use varNms
-to indicate the column names to be plotted.}
+selectCols and dropCols are null, then all variables will be read in.}
 
-\item{dropCols}{Either NULL or a vector of variables not to read into memory.
-This parameter is passed directly to fread (see selectCols)}
+\item{dropCols}{Either NULL, or a vector of variables names or indices of
+variablesnot to read into memory.}
 
 \item{dateFt}{strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
 input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
@@ -69,9 +65,9 @@ period to be used for anomaly detection.
      \item The following are equivalent ways of selecting
        all of 2014:
      \itemize{
-      \item \code{c("2014-01-01","2014-12-31")}
-         \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
-        }
+       \item \code{c("2014-01-01","2014-12-31")}
+       \item \code{c("01JAN2014","31DEC2014", "\%d\%h\%Y")}
+     }
 }}
 
 \item{highlightNms}{Either NULL or a character vector of variables to recieve
@@ -100,11 +96,11 @@ function. If FALSE, dataFl must be a data.table containing variables
 \code{weightNm, dateNm, dateGp} and \code{dateGpBp} (allows the user to use
 arbitrary groupings of data on the x-axis)}
 
-\item{varNms}{Either NULL or a vector of column names to be plotted. If null,
-will default to all columns which are not \code{dateNm} or \code{weightNm}.
-Can also be a vector of indices of the column names, after dropCols or
-selectCols have been applied, if applicable, and not including dateGp,
-dateGpBp (which will be added to the data.table)}
+\item{varNms}{Either NULL or a vector of names or indices of variables to 
+be plotted. If null, will default to all columns which are not \code{dateNm}
+or \code{weightNm}. Can also be a vector of indices of the column names,
+after dropCols or selectCols have been applied, if applicable, and not 
+including dateGp, dateGpBp (which will be added to the data.table)}
 
 \item{fuzzyLabelFn}{Either NULL or a function of 2 parameters: A label file 
 in the format output by PrepLabels and a string giving a variable name. The
