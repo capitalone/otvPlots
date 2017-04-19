@@ -53,6 +53,7 @@
 #' @importFrom graphics par
 #' @importFrom stats lm.fit lm.wfit quantile sd var
 #' @importFrom utils tail
+NULL
 
 ###########################################
 #          Wrapper Function               #
