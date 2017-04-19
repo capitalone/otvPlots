@@ -6,7 +6,12 @@ is.dscrt <- function(x)  inherits(x, "dscrt")
 is.IDate <- function(x)  inherits(x, "IDate")
 is.binary <- function(x) uniqueN(na.omit(x)) == 2
 
- 
+test_that("Names of the variables are transformed correctly", {
+  out <- PrepData(dataFl = "../testthat/drugRDate.csv", dateNm = "date",
+               	  dateGp = "months", dateGpBp = "quarters")
+  expect_equal(names(out)[6], "Residence.City")
+})
+
 test_that("Parse SAS (eg. 07Apr2017) default date format correctly", {
   out <- PrepData(dataFl = "../testthat/drugSASDate.csv", dateNm = "date", 
                   dateGp = "months", dateGpBp = "quarters")
@@ -21,7 +26,6 @@ test_that("Parse R (eg. 2017-04-17) default date format correctly", {
   }
 )
 
-  
 test_that("Incorrect date format creates warnings with csv input file", {
   expect_warning(
   	PrepData("../testthat/rawData.csv", dateNm = "date", weightNm ="weight", 
@@ -73,7 +77,6 @@ test_that("Variables are assigned to appropriate data type", {
 		+ length(names(cntnsVars)) + 1, length(names(out)))	
 })
 
-	
 test_that("varNms parameter works", {
 	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
  		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y", varNms = c("age", "balance"))
@@ -83,10 +86,18 @@ test_that("varNms parameter works", {
 	expect_equal(length(cntnsVars), 2)
 	expect_equal(length(dscrtVars), 0)
 	expect_equal(length(dateVars), 2)
+
+	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y", varNms = c(1, 4))
+	cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
 })
 
-
-test_that("selectCols and dropCols work together as expected for csv file", {
+test_that("selectCols and dropCols work as expected for csv file", {
 	
 	# Test that selectCols works alone
 	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
@@ -99,6 +110,16 @@ test_that("selectCols and dropCols work together as expected for csv file", {
 	expect_equal(length(dscrtVars), 0)
 	expect_equal(length(dateVars), 2)
  	
+ 	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   selectCols = c(1, 4, 7, 6))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
+
  	# test that dropCols works alone
  	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
  		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
@@ -109,16 +130,19 @@ test_that("selectCols and dropCols work together as expected for csv file", {
 	expect_equal(length(cntnsVars), 2)
 	expect_equal(length(dscrtVars), 0)
 	expect_equal(length(dateVars), 2)
- 		
- 	# Test that selectCols and dropCols together give an error	   
-	expect_error(PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
- 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
- 		   selectCols = c("age", "balance", "date", "weight"),
- 		   dropCols = c("default")))
 
+ 	out <- PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   dropCols = c(2:3, 5))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
 })
 
-test_that("selectCols and dropCols work together as expected for RData file", {
+test_that("selectCols and dropCols work as expected for RData file", {
 	
 	# Test that selectCols works alone
 	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
@@ -131,6 +155,16 @@ test_that("selectCols and dropCols work together as expected for RData file", {
 	expect_equal(length(dscrtVars), 0)
 	expect_equal(length(dateVars), 2)
  	
+ 	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
+			dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   	selectCols = c(1, 4, 7, 6))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
+
  	# test that dropCols works alone
  	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
  		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
@@ -141,13 +175,16 @@ test_that("selectCols and dropCols work together as expected for RData file", {
 	expect_equal(length(cntnsVars), 2)
 	expect_equal(length(dscrtVars), 0)
 	expect_equal(length(dateVars), 2)
- 		
- 	# Test that selectCols and dropCols together give an error	   
-	expect_error(PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
- 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
- 		   selectCols = c("age", "balance", "date", "weight"),
- 		   dropCols = c("default")))
 
+	 	out <- PrepData("../testthat/rawData.rda", dateNm = "date", weightNm = "weight",
+ 		   dateGp = "weeks", dateGpBp = "weeks", dateFt = "%d-%m-%Y",
+ 		   dropCols = c(2:3, 5))
+    cntnsVars = Filter(is.cntns, out)
+	dscrtVars = Filter(is.dscrt, out)
+ 	dateVars  = Filter(is.IDate, out)
+	expect_equal(length(cntnsVars), 2)
+	expect_equal(length(dscrtVars), 0)
+	expect_equal(length(dateVars), 2)
 })
 
 test_that("dropConstants works as expected", {
@@ -183,4 +220,8 @@ test_that("integer64 data doesn't cause problems", {
 	out <- suppressWarnings(PrepData("../testthat/rawData_bigint.csv", dateNm = "date", weightNm = "weight", 
  		   dateGp = "weeks", dateGpBp = "months", dateFt = "%d-%m-%Y"))
 	expect_false(is.integer64(out[,bigint]))
+})
+
+test_that("Incorrect data input file generates error", {
+	expect_error(dataFl <- PrepD("../testthat/PlotHistogram.RDS"))
 })

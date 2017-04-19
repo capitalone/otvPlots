@@ -7,12 +7,10 @@
 PrepLabels(labelFl, idx = 1:2)
 }
 \arguments{
-\item{labelFl}{Either the name (and possibly path) of a dataset containing
-labels, an R object convertible to data.table (eg data frame) or NULL. If
-name is given, if the dataset is not in your working directory then
-\code{labelFl} must include (relative or absolute) path to file. If NULL no
-labels will be used. Label dataset must contain at least 2 columns:
-variable names and variable label.}
+\item{labelFl}{Either the path of a dataset (csv or Rdata file) containing
+labels, an R object convertible to data.table (e.g. data frame) or NULL. If
+NULL no labels will be used. Label dataset must contain at least 2 columns:
+varCol (variable names) and labelCol (variable label).}
 
 \item{idx}{Vector of length 2 giving column index of variable names (first
 position) and labels (second position)}
