@@ -1088,11 +1088,11 @@ PlotHistOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
 #' \code{weightNm} (if not null) and all variables to be plotted. If both
 #' selectCols and dropCols are null, then all variables will be read in.
 #' @param dropCols Either NULL, or a vector of variables names or indices of
-#' variablesnot to read into memory.
+#' variables not to read into memory.
 #' @param dateNm Name of column containing \code{date} variable
 #' @param dateFt strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
-#' input data with R date format (yyyy-mm-dd) will be detected and \code{dateFt} will 
-#' be changed to "\%Y-\%m-\%d" automaticallly. See ?strptime
+#' input data with R date format (\%Y-\%m-\%d) will also be detected. Both of two formats 
+#' can be parsed automaticallly. See ?strptime
 #' @param dateGp Name of the variable the time series plots should be grouped
 #' by. Options are NULL, "weeks", "months", "quarters", "years". See
 #' data.table::IDate. If NULL \code{dateNm} will be used.
