@@ -1,5 +1,5 @@
 # Bug Reports
-Velma is now being maintained by Zoey Zhu (Yixian.Zhu@capitalone.com)
+Velma is now being maintained by Zoey Zhu (Zoey.Zhu@capitalone.com)
 
 # Installation
 
@@ -10,7 +10,7 @@ Sys.setenv(http_proxy="https://EID:SSO@proxy.kdc.capitalone.com:8099")
 # This isn't necessary on local, and results may vary on statgw
 options(repos = "https://mirror.las.iastate.edu/CRAN/")
 install.packages("devtools")
-devtools::install_github("sju922/Velma", host="github.kdc.capitalone.com/api/v3")
+devtools::install_github("JamesFiedler/Velma", host="github.kdc.capitalone.com/api/v3")
 ```
 
 You can also download the latest build from the issues page, or build the package yourself by cloning the repo, setting your working directory to the otvPlots/Velma folder and running `devtools::build() `. 
