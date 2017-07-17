@@ -289,9 +289,11 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
            highlightNms = highlightNms, skewOpt = skewOpt,
            fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories)
 
-  cairo_pdf(filename = outFl,  width = 11, height = 8, pointsize = 12,
+#  cairo_pdf(filename = outFl,  width = 11, height = 8, pointsize = 12,
+#            onefile = TRUE)
+  pdf(file = outFl,  width = 11, height = 8, pointsize = 12,
             onefile = TRUE)
-
+  
   par(ask = FALSE)
   for (x in plotList)  {
     grid::grid.newpage()

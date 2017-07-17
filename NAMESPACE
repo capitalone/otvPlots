@@ -40,3 +40,5 @@ importFrom(stats,sd)
 importFrom(stats,var)
 importFrom(stringi,stri_trans_general)
 importFrom(utils,tail)
+importFrom("grDevices", "pdf")
+
