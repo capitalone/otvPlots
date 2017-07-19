@@ -3,9 +3,9 @@ Title: Over time variable plots
 Version: 0.1
 Author: Rebecca Payne [aut], 
 	Capital One <OpenSourceOffice@capitalone.com> [cph], 
-	Zoey Zhu <Yixian.Zhu@capitalone.com> [cre, ctb]
+	Zoey Zhu [cre, ctb],
 	Yingbo Li [ctb] 
-Maintainer: Zoey Zhu <Yixian.Zhu@capitalone.com>
+Maintainer: Zoey Zhu <Yixian.Zhu@capitalone.com>, Yingbo Li<yingbo.li@capitalone.com>
 Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
     predictive model building.
 Depends:
