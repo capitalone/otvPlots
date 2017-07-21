@@ -1,29 +1,29 @@
 Package: otvPlots
-Title: Over time variable plots
+Title: Over Time Variable Plots
 Version: 0.1
-Author: Rebecca Payne [aut], 
-	Capital One <OpenSourceOffice@capitalone.com> [cph], 
-	Zoey Zhu [cre, ctb],
-	Yingbo Li [ctb] 
-Maintainer: Zoey Zhu <Yixian.Zhu@capitalone.com>, Yingbo Li<yingbo.li@capitalone.com>
+Authors@R: c(
+    person("Rebecca", "Payne", role = "aut"),
+    person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut", "cre")
+		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")
+		person("Capital One", email = "OpenSourceOffice@capitalone.com", role = "cph"))
 Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
     predictive model building.
 Depends:
-    R (>= 3.2.0), 
-    data.table (>= 1.9.6) 
-Imports: 
-    ggplot2 (>= 2.1.0), 
-    grid (>= 3.2.0), 
-    gridExtra (>= 2.2.1), 
-    Hmisc (>= 3.17-4), 
-    moments, 
+    R (>= 3.2.0),
+    data.table (>= 1.9.6)
+Imports:
+    ggplot2 (>= 2.1.0),
+    grid (>= 3.2.0),
+    gridExtra (>= 2.2.1),
+    Hmisc (>= 3.17-4),
+    moments,
     scales (>= 0.4.0)
     stringi (>= 1.1.1)
 License: file LICENSE
 LazyData: true
 Suggests:
     bit64,
-    knitr, 
+    knitr,
     proto
     testthat
 VignetteBuilder: knitr
