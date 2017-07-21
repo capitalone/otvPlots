@@ -3,8 +3,8 @@ Title: Over Time Variable Plots
 Version: 0.1
 Authors@R: c(
     person("Rebecca", "Payne", role = "aut"),
-    person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut", "cre")
-		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")
+    person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut")),
+		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", email = "OpenSourceOffice@capitalone.com", role = "cph"))
 Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
     predictive model building.
@@ -17,14 +17,14 @@ Imports:
     gridExtra (>= 2.2.1),
     Hmisc (>= 3.17-4),
     moments,
-    scales (>= 0.4.0)
+    scales (>= 0.4.0),
     stringi (>= 1.1.1)
 License: file LICENSE
 LazyData: true
 Suggests:
     bit64,
     knitr,
-    proto
+    proto,
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
