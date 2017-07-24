@@ -106,8 +106,14 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   
+  ## Remove all '/', '-', '"', and spaces in the string inputs: dateNm, weightNm
   dateNm <- gsub("/|\\-|\"|\\s", "", dateNm)
 
+  if (!is.null(weightNm)) {
+    weightNm <- gsub("/|\\-|\"|\\s", "", weightNm)
+  }
+  
+  ## Verify that inputs are valid: selectCols and dropCols
   if (!is.null(selectCols) & !is.character(selectCols) & !is.numeric(selectCols)) {
     stop("selectCols can only be a vector of names/indices of variables")
   }
@@ -115,14 +121,12 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     stop("dropCols can only be a vector of names/indices of variables")
   }
 
-  if (!is.null(weightNm)) {
-    weightNm <- gsub("/|\\-|\"|\\s", "", weightNm)
-  }
-
+  ## Read the dataFl as a data.table. 
+  ## Here, selectCols and dropCols only apply to csv files.
   csvfile = FALSE
   if (is.character(dataFl)) {
     fileExt <- tolower(tools::file_ext(dataFl))
-    if (fileExt %in% c("csv")) {
+    if (fileExt %in% c("csv")) { ## for csv input file
       if (!is.null(dropCols)) {
         dataFl <- fread(dataFl, drop = dropCols,stringsAsFactors = FALSE,
                         integer64 = "double", ...)
@@ -134,19 +138,19 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                         integer64 = "double",...)
       }
       csvfile = TRUE
-    } else if (fileExt %in% c("rdata", "rda")) {
-      dataFl <- readRDS(dataFl)
+    } else if (fileExt %in% c("rdata", "rda")) { ## for rda input file
+      dataFl <- readRDS(dataFl) ## This function seems to only work for rds files, not rda!
       setDT(dataFl)
     } else {
       stop("Please make sure the input file is a csv file or Rdata file.")
     }
-  } else {
+  } else { ## for R object
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
     }
   }
   
-  # clean up all special characters from column names
+  ## Clean up all special characters from column names
   setnames(dataFl, gsub("/|\\-|\"|\\s", "", names(dataFl)))
   if (!is.null(selectCols) & is.character(selectCols)) {
     selectCols <- gsub("/|\\-|\"|\\s", "", selectCols)
@@ -154,6 +158,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   if (!is.null(dropCols) & is.character(dropCols)) {
     dropCols <- gsub("/|\\-|\"|\\s", "", dropCols)
   }
+  
+  ## Apply selectCols and dropCols only apply to non-csv input dataFl.
   if (!csvfile) {
     if (!is.null(selectCols)) {
       if (is.character(selectCols)) {
@@ -168,24 +174,27 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       }
     }
   }
-
+  
+  ## Check that these columns are in dataFl: dateNm, weightNm
   stopifnot(c(dateNm, weightNm) %in% names(dataFl))
 
-  # ensure all integer64 types are treated as numeric
+  ## Ensure all integer64 types are treated as numeric
   for (var in names(dataFl)) {
     if (inherits(dataFl[[var]], "integer64")) {
       dataFl[, (var) := as.numeric(get(var))]
     }
   }
-
+  
+  ## Check if PrepData is already run on this dataset
   if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
     message ("PrepData has already been run on this data set.")
   }
 
+  ##  Weights
   if (!is.null(weightNm)) {
     stopifnot(is.numeric(dataFl[[weightNm]]))
-    # if current variable set to be weight/date has previously been given
-    # a plotting type, remove it now
+    ## If current variable set to be weight/date has previously been given
+    ## a plotting type, remove it now
     if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[weightNm]], "class"))) > 0) {
       attr(dataFl[[weightNm]], "class") <- attr(dataFl[[weightNm]], "class")[[1]]
     }
@@ -193,9 +202,10 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
-    # normalize weights for consistent treatment
-    dataFl[, (weightNm) := get(weightNm) / sum(get(weightNm))]
+    ## Normalize weights for consistent treatment
+    dataFl[, (weightNm) := weightNm / sum(weightNm)]
   }
+  
   # Convert date to IDate according to provided format and give warning
   # if format produces NAs
   tmp.N <-
