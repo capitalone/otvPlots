@@ -190,7 +190,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     message ("PrepData has already been run on this data set.")
   }
 
-  ##  Weights
+  ##  Normalize weights
   if (!is.null(weightNm)) {
     stopifnot(is.numeric(dataFl[[weightNm]]))
     ## If current variable set to be weight/date has previously been given
@@ -203,7 +203,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
     ## Normalize weights for consistent treatment
-    dataFl[, (weightNm) := weightNm / sum(weightNm)]
+    dataFl[, weightNm := get(weightNm) / sum(get(weightNm))]
   }
   
   # Convert date to IDate according to provided format and give warning
