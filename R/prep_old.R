@@ -52,10 +52,10 @@ NULL
 #' Clean an input dataset for plotting
 #'
 #' Cleans an input dataset for use by the plotting function \code{otvPlots}. 
-#'   The input data \code{dataFl} must contain, at a minimum, a date column 
-#'   \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-#'   convereted to a data.table class, and all changes are made to it by 
-#'   reference.
+#' The input data \code{dataFl} must contain, at a minimum, a date column 
+#' \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
+#' convereted to a data.table class, and all changes are made to it by 
+#' reference.
 #'
 #' @param dataFl Either the name of an object that can be converted using
 #'   \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
@@ -105,11 +105,10 @@ NULL
 #' @export
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 #' # columns have been assigned a plotting class (cntns/dscrt)
 #' str(bankData) 
-#' 
+ 
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                      dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
                      weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
@@ -338,7 +337,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                    paste0(discreteVars, collapse = " "),  "\n"), sep = " ") )
   
   return(dataFl)
-  }
+}
 
 ###########################################
 #           Prepare Labels                #
@@ -346,20 +345,21 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 
 #' Clean a dataset containing variable labels
 #'
-#' Prepares a dataset containing variable labels for use by otvPlots. To work
-#' correctly, input must contain names in first column and labels in second
-#' column. All other columns will be dropped. Special characters will create
-#' errors and should be stripped outside of R. All labels will be truncated at
-#' 145 characters.
+#' Prepares a dataset containing variable labels for use by \code{otvPlots}. 
+#' To work correctly, input must contain names in first column and labels in 
+#' second column. All other columns will be dropped. Special characters will 
+#' create errors and should be stripped outside of R. All labels will be 
+#' truncated at 145 characters.
 #'
 #' @param labelFl Either the path of a dataset (csv or Rdata file) containing
-#' labels, an R object convertible to data.table (e.g. data frame) or NULL. If
-#' NULL no labels will be used. Label dataset must contain at least 2 columns:
-#' varCol (variable names) and labelCol (variable label).
+#'   labels, an R object convertible to \code{data.table} (e.g. data frame) or 
+#'   \code{NULL}. If \code{NULL} no labels will be used. Label dataset must 
+#'   contain at least 2 columns: \code{varCol} (variable names) and 
+#'   \code{labelCol} (variable labels).
 #' @param idx Vector of length 2 giving column index of variable names (first
-#' position) and labels (second position)
+#'   position) and labels (second position)
 #' @export
-#' @return A data table formated for use by \code{PlotVar} function
+#' @return A data table formated for use by \code{PlotVar} function.
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the
 #' Apache License, Version 2.0 (the "License"); you may not use this file
@@ -373,26 +373,33 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' data(bankLabels)
 #' setDT(bankLabels)
 #' PrepLabels(bankLabels)
+
 PrepLabels <- function(labelFl, idx = 1:2) {
+  
+  ## Read in labelFl
   varCol <- labelCol <- NULL
   if (!is.null(labelFl)) {
     if (is.character(labelFl)) {
       fileExt <- tolower(tools::file_ext(labelFl))
-      if (fileExt %in% c("csv")) {
+      if (fileExt %in% c("csv")) { ## For csv file, only read in columns in idx
         labelFl <- fread(labelFl, select = idx, stringsAsFactors = FALSE)
-      } else if (fileExt %in% c("rdata", "rda")) {
+      } else if (fileExt %in% c("rdata", "rda")) { ## For rda file
+        ## Question: read in all columns, including those not in idx?
         labelFl <- readRDS(labelFl)
         setDT(labelFl)
       } else {
         stop("Please make sure the input file is a csv file or Rdata file.")
       }
-    } else {
+    } else { ## If labelFl is already a data.frame or data.table, not a file name.
       setDT(labelFl)
       vec <- 1:ncol(labelFl)
+      ## Remove columns that are not in idx
       if (tail(vec, 1) > 2) {
         labelFl[, vec[!vec %in% idx] := NULL]
       }
     }
+    
+    ## Clean variable names and labels
     setnames(labelFl, c("varCol", "labelCol"))
     labelFl <- subset(labelFl, subset = (!varCol == ""))
     labelFl[, varCol := gsub("/|\\-|\"|\\s", "", varCol)]

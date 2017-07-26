@@ -60,10 +60,10 @@ A data table formated for use by \code{PlotVar} function
 }
 \description{
 Cleans an input dataset for use by the plotting function \code{otvPlots}. 
-  The input data \code{dataFl} must contain, at a minimum, a date column 
-  \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-  convereted to a data.table class, and all changes are made to it by 
-  reference.
+The input data \code{dataFl} must contain, at a minimum, a date column 
+\code{dateNm} and a variable to be plotted. \code{dataFl} will be 
+convereted to a data.table class, and all changes are made to it by 
+reference.
 }
 \section{License}{
 
@@ -79,9 +79,7 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-setDT(bankData)
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 # columns have been assigned a plotting class (cntns/dscrt)
 str(bankData) 
-
 }
