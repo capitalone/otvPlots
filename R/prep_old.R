@@ -221,19 +221,21 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     warning (paste0("Formatting ", dateNm, " as \"", dateFt, "\" produces NAs"))
   }
   
+  ## Round the dataNm by dateGp, and add a column dataGp
   if (!is.null(dateGp) &&
       dateGp %in% c("weeks", "months", "quarters", "years")) {
-    # dates are rounded to level specified and results are saved for faster
-    # aggregation. dateGp will be the primary DT key
+    ## Dates are rounded to level specified and results are saved for faster
+    ## aggregation. dateGp will be the primary DT key
     dataFl[, c(dateGp) := round(get(dateNm), dateGp)]
     setkeyv(dataFl, dateGp)
   } else {
     message (paste0("Time series plots will be grouped by ", dateNm, ".
                     If this was not your intention, make sure that dateGp is one of the
-                    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
+                    IDate rounding units in c('weeks', 'months', 'quarters', 'years')"))
     setkeyv(dataFl, dateNm)
   }
   
+  ## Round the dataNm by dataGpBp, and add a column dataGpBp
   if (!is.null(dateGpBp) && dateGpBp %in%
       c("weeks", "months", "quarters", "years")) {
     # if a box plot grouping variable is given, a new rounded date variable is
@@ -245,6 +247,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                     IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
   }
   
+  ## Create a vector of column names called vars (from varNms if not NULL)
+  ## Columns in var are to be plotted
   if (is.null(varNms)) {
     vars <- names(dataFl)
   } else {
@@ -254,13 +258,14 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       vars <- varNms
     }
   }
-  
+  ## Remove dateNm and weightNm if in vars
   vars <- vars[!vars %in% c(dateNm, weightNm)]
   
   if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[dateNm]], "class"))) > 0) {
     attr(dataFl[[dateNm]], "class") <- attr(dataFl[[dateNm]], "class")[[1]]
   }
   
+  ## Check for any (non-NA) constant columns in vars
   bad_ind <- vapply(dataFl[, c(vars), with = FALSE],
                     function(x) all(length(unique(x)) == 1,
                                     sum(is.na(x)) == 0), logical(1))
@@ -272,6 +277,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     stop("All the variables selected have no variability")
   }
   
+  ## Drop constant columns
   if (dropConstants){
     if (sum(bad_ind) > 0) {
       warning (paste(
@@ -283,13 +289,14 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     }
   }
   
+  ## Logical indicator vector: columns of type Date
   date_ind <- sapply(dataFl[, c(vars), with = FALSE], inherits, "Date")
   
-  # we do not want to plot any dates
+  ## Remove all columns of type Date in var, becuase we do not want to plot any dates
   vars <- vars[!date_ind]
-  # numeric variables
+  # Logical indicator vector: numeric columns
   num_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z) is.numeric(z))
-  # categorical variables
+  # Logical indicator vector: categorical (i.e., nominal) columns
   nom_ind  <- vapply(dataFl[, c(vars), with = FALSE], function(z)
     class(z)[1] %in% c("character", "factor"), logical(1) )
   # binary variables (nominal or numeric)
