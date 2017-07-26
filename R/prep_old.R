@@ -201,8 +201,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
-    # normalize weights for consistent treatment
-    dataFl[, (weightNm) := get(weightNm) / sum(get(weightNm))]
+    # Normalize weights for consistent treatment
+    dataFl[, c(weightNm) := get(weightNm) / sum(get(weightNm))]
   }
   # Convert date to IDate according to provided format and give warning
   # if format produces NAs
@@ -210,6 +210,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     dataFl[is.na(get(dateNm)), .N] + dataFl[as.character(get(dateNm)) == "", .N]
   nonNADateIndex <- which(!is.na(dataFl[, dateNm, with = FALSE]))
   firstNonNA <- min(nonNADateIndex)
+  ## Recognize data format (overwrite user input dataFt!). 
+  ## Question: handle user input dataFt? 
   nonNADate <- dataFl[firstNonNA, dateNm, with = FALSE]
   if (grepl("([0-9]{4}-[0-9]{2}-[0-9]{2})", nonNADate[[1]])) {
     dateFt <- "%Y-%m-%d"
