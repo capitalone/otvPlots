@@ -299,19 +299,23 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   # Logical indicator vector: categorical (i.e., nominal) columns
   nom_ind  <- vapply(dataFl[, c(vars), with = FALSE], function(z)
     class(z)[1] %in% c("character", "factor"), logical(1) )
-  # binary variables (nominal or numeric)
+  # Logical indicator vector: binary variables (nominal or numeric)
   bin_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z)
     uniqueN(stats::na.omit(z)) == 2)
   
+  ## Names of variables to be plots. 
+  ## Binary conitnous variables are treated as categorical.
   continuousVars <- vars[num_ind == 1 & nom_ind == 0 & bin_ind == 0]
   discreteVars <- vars[nom_ind  == 1 | bin_ind  == 1]
   
+  ## Add type 'cntns' to all continuous variables (excluding binary ones)
   if (length(continuousVars) > 0) {
     invisible(lapply(1:length(continuousVars), function(z)
       setattr(dataFl[[continuousVars[z]]], "class",
               unique(c(class(dataFl[[continuousVars[z]]]), "cntns")))))
   }
   
+  ## Add type 'dscrt' to all categorical variables (including binary continuous ones)
   if (length(discreteVars) > 0) {
     for (z in vars[bin_ind]) {
       dataFl[, (z) := as.character(get(z))]
