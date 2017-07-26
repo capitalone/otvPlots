@@ -1,0 +1,2 @@
+load("/Users/oft240/GitHub/Velma/tests/testthat/rawData.rda")
+ls()

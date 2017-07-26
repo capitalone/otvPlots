@@ -44,6 +44,7 @@
 #' @importFrom stats lm.fit lm.wfit quantile sd var
 #' @importFrom utils tail
 NULL
+
 ###########################################
 #         Prepare Data                    #
 ###########################################
@@ -103,26 +104,25 @@ NULL
 #' str(bankData) 
 #' 
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
-                    dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
-                    weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
+                     dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
+                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
   
   ## Remove all '/', '-', '"', and spaces in the string inputs: dateNm, weightNm
   dateNm <- gsub("/|\\-|\"|\\s", "", dateNm)
-
   if (!is.null(weightNm)) {
     weightNm <- gsub("/|\\-|\"|\\s", "", weightNm)
   }
   
-  ## Verify that inputs are valid: selectCols and dropCols
+  ## Ensure valid inputs: selectCols and dropCols
   if (!is.null(selectCols) & !is.character(selectCols) & !is.numeric(selectCols)) {
     stop("selectCols can only be a vector of names/indices of variables")
   }
   if (!is.null(dropCols) & !is.character(dropCols) & !is.numeric(dropCols)) {
     stop("dropCols can only be a vector of names/indices of variables")
   }
-
+  
+  
   ## Read the dataFl as a data.table. 
-  ## Here, selectCols and dropCols only apply to csv files.
   csvfile = FALSE
   if (is.character(dataFl)) {
     fileExt <- tolower(tools::file_ext(dataFl))
@@ -144,7 +144,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     } else {
       stop("Please make sure the input file is a csv file or Rdata file.")
     }
-  } else { ## for R object
+  } else {
     if (!is.data.table(dataFl)) {
       setDT(dataFl)
     }
@@ -158,7 +158,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   if (!is.null(dropCols) & is.character(dropCols)) {
     dropCols <- gsub("/|\\-|\"|\\s", "", dropCols)
   }
-  
   ## Apply selectCols and dropCols only apply to non-csv input dataFl.
   if (!csvfile) {
     if (!is.null(selectCols)) {
@@ -177,7 +176,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   
   ## Check that these columns are in dataFl: dateNm, weightNm
   stopifnot(c(dateNm, weightNm) %in% names(dataFl))
-
+  
   ## Ensure all integer64 types are treated as numeric
   for (var in names(dataFl)) {
     if (inherits(dataFl[[var]], "integer64")) {
@@ -189,7 +188,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
     message ("PrepData has already been run on this data set.")
   }
-
+  
   ##  Normalize weights
   if (!is.null(weightNm)) {
     stopifnot(is.numeric(dataFl[[weightNm]]))
@@ -202,10 +201,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
-    ## Normalize weights for consistent treatment
-    dataFl[, weightNm := get(weightNm) / sum(get(weightNm))]
+    # normalize weights for consistent treatment
+    dataFl[, (weightNm) := get(weightNm) / sum(get(weightNm))]
   }
-  
   # Convert date to IDate according to provided format and give warning
   # if format produces NAs
   tmp.N <-
@@ -220,7 +218,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   if (dataFl[is.na(get(dateNm)), .N] > tmp.N) {
     warning (paste0("Formatting ", dateNm, " as \"", dateFt, "\" produces NAs"))
   }
-
+  
   if (!is.null(dateGp) &&
       dateGp %in% c("weeks", "months", "quarters", "years")) {
     # dates are rounded to level specified and results are saved for faster
@@ -229,11 +227,11 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     setkeyv(dataFl, dateGp)
   } else {
     message (paste0("Time series plots will be grouped by ", dateNm, ".
-    If this was not your intention, make sure that dateGp is one of the
-    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
+                    If this was not your intention, make sure that dateGp is one of the
+                    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
     setkeyv(dataFl, dateNm)
   }
-
+  
   if (!is.null(dateGpBp) && dateGpBp %in%
       c("weeks", "months", "quarters", "years")) {
     # if a box plot grouping variable is given, a new rounded date variable is
@@ -241,10 +239,10 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     dataFl[, c(dateGpBp) := round(get(dateNm), dateGpBp)]
   } else {
     message (paste0("Boxplots will be grouped by ", dateNm, ".
-    If this was not your intention, make sure dateGpBp is one of the
-    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
+                    If this was not your intention, make sure dateGpBp is one of the
+                    IDate rounding functions ('weeks', 'months', 'quarters', 'years')"))
   }
-
+  
   if (is.null(varNms)) {
     vars <- names(dataFl)
   } else {
@@ -254,17 +252,17 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       vars <- varNms
     }
   }
-
+  
   vars <- vars[!vars %in% c(dateNm, weightNm)]
   
   if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[dateNm]], "class"))) > 0) {
     attr(dataFl[[dateNm]], "class") <- attr(dataFl[[dateNm]], "class")[[1]]
   }
-
+  
   bad_ind <- vapply(dataFl[, c(vars), with = FALSE],
                     function(x) all(length(unique(x)) == 1,
-                                  sum(is.na(x)) == 0), logical(1))
-
+                                    sum(is.na(x)) == 0), logical(1))
+  
   if (any(c(dateGp, dateGpBp) %in% vars[bad_ind])) {
     warning ("No variability in grouping variables. Select a new grouping level.")
   }
@@ -282,9 +280,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       dataFl[, c(badVars) := NULL]
     }
   }
-
+  
   date_ind <- sapply(dataFl[, c(vars), with = FALSE], inherits, "Date")
-
+  
   # we do not want to plot any dates
   vars <- vars[!date_ind]
   # numeric variables
@@ -295,32 +293,32 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   # binary variables (nominal or numeric)
   bin_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z)
     uniqueN(stats::na.omit(z)) == 2)
-
+  
   continuousVars <- vars[num_ind == 1 & nom_ind == 0 & bin_ind == 0]
   discreteVars <- vars[nom_ind  == 1 | bin_ind  == 1]
-
+  
   if (length(continuousVars) > 0) {
     invisible(lapply(1:length(continuousVars), function(z)
       setattr(dataFl[[continuousVars[z]]], "class",
               unique(c(class(dataFl[[continuousVars[z]]]), "cntns")))))
   }
-
+  
   if (length(discreteVars) > 0) {
     for (z in vars[bin_ind]) {
-        dataFl[, (z) := as.character(get(z))]
-      }
-
+      dataFl[, (z) := as.character(get(z))]
+    }
+    
     invisible(lapply(1:length(discreteVars), function(z)
       setattr(dataFl[[discreteVars[z]]], "class",
               unique(c(class(dataFl[[discreteVars[z]]]), "dscrt")))))
   }
-
+  
   message (paste(c("The following variables will be plotted:\nNumeric: ",
-              paste0(continuousVars, collapse = " "), "\nDiscrete: ",
-              paste0(discreteVars, collapse = " "),  "\n"), sep = " ") )
-
+                   paste0(continuousVars, collapse = " "), "\nDiscrete: ",
+                   paste0(discreteVars, collapse = " "),  "\n"), sep = " ") )
+  
   return(dataFl)
-}
+  }
 
 ###########################################
 #           Prepare Labels                #
