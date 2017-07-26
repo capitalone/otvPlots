@@ -10,43 +10,48 @@ PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
-as.data.table (e.g. a data frame), or a character string containing the name
-of dataset that can be loaded using fread (e.g. a csv file), or a file path 
-of Rdata file. If dataset is not in your working directory then \code{dataFl}
-must include (relative or absolute) path to file}
+\code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
+character string containing the name of dataset that can be loaded using 
+\code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
+file. If dataset is not in your working directory then \code{dataFl}
+must include (relative or absolute) path to file.}
 
-\item{dateNm}{Name of column containing \code{date} variable}
+\item{dateNm}{Name of column containing \code{date} variable.}
 
-\item{selectCols}{Either NULL, or a vector of names or indices of
-variables to read into memory -- must include \code{dateNm},
-\code{weightNm} (if not null) and all variables to be plotted. If both
-selectCols and dropCols are null, then all variables will be read in.}
+\item{selectCols}{Either \code{NULL}, or a vector of names or indices of 
+variables to read into memory -- must include \code{dateNm}, 
+\code{weightNm} (if not \code{NULL}) and all variables to be plotted. If
+both \code{selectCols} and \code{dropCols} are \code{NULL}, then all
+variables will be read in.}
 
-\item{dropCols}{Either NULL, or a vector of variables names or indices of
-variables not to read into memory.}
+\item{dropCols}{Either \code{NULL}, or a vector of variables names or indices
+of variables not to read into memory.}
 
-\item{dateFt}{strptime format of date variable. Default is SAS format ("\%d\%h\%Y"). But 
-input data with R date format (\%Y-\%m-\%d) will also be detected. Both of two formats 
-can be parsed automaticallly. See ?strptime}
+\item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
+format \code{"\%d\%h\%Y"}. But input data with R date format 
+\code{"\%Y-\%m-\%d"} will also be detected. Both of two formatscan be
+parsed automatically.}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are NULL, "weeks", "months", "quarters", "years". See
-data.table::IDate. If NULL \code{dateNm} will be used.}
+by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
+details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
-options as \code{dateGp}. If NULL \code{dateGp} will be used.}
+options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights or NULL for no
-weights (all rows recieve weight 1)}
+\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
+no weights (all rows recieve weight 1).}
 
-\item{varNms}{Either NULL or a vector of names or indices of variables to 
-be plotted. If null, will default to all columns which are not \code{dateNm}
-or \code{weightNm}. Can also be a vector of indices of the column names,
-after dropCols or selectCols have been applied, if applicable, and not 
-including dateGp, dateGpBp (which will be added to the data.table)}
+\item{varNms}{Either \code{NULL} or a vector of names or indices of variables
+to be plotted. If \code{NULL}, will default to all columns which are not 
+\code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
+column names, after \code{dropCols} or \code{selectCols} have been applied,
+if applicable, and not including \code{dateGp}, \code{dateGpBp} 
+(which will be added to the \code{dataFl} by this function).}
 
-\item{dropConstants}{logical Indicates whether or not constant (all
-duplicated or NA) variables should be dropped from dataFl prior to plotting}
+\item{dropConstants}{Logical indicates whether or not constant (all
+duplicated or NA) variables should be dropped from dataFl prior to plotting.}
 
 \item{...}{Additional parameters to be passed to fread}
 }
@@ -54,8 +59,11 @@ duplicated or NA) variables should be dropped from dataFl prior to plotting}
 A data table formated for use by \code{PlotVar} function
 }
 \description{
-Cleans an input dataset for use by otvPlots. \code{dataFl} must contain, at a
-minimum, a date column \code{dateNm} and a variable to be plotted.
+Cleans an input dataset for use by the plotting function \code{otvPlots}. 
+  The input data \code{dataFl} must contain, at a minimum, a date column 
+  \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
+  convereted to a data.table class, and all changes are made to it by 
+  reference.
 }
 \section{License}{
 
@@ -76,7 +84,4 @@ PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 # columns have been assigned a plotting class (cntns/dscrt)
 str(bankData) 
 
-}
-\seealso{
-\code{\link{fread}}
 }
