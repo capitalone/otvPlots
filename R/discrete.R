@@ -39,30 +39,30 @@
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                     dateGpBp = "quarters", weightNm = NULL)
 #' # Single histogram is plotted for job type since there are 12 categories
-#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
+#' plot(PlotCategoricalVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 #'                      
-#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
+#' plot(PlotCategoricalVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months", kCategories = 12))
 #'
 #'
 #' ## Binary data is treated as categorical, 
 #' ## and only the less frequent category is plotted over time.
-#' plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
+#' plot(PlotCategoricalVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 
-PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
-                            kCategories = 9, normBy = "time") {
+PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
+                            kCategories = 9, normBy = "time") { #!# previous name: PlotDiscreteVar
   count <- NULL
   
-  p <- PlotHistogram(dataFl = dataFl, myVar = myVar, weightNm = weightNm)
+  p <- PlotBarplot(dataFl = dataFl, myVar = myVar, weightNm = weightNm)
   newLevels <- as.character(p$data[order(-count)][[myVar]])
   
   # If more than kCategories levels only plot a single histogram (p)
   # Otherwise also plot the category rates over time (p2)
   
   if (!is.null(kCategories) && length(newLevels) <= kCategories) {
-    p2 <- PlotHistOverTime(dataFl = dataFl, dateGp = dateGp,
+    p2 <- PlotRatesOverTime(dataFl = dataFl, dateGp = dateGp,
                            weightNm = weightNm, myVar = myVar, newLevels = newLevels,
                            normBy = normBy)
     p  <- gridExtra::arrangeGrob(ggplotGrob(p), p2, widths = c(1, 2))
@@ -74,10 +74,10 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 ###########################################
 #       Discrete Plotting Functions       #
 ###########################################
-#' Creates a histogram for a discrete or binary variable
+#' Creates a bar plot for a discrete (or binary) variable
 #'
 #' @inheritParams PrepData
-#' @inheritParams PlotDiscreteVar
+#' @inheritParams PlotCategoricalVar
 #' @export
 #' @return A \code{ggplot} object with a histogram of \code{myVar} ordered by 
 #'   category frequency
@@ -92,15 +92,14 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
-#'          weightNm = NULL)
-#' PlotHistogram(bankData, "job")
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                     dateGpBp = "quarters", weightNm = NULL)
+#' PlotBarplot(bankData, "job")
 #' 
 #' # NA will be included as a category if any NA are present
 #' bankData[sample.int(.N)[1:1000], education := NA]
-#' PlotHistogram(bankData, "education")
-PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
+#' PlotBarplot(bankData, "education")
+PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: PlotHistogram
   count <- NULL
   if (is.null(weightNm)) {
     glbTotals <- dataFl[, list(count = .N), by = myVar]
@@ -121,10 +120,10 @@ PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
 }
 
 
-#' Creates trace plots of categories propotions over time for a discrete or
-#' binary variable
+#' Creates trace plots of categories' propotions over time for a discrete (or
+#' binary) variable
 #'
-#' @inheritParams PlotDiscreteVar
+#' @inheritParams PlotCategoricalVar
 #' @inheritParams PrepData
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
@@ -143,15 +142,15 @@ PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
 #' setDT(bankData)
 #' bankData[, weight := rpois(.N, 5)]
 #' bankData[, weight := weight/sum(weight)]
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
-#'          weightNm = "weight")
-#' PlotHistOverTime(dataFl = bankData, dateGp = "months", 
-#' weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "time")
-#' PlotHistOverTime(dataFl = bankData, dateGp = "months", 
-#' weightNm = "weight", myVar = "job", newLevels = NULL, normBy = "var")
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                     dateGpBp = "quarters", weightNm = "weight")
+#' PlotRatesOverTime(dataFl = bankData, dateGp = "months", weightNm = "weight",
+#'                   myVar = "job", newLevels = NULL, normBy = "time")
+#' PlotRatesOverTime(dataFl = bankData, dateGp = "months",  weightNm = "weight",
+#'                   myVar = "job", newLevels = NULL, normBy = "var")
 #' 
-PlotHistOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
-                             weightNm = NULL, newLevels = NULL){
+PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
+                             weightNm = NULL, newLevels = NULL){ #!# previous name: PlotHistOverTime
   N.x <- NULL
   N.y <- NULL
   rate <- NULL
