@@ -60,7 +60,7 @@
 #' ## Use the bankData dataset in this package
 #' data(bankData)
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
-#' ## Columns have been assigned a plotting class (cntns/dscrt)
+#' ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 #' str(bankData) 
  
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
@@ -145,7 +145,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   }
   
   ## Check if PrepData is already run on this dataset
-  if (any(c(sapply(dataFl, class)) %in% c("cntns", "dscrt"))) {
+  if (any(c(sapply(dataFl, class)) %in% c("nmrcl", "ctgrl"))) {
     message ("PrepData has already been run on this data set.")
   }
   
@@ -154,7 +154,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     stopifnot(is.numeric(dataFl[[weightNm]]))
     ## If current variable set to be weight/date has previously been given
     ## a plotting type, remove it now
-    if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[weightNm]], "class"))) > 0) {
+    if (length(intersect(c("nmrcl", "ctgrl"), attr(dataFl[[weightNm]], "class"))) > 0) {
       attr(dataFl[[weightNm]], "class") <- attr(dataFl[[weightNm]], "class")[[1]]
     }
     if (dataFl[is.na(weightNm), .N ] > 0 ) {
@@ -221,7 +221,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   ## Remove dateNm and weightNm if in vars
   vars <- vars[!vars %in% c(dateNm, weightNm)]
   
-  if (length(intersect(c("cntns", "dcsrt"), attr(dataFl[[dateNm]], "class"))) > 0) {
+  if (length(intersect(c("nmrcl", "ctgrl"), attr(dataFl[[dateNm]], "class"))) > 0) {
     attr(dataFl[[dateNm]], "class") <- attr(dataFl[[dateNm]], "class")[[1]]
   }
   
@@ -265,30 +265,30 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   
   ## Names of variables to be plots. 
   ## Binary conitnous variables are treated as categorical.
-  continuousVars <- vars[num_ind == 1 & nom_ind == 0 & bin_ind == 0]
-  discreteVars <- vars[nom_ind  == 1 | bin_ind  == 1]
+  numericalVars <- vars[num_ind == 1 & nom_ind == 0 & bin_ind == 0] #!# previous name: continuousVars
+  categoricalVars <- vars[nom_ind  == 1 | bin_ind  == 1] #!# previous name: discreteVars
   
-  ## Add type 'cntns' to all continuous variables (excluding binary ones)
-  if (length(continuousVars) > 0) {
-    invisible(lapply(1:length(continuousVars), function(z)
-      setattr(dataFl[[continuousVars[z]]], "class",
-              unique(c(class(dataFl[[continuousVars[z]]]), "cntns")))))
+  ## Add type 'nmrcl' to all numerical variables (excluding binary ones)
+  if (length(numericalVars) > 0) {
+    invisible(lapply(1:length(numericalVars), function(z)
+      setattr(dataFl[[numericalVars[z]]], "class",
+              unique(c(class(dataFl[[numericalVars[z]]]), "nmrcl"))))) #!# previous name: "cntns"
   }
   
-  ## Add type 'dscrt' to all categorical variables (including binary continuous ones)
-  if (length(discreteVars) > 0) {
+  ## Add type 'ctgrl' to all categorical variables (including binary continuous ones)
+  if (length(categoricalVars) > 0) {
     for (z in vars[bin_ind]) {
       dataFl[, (z) := as.character(get(z))]
     }
     
-    invisible(lapply(1:length(discreteVars), function(z)
-      setattr(dataFl[[discreteVars[z]]], "class",
-              unique(c(class(dataFl[[discreteVars[z]]]), "dscrt")))))
+    invisible(lapply(1:length(categoricalVars), function(z)
+      setattr(dataFl[[categoricalVars[z]]], "class",
+              unique(c(class(dataFl[[categoricalVars[z]]]), "ctgrl"))))) #!# previous name: "dscrt"
   }
   
-  message (paste(c("The following variables will be plotted:\nNumeric: ",
-                   paste0(continuousVars, collapse = " "), "\nDiscrete: ",
-                   paste0(discreteVars, collapse = " "),  "\n"), sep = " ") )
+  message (paste(c("The following variables will be plotted:\nNumerical: ",
+                   paste0(numericalVars, collapse = " "), "\nCategorical: ",
+                   paste0(categoricalVars, collapse = " "),  "\n"), sep = " ") )
   
   return(dataFl)
 }

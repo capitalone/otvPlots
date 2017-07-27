@@ -1,8 +1,8 @@
 library(otvPlots)
 context("Prepare Data")
 data(bankData);  setDT(bankData)
-is.cntns <- function(x)  inherits(x, "cntns") 
-is.dscrt <- function(x)  inherits(x, "dscrt")
+is.cntns <- function(x)  inherits(x, "nmrcl") #!#previous name: "cntns"
+is.dscrt <- function(x)  inherits(x, "ctgrl") #!# previous name: "dscrt"
 is.IDate <- function(x)  inherits(x, "IDate")
 is.binary <- function(x) uniqueN(na.omit(x)) == 2
 

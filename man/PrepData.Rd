@@ -81,6 +81,6 @@ governing permissions and limitations under the License.
 ## Use the bankData dataset in this package
 data(bankData)
 bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
-## Columns have been assigned a plotting class (cntns/dscrt)
+## Columns have been assigned a plotting class (nmrcl/ctgrl)
 str(bankData) 
 }
