@@ -1,50 +1,3 @@
-# Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
-# Version 2.0 (the "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the  License at
-# http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
-# or agreed to in writing, software distributed under the License is distributed
-# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-# express or implied. See the License for the specific language governing
-# permissions and limitations under the License.
-
-#' Over time variable plots for predictive modeling (otvPlots)
-#'
-#' The otvPlots package uses data.table and ggplot2 packages to efficiently plot
-#' time series aggregated from large datasets. Plots are optionally returned
-#' ordered by correlation with date -- a natural starting point for anomaly
-#' detection.  Plots are automatically labeled if a variable dictionary is
-#' provided. Discrete and numeric variables are handled automatically. The
-#' package can be used either interactively for adhoc creation of plots for
-#' specifical variables, or via the included wrapper function for hands-off
-#' monitoring reports.
-#'
-#' @seealso \code{\link{PrepData}}
-#' @seealso \code{\link{PrepLabels}}
-#' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
-#' Version 2.0 (the "License"); you may not use this file except in compliance
-#' with the License. You may obtain a copy of the  License at
-#' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
-#' or agreed to in writing, software distributed under the License is 
-#' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
-#' KIND, either express or implied. See the License for the specific language 
-#' governing permissions and limitations under the License.
-#' @docType package
-#' @name otvPlots
-#' @import data.table
-#' @import ggplot2
-#' @importFrom grid grid.draw grid.newpage unit unit.c textGrob gpar
-#' @importFrom gridExtra arrangeGrob
-#' @importFrom moments skewness
-#' @importFrom Hmisc wtd.quantile wtd.mean wtd.var
-#' @importFrom stringi stri_trans_general
-#' @importFrom scales hue_pal
-#' @importFrom grDevices cairo_pdf dev.off
-#' @importFrom graphics par
-#' @importFrom stats lm.fit lm.wfit quantile sd var
-#' @importFrom utils tail
-NULL
-
 ###########################################
 #         Prepare Data                    #
 ###########################################
@@ -92,7 +45,7 @@ NULL
 #' @param dropConstants Logical indicates whether or not constant (all
 #'   duplicated or NA) variables should be dropped from dataFl prior to plotting.
 #' @param ... Additional parameters to be passed to fread
-#' @return A data table formated for use by \code{PlotVar} function
+#' @return A \code{data.table} formated for use by \code{PlotVar} function
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -104,9 +57,10 @@ NULL
 #' governing permissions and limitations under the License.
 #' @export
 #' @examples
+#' ## Use the bankData dataset in this package
 #' data(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
-#' # columns have been assigned a plotting class (cntns/dscrt)
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+#' ## Columns have been assigned a plotting class (cntns/dscrt)
 #' str(bankData) 
  
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
@@ -370,9 +324,9 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #' specific language governing permissions and limitations under the License.
 #' @examples
+## Use the bankLabels dataset in this package
 #' data(bankLabels)
-#' setDT(bankLabels)
-#' PrepLabels(bankLabels)
+#' bankLabels = PrepLabels(bankLabels)
 
 PrepLabels <- function(labelFl, idx = 1:2) {
   
