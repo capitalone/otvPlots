@@ -1,7 +1,13 @@
 ###########################################
 #      Discrete Plot Method               #
 ###########################################
-#' Frequency and proportion plots for a discrete variable
+#' Creates over time variable plots for a categorical variable
+#' 
+#' Output plots include a bar plot with cateogries ordered by counts,
+#' and trace plots of categories' proportions over time. This function is also
+#' appliable to a binary varible, which is treated as categorical in this 
+#' package.
+#' 
 #'
 #' @inheritParams PrepData
 #' @param myVar Name of the variable to be plotted
@@ -16,8 +22,9 @@
 #'   are normalized by the total counts over time from only this category. This
 #'   illustrates changes of categories' volumns over time.
 #' @export
-#' @return Histogram and rate charts (if less than \code{kCategories}) for
-#'   categorical (and binary) data. 
+#' @return a \code{ggplot} object, including a histogram, and trace plots of 
+#'   categories' proportions if number of categories is less than 
+#'   \code{kCategories}. 
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -28,24 +35,19 @@
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
 #' @examples
-#' require(data.table)
 #' data(bankData)
-#' setDT(bankData)
-#' require(ggplot2)
-#'
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
-#'          weightNm = NULL)
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                     dateGpBp = "quarters", weightNm = NULL)
 #' # Single histogram is plotted for job type since there are 12 categories
 #' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 #'                      
-#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, 
-#'                      weightNm = NULL, dateNm = "date", dateGp = "months",
-#'                      kCategories = 12))
+#' plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
+#'                      dateNm = "date", dateGp = "months", kCategories = 12))
 #'
 #'
-#' # binary data is treated as categorical, and only the less frequent category 
-#' # is plotted over time
+#' ## Binary data is treated as categorical, 
+#' ## and only the less frequent category is plotted over time.
 #' plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 
@@ -72,14 +74,13 @@ PlotDiscreteVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 ###########################################
 #       Discrete Plotting Functions       #
 ###########################################
-
-
-#' Plot Histogram of Discrete Variable
+#' Creates a histogram for a discrete or binary variable
 #'
 #' @inheritParams PrepData
 #' @inheritParams PlotDiscreteVar
 #' @export
-#' @return A ggproto object with a histogram of \code{myVar} ordered by category frequency
+#' @return A \code{ggplot} object with a histogram of \code{myVar} ordered by 
+#'   category frequency
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -107,8 +108,7 @@ PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
     glbTotals <- dataFl[, list(count = sum(get(weightNm))), by = myVar]
   }
   
-  newLevels <-
-    unlist(glbTotals[, myVar, with = FALSE][order(glbTotals[, -count])])
+  newLevels <- unlist(glbTotals[order(-count), myVar, with = FALSE])
   glbTotals[, (myVar) := factor(get(myVar), levels = newLevels)]
   
   p <- ggplot2::ggplot(glbTotals, ggplot2::aes_string(x = myVar,
@@ -121,13 +121,14 @@ PlotHistogram <- function(dataFl, myVar, weightNm = NULL){
 }
 
 
-#' Plot Histogram of Discrete Variable Over Time
+#' Creates trace plots of categories propotions over time for a discrete or
+#' binary variable
 #'
 #' @inheritParams PlotDiscreteVar
 #' @inheritParams PrepData
-#' @param newLevels categories of myVar in order of global frequency
+#' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
-#' @return A ggproto object with a histogram of \code{myVar} over time
+#' @return A ggplot object with a histogram of \code{myVar} over time??
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance

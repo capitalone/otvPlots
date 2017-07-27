@@ -2,7 +2,7 @@
 % Please edit documentation in R/discrete.R
 \name{PlotDiscreteVar}
 \alias{PlotDiscreteVar}
-\title{Frequency and proportion plots for a discrete variable}
+\title{Creates over time variable plots for a categorical variable}
 \usage{
 PlotDiscreteVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
   kCategories = 9, normBy = "time")
@@ -40,11 +40,15 @@ are normalized by the total counts over time from only this category. This
 illustrates changes of categories' volumns over time.}
 }
 \value{
-Histogram and rate charts (if less than \code{kCategories}) for
-  categorical (and binary) data.
+a \code{ggplot} object, including a histogram, and trace plots of 
+  categories' proportions if number of categories is less than 
+  \code{kCategories}.
 }
 \description{
-Frequency and proportion plots for a discrete variable
+Output plots include a bar plot with cateogries ordered by counts,
+and trace plots of categories' proportions over time. This function is also
+appliable to a binary varible, which is treated as categorical in this 
+package.
 }
 \section{License}{
 
@@ -59,24 +63,19 @@ governing permissions and limitations under the License.
 }
 
 \examples{
-require(data.table)
 data(bankData)
-setDT(bankData)
-require(ggplot2)
-
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters", 
-         weightNm = NULL)
+bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+                    dateGpBp = "quarters", weightNm = NULL)
 # Single histogram is plotted for job type since there are 12 categories
 plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
                      dateNm = "date", dateGp = "months"))
                      
-plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, 
-                     weightNm = NULL, dateNm = "date", dateGp = "months",
-                     kCategories = 12))
+plot(PlotDiscreteVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
+                     dateNm = "date", dateGp = "months", kCategories = 12))
 
 
-# binary data is treated as categorical, and only the less frequent category 
-# is plotted over time
+## Binary data is treated as categorical, 
+## and only the less frequent category is plotted over time.
 plot(PlotDiscreteVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
 }

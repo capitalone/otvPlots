@@ -2,7 +2,8 @@
 % Please edit documentation in R/discrete.R
 \name{PlotHistOverTime}
 \alias{PlotHistOverTime}
-\title{Plot Histogram of Discrete Variable Over Time}
+\title{Creates trace plots of categories propotions over time for a discrete or
+binary variable}
 \usage{
 PlotHistOverTime(dataFl, dateGp, myVar, normBy = "time", weightNm = NULL,
   newLevels = NULL)
@@ -33,13 +34,14 @@ illustrates changes of categories' volumns over time.}
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
 no weights (all rows recieve weight 1).}
 
-\item{newLevels}{categories of myVar in order of global frequency}
+\item{newLevels}{categories of \code{myVar} in order of global frequency}
 }
 \value{
-A ggproto object with a histogram of \code{myVar} over time
+A ggplot object with a histogram of \code{myVar} over time??
 }
 \description{
-Plot Histogram of Discrete Variable Over Time
+Creates trace plots of categories propotions over time for a discrete or
+binary variable
 }
 \section{License}{
 

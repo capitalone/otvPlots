@@ -2,7 +2,7 @@
 % Please edit documentation in R/discrete.R
 \name{PlotHistogram}
 \alias{PlotHistogram}
-\title{Plot Histogram of Discrete Variable}
+\title{Creates a histogram for a discrete or binary variable}
 \usage{
 PlotHistogram(dataFl, myVar, weightNm = NULL)
 }
@@ -20,10 +20,11 @@ must include (relative or absolute) path to file.}
 no weights (all rows recieve weight 1).}
 }
 \value{
-A ggproto object with a histogram of \code{myVar} ordered by category frequency
+A \code{ggplot} object with a histogram of \code{myVar} ordered by 
+  category frequency
 }
 \description{
-Plot Histogram of Discrete Variable
+Creates a histogram for a discrete or binary variable
 }
 \section{License}{
 
