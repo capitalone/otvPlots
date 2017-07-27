@@ -99,14 +99,17 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 #' # NA will be included as a category if any NA are present
 #' bankData[sample.int(.N)[1:1000], education := NA]
 #' PlotBarplot(bankData, "education")
+#' 
 PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: PlotHistogram
   count <- NULL
+  ## Create glbTotals, a frequency table of myVar 
   if (is.null(weightNm)) {
     glbTotals <- dataFl[, list(count = .N), by = myVar]
   } else {
     glbTotals <- dataFl[, list(count = sum(get(weightNm))), by = myVar]
   }
   
+  ## Create newLevels, a vector of category names, in descending order of counts
   newLevels <- unlist(glbTotals[order(-count), myVar, with = FALSE])
   glbTotals[, (myVar) := factor(get(myVar), levels = newLevels)]
   
@@ -127,7 +130,8 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #' @inheritParams PrepData
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
-#' @return A ggplot object with a histogram of \code{myVar} over time??
+#' @return A \code{ggplot} object, trace plots of categories' propotions 
+#'   \code{myVar} over time.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -157,9 +161,12 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   N <- NULL
   count <- NULL
   
+  ## A subset dataset to work on
   dataSub <- dataFl[, c(dateGp, myVar, weightNm), with = FALSE]
   dataSub[is.na(get(myVar)), (myVar) := "NA"]
   
+  ## Create glbTotals, a frequency table of myVar 
+  ## Create newLevels, a vector of category names, in descending order of counts
   if (is.null(newLevels)){
     if (is.null(weightNm)) {
       glbTotals <- dataSub[, list(count = .N), by = myVar]
@@ -167,7 +174,7 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
       glbTotals <- dataSub[, list(count = sum(get(weightNm))), by = myVar]
     }
     
-    newLevels <- glbTotals[[myVar]][order(glbTotals[, -count])]
+    newLevels <- glbTotals[order(-count), myVar, with = FALSE][[myVar]]
   }
   
   hex <- scales::hue_pal()(length(newLevels))[match(newLevels, c(dataFl[, sort(unique(get(myVar)))], "NA"))]

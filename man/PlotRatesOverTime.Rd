@@ -37,7 +37,8 @@ no weights (all rows recieve weight 1).}
 \item{newLevels}{categories of \code{myVar} in order of global frequency}
 }
 \value{
-A ggplot object with a histogram of \code{myVar} over time??
+A \code{ggplot} object, trace plots of categories' propotions 
+  \code{myVar} over time.
 }
 \description{
 Creates trace plots of categories' propotions over time for a discrete (or
