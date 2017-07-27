@@ -1,25 +1,23 @@
 ###########################################
 #      Discrete Plot Method               #
 ###########################################
-#' Frequency and proportion plots for discrete variables
+#' Frequency and proportion plots for a discrete variable
 #'
 #' @inheritParams PrepData
 #' @param myVar Name of the variable to be plotted
 #' @param kCategories If a categorical variable has more than kCategories, only 
-#' a global histogram will be plotted, rate plots for all categories will also be
-#' plotted.
-#' @param normBy "time" or "var"-- the normalization factor for rate plots. If "time" then 
-#' line plots will be normalized by month, that is, all caltegories will sum to one within
-#'  a particular month.  This allows you to compare the proportion of total coming from 
-#' different categories at 
-#' different points in time. For example, at month 1 10% volume came from category A and at 
-#' month 6 75%. If total volume was constant or decreasing, this represents an increase 
-#' in market share of category A. If "var", then each category is normalized independently. 
-#' In the same example, if category A shows a decreasing trend using the "var" normalization,
-#' this would imply that total volume is decreasing and category A market share is increasing. 
-#' This example occurs for the "retired" job category in the bankData example data set. 
+#'   a global histogram will be plotted, rate plots for all categories will also
+#'   be plotted.
+#' @param normBy The normalization factor for rate plots, can be \code{"time"}
+#'   or \code{"var"}. If \code{"time"}, then for each time period of 
+#'   \code{dateGp}, counts are normalized by the total counts over all 
+#'   categories in that time period. This illustrates changes of categories' 
+#'   proportions over time. If \code{"var"}, then for each category, its counts 
+#'   are normalized by the total counts over time from only this category. This
+#'   illustrates changes of categories' volumns over time.
 #' @export
-#' @return Histogram and rate charts (if less than kCategories) for categorical data. 
+#' @return Histogram and rate charts (if less than \code{kCategories}) for
+#'   categorical (and binary) data. 
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance

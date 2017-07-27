@@ -22,16 +22,13 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
 \item{myVar}{Name of the variable to be plotted}
 
-\item{normBy}{"time" or "var"-- the normalization factor for rate plots. If "time" then 
-line plots will be normalized by month, that is, all caltegories will sum to one within
- a particular month.  This allows you to compare the proportion of total coming from 
-different categories at 
-different points in time. For example, at month 1 10% volume came from category A and at 
-month 6 75%. If total volume was constant or decreasing, this represents an increase 
-in market share of category A. If "var", then each category is normalized independently. 
-In the same example, if category A shows a decreasing trend using the "var" normalization,
-this would imply that total volume is decreasing and category A market share is increasing. 
-This example occurs for the "retired" job category in the bankData example data set.}
+\item{normBy}{The normalization factor for rate plots, can be \code{"time"}
+or \code{"var"}. If \code{"time"}, then for each time period of 
+\code{dateGp}, counts are normalized by the total counts over all 
+categories in that time period. This illustrates changes of categories' 
+proportions over time. If \code{"var"}, then for each category, its counts 
+are normalized by the total counts over time from only this category. This
+illustrates changes of categories' volumns over time.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
 no weights (all rows recieve weight 1).}

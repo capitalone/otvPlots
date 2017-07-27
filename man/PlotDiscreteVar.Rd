@@ -2,7 +2,7 @@
 % Please edit documentation in R/discrete.R
 \name{PlotDiscreteVar}
 \alias{PlotDiscreteVar}
-\title{Frequency and proportion plots for discrete variables}
+\title{Frequency and proportion plots for a discrete variable}
 \usage{
 PlotDiscreteVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
   kCategories = 9, normBy = "time")
@@ -28,25 +28,23 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
 \item{kCategories}{If a categorical variable has more than kCategories, only 
-a global histogram will be plotted, rate plots for all categories will also be
-plotted.}
+a global histogram will be plotted, rate plots for all categories will also
+be plotted.}
 
-\item{normBy}{"time" or "var"-- the normalization factor for rate plots. If "time" then 
-line plots will be normalized by month, that is, all caltegories will sum to one within
- a particular month.  This allows you to compare the proportion of total coming from 
-different categories at 
-different points in time. For example, at month 1 10% volume came from category A and at 
-month 6 75%. If total volume was constant or decreasing, this represents an increase 
-in market share of category A. If "var", then each category is normalized independently. 
-In the same example, if category A shows a decreasing trend using the "var" normalization,
-this would imply that total volume is decreasing and category A market share is increasing. 
-This example occurs for the "retired" job category in the bankData example data set.}
+\item{normBy}{The normalization factor for rate plots, can be \code{"time"}
+or \code{"var"}. If \code{"time"}, then for each time period of 
+\code{dateGp}, counts are normalized by the total counts over all 
+categories in that time period. This illustrates changes of categories' 
+proportions over time. If \code{"var"}, then for each category, its counts 
+are normalized by the total counts over time from only this category. This
+illustrates changes of categories' volumns over time.}
 }
 \value{
-Histogram and rate charts (if less than kCategories) for categorical data.
+Histogram and rate charts (if less than \code{kCategories}) for
+  categorical (and binary) data.
 }
 \description{
-Frequency and proportion plots for discrete variables
+Frequency and proportion plots for a discrete variable
 }
 \section{License}{
 
