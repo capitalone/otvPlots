@@ -165,6 +165,7 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   
   ## A subset dataset to work on
   dataSub <- dataFl[, c(dateGp, myVar, weightNm), with = FALSE]
+  ## NA is converted to a character, i.e., treated as a new category
   dataSub[is.na(get(myVar)), (myVar) := "NA"]
   
   ## Create glbTotals, a frequency table of myVar 
@@ -179,8 +180,10 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     newLevels <- glbTotals[order(-count), myVar, with = FALSE][[myVar]]
   }
   
+  #!# to be deleted
   hex <- scales::hue_pal()(length(newLevels))[match(newLevels, c(dataFl[, sort(unique(get(myVar)))], "NA"))]
   
+  ## Compute counts by category and time
   if (is.null(weightNm)) {
     countData <- dataSub[, .N, by = c(myVar, dateGp)]
     if (normBy == "time"){
@@ -201,13 +204,14 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     }
   }
   
-  
+  ## Make sure countData contains all cateogires and all times
   crossLevels <- CJ(unique(countData[[dateGp]]), unique(countData[[myVar]]))
   setnames(crossLevels, c("V1", "V2"), c(dateGp, myVar))
   countData <- merge(crossLevels, countData, all.x = TRUE, by = c(dateGp, myVar))
   countData[is.na(N), N := 0]
   countData[, (myVar) := factor(get(myVar), levels = newLevels)]
   
+  ## Combine countData (numerator) and countBy (denominator) as rateBy
   if (normBy == "time"){
     rateBy <- merge(countData, countBy, by = dateGp)
   } else {
@@ -216,10 +220,12 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     }
   }
   
+  ## Compute the rates
   rateBy[, rate := N.x / N.y]
   rateBy[, (myVar) := factor(get(myVar), levels = newLevels)]
   
-  # Plot less frequent category only, helps when there is a large class imbalance
+  ## Plot less frequent category only for a binary variable;
+  ## this helps when there is a large class imbalance
   if (length(newLevels) == 2) {
     rateBy <- rateBy[get(myVar) == newLevels[2]]
   }
@@ -227,10 +233,10 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   p <- ggplot2::ggplot(rateBy,
                        ggplot2::aes_string(x = dateGp, y = "rate")) +
     ggplot2::geom_line(stat = "identity")  +
-    facet_wrap(stats::as.formula(paste("~", myVar))) +
+    ggplot2::facet_wrap(stats::as.formula(paste("~", myVar))) +
     ggplot2::ylab("") +
     ggplot2::scale_x_date() +
-    ggplot2::theme(axis.text.x=element_text(angle = 30, hjust = 1))
+    ggplot2::theme(axis.text.x=ggplot2::element_text(angle = 30, hjust = 1))
   
   return(p)
   
