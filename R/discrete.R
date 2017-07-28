@@ -229,8 +229,8 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   rateBy[, rate := N.x / N.y]
   rateBy[, (myVar) := factor(get(myVar), levels = newLevels)]
   
-  ## Plot less frequent category only for a binary variable;
-  ## this helps when there is a large class imbalance
+  ## Plot less frequent category only for a binary variable.
+  ## This helps when there is a large class imbalance, because the range of y-axis for all trace plots is the same.
   if (length(newLevels) == 2) {
     rateBy <- rateBy[get(myVar) == newLevels[2]]
   }
