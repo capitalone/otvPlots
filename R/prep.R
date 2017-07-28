@@ -26,7 +26,7 @@
 #' @param dateNm Name of column containing \code{date} variable.
 #' @param dateFt \code{\link{strptime}} format of date variable. Default is SAS
 #'   format \code{"\%d\%h\%Y"}. But input data with R date format 
-#'   \code{"\%Y-\%m-\%d"} will also be detected. Both of two formatscan be
+#'   \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 #'   parsed automatically. 
 #' @param dateGp Name of the variable the time series plots should be grouped
 #'   by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
@@ -43,9 +43,13 @@
 #'   if applicable, and not including \code{dateGp}, \code{dateGpBp} 
 #'   (which will be added to the \code{dataFl} by this function).
 #' @param dropConstants Logical indicates whether or not constant (all
-#'   duplicated or NA) variables should be dropped from dataFl prior to plotting.
-#' @param ... Additional parameters to be passed to fread
-#' @return A \code{data.table} formated for use by \code{PlotVar} function
+#'   duplicated or NA) variables should be dropped from \code{dataFl} prior to
+#'   plotting.
+#' @param ... Additional parameters to be passed to 
+#'   \code{\link[data.table]{fread}}.
+#' @export
+#' @keywords internal
+#' @return A \code{data.table} formated for use by \code{PlotVar} function.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -55,7 +59,6 @@
 #' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
-#' @export
 #' @examples
 #' ## Use the bankData dataset in this package
 #' data(bankData)
@@ -313,6 +316,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' @param idx Vector of length 2 giving column index of variable names (first
 #'   position) and labels (second position)
 #' @export
+#' @keywords internal
 #' @return A data table formated for use by \code{PlotVar} function.
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the

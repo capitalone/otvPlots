@@ -29,7 +29,7 @@ of variables not to read into memory.}
 
 \item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 
-\code{"\%Y-\%m-\%d"} will also be detected. Both of two formatscan be
+\code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
@@ -51,12 +51,14 @@ if applicable, and not including \code{dateGp}, \code{dateGpBp}
 (which will be added to the \code{dataFl} by this function).}
 
 \item{dropConstants}{Logical indicates whether or not constant (all
-duplicated or NA) variables should be dropped from dataFl prior to plotting.}
+duplicated or NA) variables should be dropped from \code{dataFl} prior to
+plotting.}
 
-\item{...}{Additional parameters to be passed to fread}
+\item{...}{Additional parameters to be passed to 
+\code{\link[data.table]{fread}}.}
 }
 \value{
-A \code{data.table} formated for use by \code{PlotVar} function
+A \code{data.table} formated for use by \code{PlotVar} function.
 }
 \description{
 Cleans an input dataset for use by the plotting function \code{otvPlots}. 
@@ -84,3 +86,4 @@ bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "qu
 ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 str(bankData) 
 }
+\keyword{internal}
