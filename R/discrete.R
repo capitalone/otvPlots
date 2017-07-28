@@ -62,7 +62,7 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
                           myVar = myVar, newLevels = newLevels, normBy = normBy,
                           kCategories = kCategories)
   
-  p  <- gridExtra::arrangeGrob(ggplotGrob(p), p2, widths = c(1, 2))
+  p  <- gridExtra::arrangeGrob(ggplot2::ggplotGrob(p), p2, widths = c(1, 2))
   
   return(p)
 }
