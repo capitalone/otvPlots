@@ -11,9 +11,9 @@
 #'
 #' @inheritParams PrepData
 #' @param myVar Name of the variable to be plotted
-#' @param kCategories If a categorical variable has more than kCategories, only 
-#'   a global histogram will be plotted, rate plots for all categories will also
-#'   be plotted.
+#' @param kCategories If a categorical variable has more than \code{kCategories},
+#'   trace plots of only the \code{kCategories} most prevalent categories will
+#'   be plotted.  
 #' @param normBy The normalization factor for rate plots, can be \code{"time"}
 #'   or \code{"var"}. If \code{"time"}, then for each time period of 
 #'   \code{dateGp}, counts are normalized by the total counts over all 
@@ -58,15 +58,11 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
   p <- PlotBarplot(dataFl = dataFl, myVar = myVar, weightNm = weightNm)
   newLevels <- as.character(p$data[order(-count)][[myVar]])
   
-  # If more than kCategories levels only plot a single histogram (p)
-  # Otherwise also plot the category rates over time (p2)
+  p2 <- PlotRatesOverTime(dataFl = dataFl, dateGp = dateGp, weightNm = weightNm,
+                          myVar = myVar, newLevels = newLevels, normBy = normBy,
+                          kCategories = kCategories)
   
-  if (!is.null(kCategories) && length(newLevels) <= kCategories) {
-    p2 <- PlotRatesOverTime(dataFl = dataFl, dateGp = dateGp,
-                           weightNm = weightNm, myVar = myVar, newLevels = newLevels,
-                           normBy = normBy)
-    p  <- gridExtra::arrangeGrob(ggplotGrob(p), p2, widths = c(1, 2))
-  }
+  p  <- gridExtra::arrangeGrob(ggplotGrob(p), p2, widths = c(1, 2))
   
   return(p)
 }
@@ -161,7 +157,7 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #'                   myVar = "job", newLevels = NULL, normBy = "var")
 #' 
 PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
-                             weightNm = NULL, newLevels = NULL){ #!# previous name: PlotHistOverTime
+                             weightNm = NULL, newLevels = NULL, kCategories = 9){ #!# previous name: PlotHistOverTime
   N.x <- NULL
   N.y <- NULL
   rate <- NULL
@@ -184,9 +180,6 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     
     newLevels <- glbTotals[order(-count), myVar, with = FALSE][[myVar]]
   }
-  
-  #!# to be deleted
-  hex <- scales::hue_pal()(length(newLevels))[match(newLevels, c(dataFl[, sort(unique(get(myVar)))], "NA"))]
   
   ## Compute counts by category and time
   if (is.null(weightNm)) {
@@ -235,8 +228,15 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     rateBy <- rateBy[get(myVar) == newLevels[2]]
   }
   
-  p <- ggplot2::ggplot(rateBy,
-                       ggplot2::aes_string(x = dateGp, y = "rate")) +
+  if(length(newLevels) <= kCategories){
+    p <- ggplot2::ggplot(rateBy,
+                         ggplot2::aes_string(x = dateGp, y = "rate"))   
+  } else {
+    p <- ggplot2::ggplot(rateBy[get(myVar) %in% newLevels[1:kCategories]],
+                         ggplot2::aes_string(x = dateGp, y = "rate"))
+  }
+  
+  p <- p +
     ggplot2::geom_line(stat = "identity")  +
     ggplot2::facet_wrap(stats::as.formula(paste("~", myVar))) +
     ggplot2::ylab("") +

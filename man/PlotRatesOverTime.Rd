@@ -6,7 +6,7 @@
 binary) variable}
 \usage{
 PlotRatesOverTime(dataFl, dateGp, myVar, normBy = "time", weightNm = NULL,
-  newLevels = NULL)
+  newLevels = NULL, kCategories = 9)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -35,6 +35,10 @@ illustrates changes of categories' volumns over time.}
 no weights (all rows recieve weight 1).}
 
 \item{newLevels}{categories of \code{myVar} in order of global frequency}
+
+\item{kCategories}{If a categorical variable has more than \code{kCategories},
+trace plots of only the \code{kCategories} most prevalent categories will
+be plotted.}
 }
 \value{
 A \code{ggplot} object, trace plots of categories' propotions 

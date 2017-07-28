@@ -81,6 +81,9 @@ example(PlotVar)
 ## New changes
 * For categorical variabls' rate trace plots over time, use percentage instead of fraction as y-axis label.
 
+* Previously, for a categorial varaible with more than `kCategories` number of categories, no traceplots of categories' proportions are displayed. In the new version, 
+trace plots of the `kCategories` most prevalent categories will be plotted. 
+
 * Change of terminology:
 ** continouous variable -> numerical variable
 ** discrete variable -> categorical variable

@@ -27,8 +27,8 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
-\item{kCategories}{If a categorical variable has more than kCategories, only 
-a global histogram will be plotted, rate plots for all categories will also
+\item{kCategories}{If a categorical variable has more than \code{kCategories},
+trace plots of only the \code{kCategories} most prevalent categories will
 be plotted.}
 
 \item{normBy}{The normalization factor for rate plots, can be \code{"time"}
