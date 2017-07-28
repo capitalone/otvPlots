@@ -78,4 +78,10 @@ example(PlotVar)
    )
 
 ```
+## New changes
+* For categorical variabls' rate trace plots over time, use percentage instead of fraction as y-axis label.
 
+* Change of terminology:
+** continouous variable -> numerical variable
+** discrete variable -> categorical variable
+** histogram (for categorical variable) -> bar plot

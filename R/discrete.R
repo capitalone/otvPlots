@@ -104,11 +104,16 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 
   count <- NULL
   
+  ## A subset dataset to work on
+  dataSub <- dataFl[, c(myVar, weightNm), with = FALSE]
+  ## NA is converted to a character, i.e., treated as a new category
+  dataSub[is.na(get(myVar)), (myVar) := "NA"]
+  
   ## Create glbTotals, a frequency table of myVar 
   if (is.null(weightNm)) {
-    glbTotals <- dataFl[, list(count = .N), by = myVar]
+    glbTotals <- dataSub[, list(count = .N), by = myVar]
   } else {
-    glbTotals <- dataFl[, list(count = sum(get(weightNm))), by = myVar]
+    glbTotals <- dataSub[, list(count = sum(get(weightNm))), by = myVar]
   }
   
   ## Create newLevels, a vector of category names, in descending order of counts
@@ -236,7 +241,8 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     ggplot2::facet_wrap(stats::as.formula(paste("~", myVar))) +
     ggplot2::ylab("") +
     ggplot2::scale_x_date() +
-    ggplot2::theme(axis.text.x=ggplot2::element_text(angle = 30, hjust = 1))
+    ggplot2::theme(axis.text.x=ggplot2::element_text(angle = 30, hjust = 1)) +
+    ggplot2::scale_y_continuous(labels=scales::percent)
   
   return(p)
   
