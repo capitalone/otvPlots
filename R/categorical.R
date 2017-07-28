@@ -1,5 +1,5 @@
 ###########################################
-#      Discrete Plot Method               #
+#      Plots for Categorical Data         #
 ###########################################
 #' Creates over time variable plots for a categorical variable
 #' 
