@@ -96,12 +96,14 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 #'                     dateGpBp = "quarters", weightNm = NULL)
 #' PlotBarplot(bankData, "job")
 #' 
-#' # NA will be included as a category if any NA are present
+#' ## NA will be included as a category if any NA are present
 #' bankData[sample.int(.N)[1:1000], education := NA]
 #' PlotBarplot(bankData, "education")
-#' 
+
 PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: PlotHistogram
+
   count <- NULL
+  
   ## Create glbTotals, a frequency table of myVar 
   if (is.null(weightNm)) {
     glbTotals <- dataFl[, list(count = .N), by = myVar]
