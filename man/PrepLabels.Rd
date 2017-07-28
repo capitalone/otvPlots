@@ -42,4 +42,3 @@ specific language governing permissions and limitations under the License.
 data(bankLabels)
 bankLabels = PrepLabels(bankLabels)
 }
-\keyword{internal}

@@ -73,4 +73,3 @@ PlotRatesOverTime(dataFl = bankData, dateGp = "months",  weightNm = "weight",
                   myVar = "job", newLevels = NULL, normBy = "var")
 
 }
-\keyword{internal}

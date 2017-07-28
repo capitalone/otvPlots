@@ -48,4 +48,3 @@ PlotBarplot(bankData, "job")
 bankData[sample.int(.N)[1:1000], education := NA]
 PlotBarplot(bankData, "education")
 }
-\keyword{internal}

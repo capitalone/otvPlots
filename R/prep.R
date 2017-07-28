@@ -48,7 +48,6 @@
 #' @param ... Additional parameters to be passed to 
 #'   \code{\link[data.table]{fread}}.
 #' @export
-#' @keywords internal
 #' @return A \code{data.table} formated for use by \code{PlotVar} function.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
@@ -316,7 +315,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' @param idx Vector of length 2 giving column index of variable names (first
 #'   position) and labels (second position)
 #' @export
-#' @keywords internal
 #' @return A data table formated for use by \code{PlotVar} function.
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the

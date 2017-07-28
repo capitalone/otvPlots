@@ -80,4 +80,3 @@ plot(PlotCategoricalVar(myVar = "job", dataFl = bankData, weightNm = NULL,
 plot(PlotCategoricalVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
 }
-\keyword{internal}

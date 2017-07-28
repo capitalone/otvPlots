@@ -86,4 +86,3 @@ bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "qu
 ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 str(bankData) 
 }
-\keyword{internal}

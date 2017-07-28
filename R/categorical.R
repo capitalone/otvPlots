@@ -22,7 +22,6 @@
 #'   are normalized by the total counts over time from only this category. This
 #'   illustrates changes of categories' volumns over time.
 #' @export
-#' @keywords internal
 #' @return a \code{grob} (i.e., \code{ggplot} grid) object, including a 
 #'   histogram, and trace plots of categories' proportions. If the number of 
 #'   categories is larger than \code{kCategories}, then trace plots of only the
@@ -77,7 +76,6 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 #' @inheritParams PrepData
 #' @inheritParams PlotCategoricalVar
 #' @export
-#' @keywords internal
 #' @return A \code{ggplot} object with a histogram of \code{myVar} ordered by 
 #'   category frequency
 #' @section License:
@@ -136,7 +134,6 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #' @inheritParams PrepData
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
-#' @keywords internal
 #' @return A \code{ggplot} object, trace plots of categories' propotions 
 #'   \code{myVar} over time.
 #' @section License:
