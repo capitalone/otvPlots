@@ -10,10 +10,10 @@
 #' 
 #'
 #' @inheritParams PrepData
-#' @param myVar Name of the variable to be plotted
+#' @param myVar The name of the variable to be plotted
 #' @param kCategories If a categorical variable has more than \code{kCategories},
-#'   trace plots of only the \code{kCategories} most prevalent categories will
-#'   be plotted.  
+#'   trace plots of only the \code{kCategories} most prevalent categories are
+#'   plotted.  
 #' @param normBy The normalization factor for rate plots, can be \code{"time"}
 #'   or \code{"var"}. If \code{"time"}, then for each time period of 
 #'   \code{dateGp}, counts are normalized by the total counts over all 
@@ -22,9 +22,10 @@
 #'   are normalized by the total counts over time from only this category. This
 #'   illustrates changes of categories' volumns over time.
 #' @export
-#' @return a \code{ggplot} object, including a histogram, and trace plots of 
-#'   categories' proportions if number of categories is less than 
-#'   \code{kCategories}. 
+#' @return a \code{grob} (i.e., \code{ggplot} grid) object, including a 
+#'   histogram, and trace plots of categories' proportions. If the number of 
+#'   categories is larger than \code{kCategories}, then trace plots of only the
+#'   \code{kCategories} most prevalent categories are be plotted.  
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
