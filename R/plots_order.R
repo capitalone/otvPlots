@@ -107,21 +107,23 @@ OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 #           CalcR2 Function               #
 ###########################################
 
-#' Calculates R2 of variable using date as predictor
+#' Calculates R2 of a numerical variable using date as the predictor
 #'
 #' Calculates weighted R2 of a univariate weighted linear model with
-#' \code{dateNm} as x and \code{myVar} as y using the workhorse lm.fit and
-#' lm.wfit functions
+#' \code{dateNm} as x and \code{myVar} as y using the workhorse \code{lm.fit}
+#' and \code{lm.wfit} functions.
 #'
-#' @param myVar Name of variable to model
-#' @param dataFl A data.table containing myVar, dateNm and inweight
-#' @param dateNm Name of column containing date variable (to be modeled as 
-#' numeric)
-#' @param weightNm Name of column containing row weights. If all(w==1), lm.fit
-#' will be called, else lm.wfit will be called.
-#' @param imputeValue Either NULL or numeric. If NULL model will be fit on
-#' non-NA components of myVar. (dateNm, inweight must not have NA cases). If
-#' numeric, missing cases of myVar will be imputed to imputeValue
+#' @param myVar Name of variable to model. 
+#' @param dataFl A \code{data.table}, containing \code{myVar}, \code{dateNm}, 
+#'   and \code{weightNm}.
+#' @param dateNm Name of column containing the date variable (to be modeled as
+#'   numeric); this date column must not have NA's. 
+#' @param weightNm Name of column containing row weights. If weights equal one, 
+#'   then the \code{\link{lm.fit}} function will be called, otherwise the 
+#'   \code{\link{lm.wfit}} will be called. The weights column must not have NA's.
+#' @param imputeValue Either \code{NULL} or numeric. If \code{NULL}, model will
+#'   be fit on only non-NA components of \code{myVar}. If numeric, missing cases
+#'   of \code{myVar} will be imputed to \code{imputeValue}.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -132,34 +134,40 @@ OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
 #' @export
+
 CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
+
   message("Calculating R2 of ", myVar)
   
   if (sum(!is.na(dataFl[[myVar]])) < 2) {
+    ## If kSample is not null, then we need to recheck that the subsample is not
+    ## all missing. If there are less than 2 numeric values left after sampling
+    ## we can't calculate R2
     return(Inf)
-    # if kSample is not null, then we need to recheck that the subsample is not
-    # all missing. If there are less than 2 numeric values left after sampling
-    # we can't calculate R2
   } else {
     y <- dataFl[[myVar]]
     
-    # if imputeValue is available, we impute everywhere Y is missing
+    ## If imputeValue is available, we impute everywhere Y is missing
     if (!is.null(imputeValue)) {
       y[is.na(y)] <- imputeValue
     }
+    
+    ## Index of missing values in y (after imputation if applicable)
     yIdx <- which(is.na(y))
     
-    # We perform casewise deletion anywhere X, Y or W (if not null) is missing
+    ## We perform casewise deletion anywhere X, Y or W (if not null) is missing
     if (!is.null(weightNm)) {
       w <- dataFl[[weightNm]]
       wIdx <- which(is.na(w))
       yIdx <- unique(c(yIdx, wIdx))
     }
     
+    ## Convert x from date to numeric, plus a column of ones as the intercept
     x <- cbind(1, as.matrix(as.numeric(dataFl[[dateNm]]), ncol = 1))
     xIdx <- which(is.na(x[, 2]))
     yIdx <- unique(c(xIdx, yIdx))
     
+    ## Remove all entries as in yIdx
     if (length(yIdx) > 0) {
       if (!is.null(weightNm)) {
         w <- w[-c(yIdx)]
@@ -168,13 +176,13 @@ CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
       x <- x[-c(yIdx), ]
     }
     
+    ## Compute R2 or weighted R2
     if (is.null(weightNm)) {
       mod <- lm.fit(x = x, y = y)
       r2  <- 1 - sum(mod$resid ^ 2) / sum( (y - mean(y)) ^ 2)
     } else {
       mod <- lm.wfit(x = x, y = y, w = w)
-      r2  <- 1 - sum(w *
-                       mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w, normwt = TRUE)) ^ 2)
+      r2  <- 1 - sum(w * mod$resid ^ 2) / sum(w * (y - Hmisc::wtd.mean(y, w, normwt = TRUE)) ^ 2)
     }
     return(r2)
   }

@@ -2,29 +2,31 @@
 % Please edit documentation in R/plots_order.R
 \name{CalcR2}
 \alias{CalcR2}
-\title{Calculates R2 of variable using date as predictor}
+\title{Calculates R2 of a numerical variable using date as the predictor}
 \usage{
 CalcR2(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL)
 }
 \arguments{
-\item{myVar}{Name of variable to model}
+\item{myVar}{Name of variable to model.}
 
-\item{dataFl}{A data.table containing myVar, dateNm and inweight}
+\item{dataFl}{A \code{data.table}, containing \code{myVar}, \code{dateNm}, 
+and \code{weightNm}.}
 
-\item{dateNm}{Name of column containing date variable (to be modeled as 
-numeric)}
+\item{dateNm}{Name of column containing the date variable (to be modeled as
+numeric); this date column must not have NA's.}
 
-\item{weightNm}{Name of column containing row weights. If all(w==1), lm.fit
-will be called, else lm.wfit will be called.}
+\item{weightNm}{Name of column containing row weights. If weights equal one, 
+then the \code{\link{lm.fit}} function will be called, otherwise the 
+\code{\link{lm.wfit}} will be called. The weights column must not have NA's.}
 
-\item{imputeValue}{Either NULL or numeric. If NULL model will be fit on
-non-NA components of myVar. (dateNm, inweight must not have NA cases). If
-numeric, missing cases of myVar will be imputed to imputeValue}
+\item{imputeValue}{Either \code{NULL} or numeric. If \code{NULL}, model will
+be fit on only non-NA components of \code{myVar}. If numeric, missing cases
+of \code{myVar} will be imputed to \code{imputeValue}.}
 }
 \description{
 Calculates weighted R2 of a univariate weighted linear model with
-\code{dateNm} as x and \code{myVar} as y using the workhorse lm.fit and
-lm.wfit functions
+\code{dateNm} as x and \code{myVar} as y using the workhorse \code{lm.fit}
+and \code{lm.wfit} functions.
 }
 \section{License}{
 
