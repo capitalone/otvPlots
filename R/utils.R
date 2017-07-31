@@ -2,8 +2,8 @@
 #           Utility Functions             #
 ###########################################
 
-#is.cntns <- function(x)  inherits(x, "cntns")
-#is.dscrt <- function(x)  inherits(x, "dscrt")
+is.nmrcl <- function(x)  inherits(x, "nmrcl")
+is.ctgrl <- function(x)  inherits(x, "ctgrl")
 
 wtd_quantile_NA <- function(x, weights, probs = c(.0, .25, .5, .75, 1),
                             ...) { #!# previous name: wtd.quantile_NA
