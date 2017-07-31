@@ -40,19 +40,19 @@
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                     dateGpBp = "quarters", weightNm = NULL)
 #' # Single histogram is plotted for job type since there are 12 categories
-#' plot(PlotCategoricalVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
+#' plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 #'                      
-#' plot(PlotCategoricalVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
+#' plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months", kCategories = 12))
 #'
 #'
 #' ## Binary data is treated as categorical, 
 #' ## and only the less frequent category is plotted over time.
-#' plot(PlotCategoricalVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
+#' plot(PlotCatVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
 #'                      dateNm = "date", dateGp = "months"))
 
-PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
+PlotCatVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
                             kCategories = 9, normBy = "time") { #!# previous name: PlotDiscreteVar
   count <- NULL
   
@@ -74,7 +74,7 @@ PlotCategoricalVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 #' Creates a bar plot for a discrete (or binary) variable
 #'
 #' @inheritParams PrepData
-#' @inheritParams PlotCategoricalVar
+#' @inheritParams PlotCatVar
 #' @export
 #' @return A \code{ggplot} object with a histogram of \code{myVar} ordered by 
 #'   category frequency
@@ -130,7 +130,7 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #' Creates trace plots of categories' propotions over time for a discrete (or
 #' binary) variable
 #'
-#' @inheritParams PlotCategoricalVar
+#' @inheritParams PlotCatVar
 #' @inheritParams PrepData
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
