@@ -22,9 +22,10 @@ options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
 no weights (all rows recieve weight 1).}
 
-\item{skewOpt}{Either a numeric constant or \code{NULL}. If numeric, say 5,
-the box plots of variables whose skewness exceeds 5 will be on a log10
-scale if possible. Default is \code{NULL} (no transformation).}
+\item{skewOpt}{Either a numeric constant or \code{NULL}. Default is 
+\code{NULL} (no transformation). If numeric, say 5, then all box plots of
+a variable whose skewness exceeds 5 will be on a log10 scale if possible.
+Negative input of \code{skewOpt} will be converted to 3.}
 }
 \value{
 A \code{ggplot2} object with a box plot of \code{myVar} grouped by 

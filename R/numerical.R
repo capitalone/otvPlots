@@ -6,16 +6,19 @@
 #'
 #' @inheritParams PrepData
 #' @param myVar The name of the variable to be plotted
-#' @param skewOpt Either a numeric constant or \code{NULL}. If numeric, say 5,
-#'   the box plots of variables whose skewness exceeds 5 will be on a log10
-#'   scale if possible. Default is \code{NULL} (no transformation).
-#' @param kSample Either \code{NULL} or an integer. If an integer, indicates the
-#'   sample size for both drawing boxplots and ordering numerical graphs by 
-#'   \eqn{R^2}. For large datasets, setting this to a reasonable (say 50K) value
-#'   dramatically increases processing speed. In larger datasets (e.g. > 10 
-#'   percent system memory), this parameter should not be set to NULL, or 
-#'   boxplots may take a very long time to render. This setting has no impact on
-#'   the accuracy of time series plots.
+#' @param skewOpt Either a numeric constant or \code{NULL}. Default is 
+#'   \code{NULL} (no transformation). If numeric, say 5, then all box plots of
+#'   a variable whose skewness exceeds 5 will be on a log10 scale if possible.
+#'   Negative input of \code{skewOpt} will be converted to 3.
+#'   
+#' @param kSample Either \code{NULL} or an positive integer. If an integer, 
+#'   indicates the sample size for both drawing boxplots and ordering numerical
+#'   graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
+#'   reasonable value (default is 50K) dramatically improves processing speed. 
+#'   Therefore, for larger datasets (e.g. > 10 percent system memory), this
+#'   parameter should not be set to \code{NULL}, or boxplots may take a very
+#'   long time to render. This setting has no impact on the accuracy of time 
+#'   series plots on quantiles, mean, SD, and missing and zero rates.
 #' @export
 #' @return a \code{grob} (i.e., \code{ggplot} grid) object, including a boxplot
 #'   grouped by \code{dateGpBp}, a time series of p1, p50 and p99 grouped by 
@@ -33,22 +36,24 @@
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                     dateGpBp = "years")
 #' plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
 #'                  skewOpt = NULL, kSample = NULL))
-#'
+
 PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
                         skewOpt = NULL, kSample = 50000) { #!# previous name: PlotContVar
   variable <- NULL
   if (inherits(myVar, "integer64")) {
     stop("Cannot plot integer64 type--cast to numeric")
   }
+  
+  ## Compute the summary stats
   meltdx <- SummaryStats(myVar = myVar, dataFl = dataFl, dateGp = dateGp,
                          weightNm = weightNm)
   
-  # option for log10 transform of box plot y axis if skewness is high enough.
-  # Invalid choices revert to 3.
+  ## Option for log10 transform of box plot y axis if skewness is high enough.
+  ## Invalid choices revert to 3.
   if (!is.null(skewOpt)) {
     stopifnot(is.numeric(skewOpt))
     if (skewOpt < 0) {
@@ -56,17 +61,22 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
     }
   }
   
+  ## Boxplots
   if (!is.null(kSample)) {
-    # take a subsample of dataFl for boxplots
+    ## Take a subsample of dataFl for boxplots
     p1 <- PlotDist(dataFl[sample(.N, min(.N, kSample))], myVar, dateGpBp,
                    weightNm, skewOpt)
   } else {
     p1 <- PlotDist(dataFl, myVar, dateGpBp, weightNm, skewOpt)
   }
+  
+  ## Time series plots for quantiles, mean+-SD, and missing rates
   p2 <- PlotQuantiles(meltdx[variable %in% c("p99", "p50", "p1", "p99_g",
                                              "p50_g", "p1_g")], myVar, dateGp)
   p3 <- PlotMean(meltdx[variable %in% c("Mean", "cl1", "cl2")], myVar, dateGp)
   p4 <- PlotRates(meltdx, myVar, dateGp)
+  
+  ## Combines the plots together
   p5 <- rbind(ggplot2::ggplotGrob(p2), ggplot2::ggplotGrob(p3),
               ggplot2::ggplotGrob(p4), size = "last")
   p  <- gridExtra::arrangeGrob(p1, p5,

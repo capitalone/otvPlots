@@ -28,17 +28,19 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{skewOpt}{Either a numeric constant or \code{NULL}. If numeric, say 5,
-the box plots of variables whose skewness exceeds 5 will be on a log10
-scale if possible. Default is \code{NULL} (no transformation).}
+\item{skewOpt}{Either a numeric constant or \code{NULL}. Default is 
+\code{NULL} (no transformation). If numeric, say 5, then all box plots of
+a variable whose skewness exceeds 5 will be on a log10 scale if possible.
+Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an integer. If an integer, indicates the
-sample size for both drawing boxplots and ordering numerical graphs by 
-\eqn{R^2}. For large datasets, setting this to a reasonable (say 50K) value
-dramatically increases processing speed. In larger datasets (e.g. > 10 
-percent system memory), this parameter should not be set to NULL, or 
-boxplots may take a very long time to render. This setting has no impact on
-the accuracy of time series plots.}
+\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+indicates the sample size for both drawing boxplots and ordering numerical
+graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
+reasonable value (default is 50K) dramatically improves processing speed. 
+Therefore, for larger datasets (e.g. > 10 percent system memory), this
+parameter should not be set to \code{NULL}, or boxplots may take a very
+long time to render. This setting has no impact on the accuracy of time 
+series plots on quantiles, mean, SD, and missing and zero rates.}
 }
 \value{
 a \code{grob} (i.e., \code{ggplot} grid) object, including a boxplot
@@ -64,9 +66,8 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-setDT(bankData)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
+bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+                    dateGpBp = "years")
 plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
                  skewOpt = NULL, kSample = NULL))
-
 }
