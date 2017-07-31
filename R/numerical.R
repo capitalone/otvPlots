@@ -81,12 +81,16 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #     Continuous Plotting Functions       #
 ###########################################
 
-#' Create data.table of summary statistics for continuous plotting functions
+#' Create summary statistics for a numerical variable
+#' 
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @export
-#' @return A data.table formatted for use by the continuous plot funtions 
-#' \code{PlotMean}, \code{PlotQuantiles} and \code{PlotRates}.
+#' @return A \code{data.table} for use by the numerical variables' plotting 
+#'   funtions \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
+#'   \code{\link{PlotRates}}.
+#' @importFrom Hmisc wtd.mean
+#' @importFrom Hmisc wtd.quantile
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -98,18 +102,21 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
 #' mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "months")
 #' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", 
 #'                                             "p50_g", "p1_g")], "age", "months"))
 #' plot(PlotMean(mdx[variable %in% c("Mean", "cl1", "cl2")], "age", "months"))
 #' plot(PlotRates(mdx, "age", "months"))
+
 SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
+  
   variable <- NULL
-  if (!is.null(weightNm)) {
+  
+  if (!is.null(weightNm)) {   ## If weights are available
+    ## Compute a data.table of the summary statistics, grouped by dataGp
     dx <- dataFl[, {
-      tmp1 <- wtd.quantile_NA(get(myVar), get(weightNm), c(.01, .5, .99));
+      tmp1 <- wtd_quantile_NA(get(myVar), get(weightNm), c(.01, .5, .99));
       list(
         "p1"   = tmp1[1],
         "p50"  = tmp1[2],
@@ -121,13 +128,16 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "missingrate" = Hmisc::wtd.mean(is.na(get(myVar)),
                                         get(weightNm), normwt = TRUE)
       )}, by = c(dateGp)]
-    qq <- dataFl[, wtd.quantile_NA(get(myVar), get(weightNm),
+    
+    ## Compute summary stats for the overall data (no group by)
+    qq <- dataFl[, wtd_quantile_NA(get(myVar), get(weightNm),
                                    probs = c(.99, .5, .01))]
     cl <- dataFl[, c(Hmisc::wtd.mean(get(myVar), get(weightNm),
                                      na.rm = TRUE, normwt = TRUE),
                      sqrt(Hmisc::wtd.var(get(myVar), get(weightNm),
                                          na.rm = TRUE, normwt = TRUE)))]
-  } else {
+  } else { ## If no weights are provided
+    ## Compute a data.table of the summary statistics, grouped by dataGp
     dx <- dataFl[, {
       tmp1 <- quantile(get(myVar), probs = c(.01, .5, .99), na.rm = TRUE);
       list(
@@ -138,25 +148,34 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "zerorate"    = mean(get(myVar) == 0, na.rm = TRUE),
         "missingrate" = mean(is.na(get(myVar)))
       )}, by = c(dateGp)]
+
+    ## Compute summary stats for the overall data (no group by)
     qq <- dataFl[, quantile(get(myVar), probs = c(.99, .5, .01), na.rm = TRUE)]
     cl <- dataFl[, c(mean(get(myVar), na.rm = TRUE),
                      sd(get(myVar), na.rm = TRUE))]
   }
+  
+  ## Melt the dx table to have only 3 columns: dateGp, variable, and value
   meltdx <- data.table::melt(dx,
                              id.vars = c(dateGp),
                              measure.vars = c("p99", "p50", "p1", "Mean",
                                               "zerorate", "missingrate")
   )
-  cl <- cl %*% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) # mean +- 1 SD
+  ## Mean +- 1 SD
+  cl <- cl %*% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) 
+
+  ## The gloabl summary qq now has 0.99, 0.5, 0.1 quantiles, mean+SD, and mean-SD
   qq <- c(qq, cl)
-  
-  # 5 copies of dateGp for 5 global summary variables
+  ## 5 copies of dateGp for 5 global summary variables
   globaldx <- data.table(dateGp = rep(meltdx[variable == "p99", dateGp,
                                              with = FALSE][[1]], 5))
+  ## Make the global stats in the same format of meltdx
   globaldx[, c("variable", "value") := list(rep(c("p99_g", "p50_g",
                                                   "p1_g", "cl1", "cl2"),
                                                 each = .N / 5),
                                             rep(qq, each = .N / 5))]
+  
+  ## Merge stats by dateGp (meltdx) and global stats in one table
   meltdx <- rbindlist(list(meltdx, globaldx))
   return(meltdx)
 }

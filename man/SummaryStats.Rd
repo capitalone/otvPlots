@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical.R
 \name{SummaryStats}
 \alias{SummaryStats}
-\title{Create data.table of summary statistics for continuous plotting functions}
+\title{Create summary statistics for a numerical variable}
 \usage{
 SummaryStats(myVar, dataFl, dateGp, weightNm = NULL)
 }
@@ -25,11 +25,12 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 no weights (all rows recieve weight 1).}
 }
 \value{
-A data.table formatted for use by the continuous plot funtions 
-\code{PlotMean}, \code{PlotQuantiles} and \code{PlotRates}.
+A \code{data.table} for use by the numerical variables' plotting 
+  funtions \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
+  \code{\link{PlotRates}}.
 }
 \description{
-Create data.table of summary statistics for continuous plotting functions
+Create summary statistics for a numerical variable
 }
 \section{License}{
 
@@ -45,8 +46,7 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-setDT(bankData)
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
+bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
 mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "months")
 plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", 
                                             "p50_g", "p1_g")], "age", "months"))
