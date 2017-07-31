@@ -36,11 +36,11 @@
 #' data(bankData)
 #' setDT(bankData)
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
-#' plot(PlotContVar("balance", bankData, NULL, "months", "years", 
+#' plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
 #'                  skewOpt = NULL, kSample = NULL))
 #'
-PlotContVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
-                        skewOpt = NULL, kSample = 50000) {
+PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
+                        skewOpt = NULL, kSample = 50000) { #!# previous name: PlotContVar
   variable <- NULL
   if (inherits(myVar, "integer64")) {
     stop("Cannot plot integer64 type--cast to numeric")
@@ -83,7 +83,7 @@ PlotContVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 
 #' Create data.table of summary statistics for continuous plotting functions
 #' @inheritParams PrepData
-#' @inheritParams PlotContVar
+#' @inheritParams PlotNumVar
 #' @export
 #' @return A data.table formatted for use by the continuous plot funtions 
 #' \code{PlotMean}, \code{PlotQuantiles} and \code{PlotRates}.
@@ -168,7 +168,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #' @param meltdx A data.table with p1, p50, and p99 in long format, produced by
 #' \code{PlotVar}
 #' @inheritParams PrepData
-#' @inheritParams PlotContVar
+#' @inheritParams PlotNumVar
 #' @return A ggplot object with \code{dateGp} on the x axis, \code{value} on the 
 #' y axis, and variables \code{p01}, \code{p50} and \code{p99} plotted on the 
 #' same graph, with grouped and global percentiles differentiated by linetype
@@ -225,7 +225,7 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 #' @param meltdx A data.table with Mean and 1SD control limits in long format, 
 #' produced by \code{PlotVar}
 #' @inheritParams PrepData
-#' @inheritParams PlotContVar
+#' @inheritParams PlotNumVar
 #' @return A ggplot object with \code{dateGp} on the x axis, \code{value} on the
 #' y axis, and variables \code{Mean}, \code{cl1} and \code{cl2} plotted on the
 #' same graph, Mean and control limits differentiated by linetype
@@ -270,7 +270,7 @@ PlotMean <- function(meltdx, myVar, dateGp){
 #' @param meltdx A data.table with missingrate and zerorate in long format, 
 #' produced by \code{PlotVar}
 #' @inheritParams PrepData
-#' @inheritParams PlotContVar
+#' @inheritParams PlotNumVar
 #' @export
 #' @return A ggplot object with a \code{missingrate} and \code{zerorate} grouped 
 #' by \code{dateGp}
@@ -307,7 +307,7 @@ PlotRates <- function(meltdx, myVar, dateGp) {
 #' Simple grouped box plot
 #'
 #' @inheritParams PrepData
-#' @inheritParams PlotContVar
+#' @inheritParams PlotNumVar
 #' @return A ggplot object with a box plot of \code{myVar} grouped by 
 #' \code{dateGpBp}
 #' @export
