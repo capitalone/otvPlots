@@ -8,7 +8,7 @@ PlotQuantiles(meltdx, myVar, dateGp)
 }
 \arguments{
 \item{meltdx}{A data.table with p1, p50, and p99 in long format, produced by
-\code{PlotVar}}
+\code{\link{SummaryStats}}}
 
 \item{myVar}{The name of the variable to be plotted}
 
@@ -18,9 +18,10 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 }
 \value{
-A ggplot object with \code{dateGp} on the x axis, \code{value} on the 
-y axis, and variables \code{p01}, \code{p50} and \code{p99} plotted on the 
-same graph, with grouped and global percentiles differentiated by linetype
+A \code{ggplot} object with \code{dateGp} on the x axis, 
+  \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
+  \code{p99} plotted on the same graph, with grouped and global percentiles 
+  differentiated by linetype.
 }
 \description{
 Plots  01, 50, and 99 percentile together

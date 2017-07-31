@@ -102,12 +102,12 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
-#' mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "months")
-#' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", 
-#'                                             "p50_g", "p1_g")], "age", "months"))
-#' plot(PlotMean(mdx[variable %in% c("Mean", "cl1", "cl2")], "age", "months"))
-#' plot(PlotRates(mdx, "age", "months"))
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", dateGpBp = "years")
+#' mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "quarters")
+#' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
+#'                    "age", "quarters"))
+#' plot(PlotMean(mdx[variable %in% c("Mean", "cl1", "cl2")], "age", "quarters"))
+#' plot(PlotRates(mdx, "age", "quarters"))
 
 SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
   
@@ -185,12 +185,13 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #' Plots  01, 50, and 99 percentile together
 #'
 #' @param meltdx A data.table with p1, p50, and p99 in long format, produced by
-#' \code{PlotVar}
+#' \code{\link{SummaryStats}}
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
-#' @return A ggplot object with \code{dateGp} on the x axis, \code{value} on the 
-#' y axis, and variables \code{p01}, \code{p50} and \code{p99} plotted on the 
-#' same graph, with grouped and global percentiles differentiated by linetype
+#' @return A \code{ggplot} object with \code{dateGp} on the x axis, 
+#'   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
+#'   \code{p99} plotted on the same graph, with grouped and global percentiles 
+#'   differentiated by linetype.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -223,19 +224,30 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #' bankMT = rbindlist(list( bankMT, globalDT))
 #' # bankMT  # See long format used for plotting
 #' PlotQuantiles(bankMT, "balance", "months")
+
 PlotQuantiles <- function(meltdx, myVar, dateGp) {
+  
   variable <- gp <- group <- NULL
+  
+  ## Add a column 'group' to indictor whether each stat is 'by dateGp' or 'global'.
   meltdx[, "group" := as.factor(ifelse(variable %in% c("p99", "p50", "p1"),
-                                       "by month", "global"))]
+                                       gsub('.{1}$', '', paste("by", dateGp, sep = " ")), 
+                                       "global"))]
   meltdx[, variable := droplevels(variable)]
+  ## Change variable names to just quantiles
   levels(meltdx$variable) <- list(p99 = c("p99", "p99_g"),
                                   p50 = c("p50", "p50_g"),
                                   p1 = c("p1", "p1_g"))
   meltdx[, gp := paste(variable, group)]
+  
+
+  ## Create a ggplots2 object
   ggplot2::ggplot(meltdx, ggplot2::aes_string(x = dateGp, y = "value",
                                               colour = "variable", lty = "group",
                                               group = "gp")) +
-    ggplot2::geom_line() + ggplot2::ylab(NULL)
+    ggplot2::geom_line() + ggplot2::ylab(NULL) + 
+    ggplot2::scale_colour_manual(values = cbbPalette)
+  
 }
 
 

@@ -84,6 +84,8 @@ example(PlotVar)
 * Previously, for a categorial varaible with more than `kCategories` number of categories, no traceplots of categories' proportions are displayed. In the new version, 
 trace plots of the `kCategories` most prevalent categories will be plotted. 
 
+* Change quantile plots with color-blind friendly color palette
+
 * Change of terminology:
 ** continouous variable -> numerical variable
 ** discrete variable -> categorical variable

@@ -46,10 +46,10 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "years")
-mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "months")
-plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", 
-                                            "p50_g", "p1_g")], "age", "months"))
-plot(PlotMean(mdx[variable \%in\% c("Mean", "cl1", "cl2")], "age", "months"))
-plot(PlotRates(mdx, "age", "months"))
+bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", dateGpBp = "years")
+mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "quarters")
+plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
+                   "age", "quarters"))
+plot(PlotMean(mdx[variable \%in\% c("Mean", "cl1", "cl2")], "age", "quarters"))
+plot(PlotRates(mdx, "age", "quarters"))
 }
