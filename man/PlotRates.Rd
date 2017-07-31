@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical.R
 \name{PlotRates}
 \alias{PlotRates}
-\title{Plot zero and missing rates}
+\title{Plot zero and missing rates for a numerical variable}
 \usage{
 PlotRates(meltdx, myVar, dateGp)
 }
@@ -22,7 +22,7 @@ A ggplot object with a \code{missingrate} and \code{zerorate} grouped
 by \code{dateGp}
 }
 \description{
-Plot zero and missing rates
+Plot zero and missing rates for a numerical variable
 }
 \section{License}{
 

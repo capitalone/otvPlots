@@ -182,13 +182,13 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 
 
 
-#' Plots  01, 50, and 99 percentile together
+#' Plot 01, 50, and 99 percentile for a numerical variable
 #'
 #' @param meltdx A data.table with p1, p50, and p99 in long format, produced by
 #' \code{\link{SummaryStats}}
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
-#' @return A \code{ggplot} object with \code{dateGp} on the x axis, 
+#' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
 #'   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
 #'   \code{p99} plotted on the same graph, with grouped and global percentiles 
 #'   differentiated by linetype.
@@ -202,28 +202,6 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
 #' @export
-#' @examples
-#' data(bankData)
-#' setDT(bankData)
-#' bankData[, months := round(date, "months")]
-#' bankDT = bankData[, {
-#'   tmp1 = quantile(balance, p = c(.01, .5, .99));
-#'   list("p1"  = tmp1[1] ,
-#'        "p50" = tmp1[2] ,
-#'        "p99" = tmp1[3]
-#'   )}, by = "months"]
-#'
-#' bankMT = melt(bankDT, id.vars = "months", 
-#'               measure.vars = c("p99", "p50","p1"))
-#' globalPct = bankData[ , quantile(balance, p = c(.01, .5, .99) ) ]
-#' globalDT = data.table("months" = rep(bankMT[variable == "p99", "months", 
-#'                       with = FALSE][[1]], 3))
-#' globalDT[, c("variable", "value") := list(rep(c("p1_g", "p50_g", "p99_g"), 
-#'                                               each = .N/3),
-#'                                           rep(globalPct, each = .N/3))]
-#' bankMT = rbindlist(list( bankMT, globalDT))
-#' # bankMT  # See long format used for plotting
-#' PlotQuantiles(bankMT, "balance", "months")
 
 PlotQuantiles <- function(meltdx, myVar, dateGp) {
   
@@ -251,15 +229,16 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 }
 
 
-#' Plot mean with {Mean +- 1SD} control limits
+#' Plot mean with {Mean +- 1SD} control limits for a numerical variable
 #' 
-#' @param meltdx A data.table with Mean and 1SD control limits in long format, 
-#' produced by \code{PlotVar}
+#' @param meltdx A \code{data.table} with Mean and 1SD control limits in long format, 
+#' produced by \code{\link{SummaryStats}}
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
-#' @return A ggplot object with \code{dateGp} on the x axis, \code{value} on the
-#' y axis, and variables \code{Mean}, \code{cl1} and \code{cl2} plotted on the
-#' same graph, Mean and control limits differentiated by linetype
+#' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
+#'   \code{value} on the y axis, and variables \code{Mean}, \code{cl1}, and 
+#'   \code{cl2} plotted on the same graph, with mean and control limits 
+#'   differentiated by linetype.
 #' @export
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
@@ -270,22 +249,16 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 #' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
-#' @examples
-#' data(bankData)
-#' setDT(bankData)
-#' bankData[, months := round(date, "months")]
-#' bankDT = bankData[, .( Mean = mean(balance)), by = "months"]
-#' cl = bankData[, c(mean(balance), sd(balance))]
-#' cl = cl %*% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) # mean +- 1 SD
-#' bankDT[, c("cl1", "cl2") := list(cl[1], cl[2])  ]
-#' bankMT = melt(bankDT, id.vars = "months", 
-#'          measure.vars = c("Mean", "cl1", "cl2"))
-#' # bankMT # Long format for plotting
-#' PlotMean(bankMT, "balance", "months")
+
 PlotMean <- function(meltdx, myVar, dateGp){
+  
   variable <- NULL
+  
+  ## Modify the column variable to be either 'mean' or '1SD CL'
   setnames(meltdx, "variable", "var")
   meltdx[, variable := as.factor(ifelse(var != "Mean", "1SD CL", "mean"))]
+  
+  ## Create a ggplots2 object
   ggplot2::ggplot(meltdx,
                   ggplot2::aes_string(x = dateGp, y = "value", group = "var",
                                       linetype = "variable")) +
@@ -296,7 +269,7 @@ PlotMean <- function(meltdx, myVar, dateGp){
 }
 
 
-#' Plot zero and missing rates
+#' Plot zero and missing rates for a numerical variable
 #'
 #' @param meltdx A data.table with missingrate and zerorate in long format, 
 #' produced by \code{PlotVar}

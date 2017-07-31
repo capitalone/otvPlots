@@ -2,13 +2,13 @@
 % Please edit documentation in R/numerical.R
 \name{PlotMean}
 \alias{PlotMean}
-\title{Plot mean with {Mean +- 1SD} control limits}
+\title{Plot mean with {Mean +- 1SD} control limits for a numerical variable}
 \usage{
 PlotMean(meltdx, myVar, dateGp)
 }
 \arguments{
-\item{meltdx}{A data.table with Mean and 1SD control limits in long format, 
-produced by \code{PlotVar}}
+\item{meltdx}{A \code{data.table} with Mean and 1SD control limits in long format, 
+produced by \code{\link{SummaryStats}}}
 
 \item{myVar}{The name of the variable to be plotted}
 
@@ -18,12 +18,13 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 }
 \value{
-A ggplot object with \code{dateGp} on the x axis, \code{value} on the
-y axis, and variables \code{Mean}, \code{cl1} and \code{cl2} plotted on the
-same graph, Mean and control limits differentiated by linetype
+A \code{ggplot2} object with \code{dateGp} on the x axis, 
+  \code{value} on the y axis, and variables \code{Mean}, \code{cl1}, and 
+  \code{cl2} plotted on the same graph, with mean and control limits 
+  differentiated by linetype.
 }
 \description{
-Plot mean with {Mean +- 1SD} control limits
+Plot mean with {Mean +- 1SD} control limits for a numerical variable
 }
 \section{License}{
  
@@ -37,16 +38,3 @@ KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 }
 
-\examples{
-data(bankData)
-setDT(bankData)
-bankData[, months := round(date, "months")]
-bankDT = bankData[, .( Mean = mean(balance)), by = "months"]
-cl = bankData[, c(mean(balance), sd(balance))]
-cl = cl \%*\% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) # mean +- 1 SD
-bankDT[, c("cl1", "cl2") := list(cl[1], cl[2])  ]
-bankMT = melt(bankDT, id.vars = "months", 
-         measure.vars = c("Mean", "cl1", "cl2"))
-# bankMT # Long format for plotting
-PlotMean(bankMT, "balance", "months")
-}

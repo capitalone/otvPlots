@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical.R
 \name{PlotQuantiles}
 \alias{PlotQuantiles}
-\title{Plots  01, 50, and 99 percentile together}
+\title{Plot 01, 50, and 99 percentile for a numerical variable}
 \usage{
 PlotQuantiles(meltdx, myVar, dateGp)
 }
@@ -18,13 +18,13 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 }
 \value{
-A \code{ggplot} object with \code{dateGp} on the x axis, 
+A \code{ggplot2} object with \code{dateGp} on the x axis, 
   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
   \code{p99} plotted on the same graph, with grouped and global percentiles 
   differentiated by linetype.
 }
 \description{
-Plots  01, 50, and 99 percentile together
+Plot 01, 50, and 99 percentile for a numerical variable
 }
 \section{License}{
 
@@ -38,26 +38,3 @@ KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 }
 
-\examples{
-data(bankData)
-setDT(bankData)
-bankData[, months := round(date, "months")]
-bankDT = bankData[, {
-  tmp1 = quantile(balance, p = c(.01, .5, .99));
-  list("p1"  = tmp1[1] ,
-       "p50" = tmp1[2] ,
-       "p99" = tmp1[3]
-  )}, by = "months"]
-
-bankMT = melt(bankDT, id.vars = "months", 
-              measure.vars = c("p99", "p50","p1"))
-globalPct = bankData[ , quantile(balance, p = c(.01, .5, .99) ) ]
-globalDT = data.table("months" = rep(bankMT[variable == "p99", "months", 
-                      with = FALSE][[1]], 3))
-globalDT[, c("variable", "value") := list(rep(c("p1_g", "p50_g", "p99_g"), 
-                                              each = .N/3),
-                                          rep(globalPct, each = .N/3))]
-bankMT = rbindlist(list( bankMT, globalDT))
-# bankMT  # See long format used for plotting
-PlotQuantiles(bankMT, "balance", "months")
-}
