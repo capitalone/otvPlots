@@ -271,13 +271,13 @@ PlotMean <- function(meltdx, myVar, dateGp){
 
 #' Plot zero and missing rates for a numerical variable
 #'
-#' @param meltdx A data.table with missingrate and zerorate in long format, 
-#' produced by \code{PlotVar}
+#' @param meltdx A \code{data.table} with missing rate and zero rate in long
+#'   format, produced by \code{\link{SummaryStats}}
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @export
-#' @return A ggplot object with a \code{missingrate} and \code{zerorate} grouped 
-#' by \code{dateGp}
+#' @return A \code{ggplot2} object with a \code{missingrate} and
+#'   \code{zerorate} grouped by \code{dateGp}.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -287,25 +287,17 @@ PlotMean <- function(meltdx, myVar, dateGp){
 #' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
-#' @examples
-#' data(bankData)
-#' setDT(bankData)
-#' bankData[, months := round(date, "months")]
-#' bankDT = bankData[, {list("zerorate" = mean(balance == 0),
-#'                           "missingrate" = mean(is.na(balance)))}, 
-#'                  by = "months"]
-#' bankMT = melt(bankDT, id.vars = "months", 
-#'               measure.vars = c("zerorate", "missingrate"))
-#' # bankMT # Long format for plotting
-#' PlotRates(bankMT, "balance", "months")
+
 PlotRates <- function(meltdx, myVar, dateGp) {
+  
   variable <- NULL
   ggplot2::ggplot(meltdx[variable %in% c("zerorate", "missingrate")],
                   ggplot2::aes_string(x = dateGp,
                                       y = "value",
                                       colour = "variable",
                                       group = "variable")) +
-    ggplot2::geom_line() + ggplot2::ylab(NULL)
+    ggplot2::geom_line() + ggplot2::ylab(NULL) +
+    ggplot2::scale_colour_manual(values = cbbPalette)
 }
 
 #' Simple grouped box plot

@@ -7,8 +7,8 @@
 PlotRates(meltdx, myVar, dateGp)
 }
 \arguments{
-\item{meltdx}{A data.table with missingrate and zerorate in long format, 
-produced by \code{PlotVar}}
+\item{meltdx}{A \code{data.table} with missing rate and zero rate in long
+format, produced by \code{\link{SummaryStats}}}
 
 \item{myVar}{The name of the variable to be plotted}
 
@@ -18,8 +18,8 @@ by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 }
 \value{
-A ggplot object with a \code{missingrate} and \code{zerorate} grouped 
-by \code{dateGp}
+A \code{ggplot2} object with a \code{missingrate} and
+  \code{zerorate} grouped by \code{dateGp}.
 }
 \description{
 Plot zero and missing rates for a numerical variable
@@ -36,15 +36,3 @@ KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 }
 
-\examples{
-data(bankData)
-setDT(bankData)
-bankData[, months := round(date, "months")]
-bankDT = bankData[, {list("zerorate" = mean(balance == 0),
-                          "missingrate" = mean(is.na(balance)))}, 
-                 by = "months"]
-bankMT = melt(bankDT, id.vars = "months", 
-              measure.vars = c("zerorate", "missingrate"))
-# bankMT # Long format for plotting
-PlotRates(bankMT, "balance", "months")
-}
