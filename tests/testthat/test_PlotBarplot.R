@@ -1,6 +1,6 @@
 library(otvPlots)
 library(proto)
-context("Plot histogram")
+context("Plot bar plot")
 load("../testthat/testData.rda")
 setDT(testData)
 suppressMessages(PrepData(testData, dateNm = "date", 
