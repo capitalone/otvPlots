@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical.R
 \name{PlotDist}
 \alias{PlotDist}
-\title{Simple grouped box plot}
+\title{Side-by-side box plots, for a numerical variable,  grouped by \code{dateGpBp}}
 \usage{
 PlotDist(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL)
 }
@@ -24,15 +24,16 @@ no weights (all rows recieve weight 1).}
 
 \item{skewOpt}{Either a numeric constant or \code{NULL}. If numeric, say 5,
 the box plots of variables whose skewness exceeds 5 will be on a log10
-scale if possible. If negative, 3 will be used as the cutoff. Default is 
-\code{NULL} (no transformation).}
+scale if possible. Default is \code{NULL} (no transformation).}
 }
 \value{
-A ggplot object with a box plot of \code{myVar} grouped by 
-\code{dateGpBp}
+A \code{ggplot2} object with a box plot of \code{myVar} grouped by 
+  \code{dateGpBp}
 }
 \description{
-Simple grouped box plot
+For a variable is all positive (no zeros) and has larger than 50 all distinct
+values, if it is highly skewed, then all box plots can be plotted under the 
+log base 10 transformation. See the argument \code{skewOpt} for details.
 }
 \section{License}{
 

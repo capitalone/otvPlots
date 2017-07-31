@@ -30,8 +30,7 @@ options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
 \item{skewOpt}{Either a numeric constant or \code{NULL}. If numeric, say 5,
 the box plots of variables whose skewness exceeds 5 will be on a log10
-scale if possible. If negative, 3 will be used as the cutoff. Default is 
-\code{NULL} (no transformation).}
+scale if possible. Default is \code{NULL} (no transformation).}
 
 \item{kSample}{Either \code{NULL} or an integer. If an integer, indicates the
 sample size for both drawing boxplots and ordering numerical graphs by 

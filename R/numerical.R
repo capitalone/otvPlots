@@ -8,8 +8,7 @@
 #' @param myVar The name of the variable to be plotted
 #' @param skewOpt Either a numeric constant or \code{NULL}. If numeric, say 5,
 #'   the box plots of variables whose skewness exceeds 5 will be on a log10
-#'   scale if possible. If negative, 3 will be used as the cutoff. Default is 
-#'   \code{NULL} (no transformation).
+#'   scale if possible. Default is \code{NULL} (no transformation).
 #' @param kSample Either \code{NULL} or an integer. If an integer, indicates the
 #'   sample size for both drawing boxplots and ordering numerical graphs by 
 #'   \eqn{R^2}. For large datasets, setting this to a reasonable (say 50K) value
@@ -300,12 +299,16 @@ PlotRates <- function(meltdx, myVar, dateGp) {
     ggplot2::scale_colour_manual(values = cbbPalette)
 }
 
-#' Simple grouped box plot
+#' Side-by-side box plots, for a numerical variable,  grouped by \code{dateGpBp}
+#' 
+#' For a variable is all positive (no zeros) and has larger than 50 all distinct
+#' values, if it is highly skewed, then all box plots can be plotted under the 
+#' log base 10 transformation. See the argument \code{skewOpt} for details.
 #'
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
-#' @return A ggplot object with a box plot of \code{myVar} grouped by 
-#' \code{dateGpBp}
+#' @return A \code{ggplot2} object with a box plot of \code{myVar} grouped by 
+#'   \code{dateGpBp}
 #' @export
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
@@ -330,8 +333,13 @@ PlotRates <- function(meltdx, myVar, dateGp) {
 #' # negative values
 #' PlotDist(dataFl = bankData, myVar = "duration", dateGpBp = "quarters",
 #'          skewOpt = 3)
+          
 PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
+  
+  ## Set key
   setkeyv(dataFl, dateGpBp)
+  
+  ## First layer of the graph
   if (is.null(weightNm)) {
     p <- ggplot2::ggplot(dataFl, ggplot2::aes_string(x = dateGpBp,
                                                      y = myVar,
@@ -340,6 +348,8 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
     p <- ggplot2::ggplot(dataFl, ggplot2::aes_string(
       x = dateGpBp, y = myVar, group = dateGpBp, weight = weightNm))
   }
+  
+  ## Create side-by-side box plots, with a rug plot in the margin
   p <- p + ggplot2::geom_boxplot() + ggplot2::ylab(myVar) +
     ggplot2::scale_y_continuous() +
     ggplot2::geom_rug(data = dataFl,
@@ -348,13 +358,13 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
                       sides = "l", position = "jitter", inherit.aes = FALSE,
                       colour = "#F8766D", alpha = .4)
   
-  # log10 transform of highly skewed variables, only if variable is non-negative
-  # and has large (>50) # unique variables
+  # log10 transform of highly skewed variable, only if variable is all positive
+  # and has a large number (>50) of unique values
   if (!is.null(skewOpt)) {
     M <- min(dataFl[, myVar, with = FALSE], na.rm = TRUE)
-    if (M < 0) {
-      message("range of ", myVar, " includes negative values, returning
-              untransformed boxplot")
+    if (M <= 0) {
+      message("The Range of ", myVar, " includes negative values or zero, 
+              returning untransformed boxplots.")
     } else {
       if (dim(unique(dataFl[, myVar, with = FALSE]))[1] > 50){
         if (moments::skewness(dataFl[, myVar, with = FALSE],
@@ -362,7 +372,7 @@ PlotDist <- function(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL){
           p2 <- try(p + ggplot2::scale_y_log10() +
                       ggplot2::ylab(paste(myVar, " (log10)")))
           if (inherits(p2, "try-error")) {
-            message(paste("log transform failed, returning untransformed boxplot
+            message(paste("Log transform failed, returning untransformed boxplot
                           of ", myVar))
           } else {
             p <- p2

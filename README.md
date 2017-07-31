@@ -86,6 +86,8 @@ trace plots of the `kCategories` most prevalent categories will be plotted.
 
 * Change quantile plots with color-blind friendly color palette
 
+* Only apply log transformation for boxplots if the variable is all positive (no zeros).
+
 * Change of terminology:
 ** continouous variable -> numerical variable
 ** discrete variable -> categorical variable
