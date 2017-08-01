@@ -6,14 +6,12 @@
 \alias{otvPlots-package}
 \title{Over time variable plots for predictive modeling (otvPlots)}
 \description{
-The otvPlots package uses data.table and ggplot2 packages to efficiently plot
-time series aggregated from large datasets. Plots are optionally returned
-ordered by correlation with date -- a natural starting point for anomaly
-detection.  Plots are automatically labeled if a variable dictionary is
-provided. Discrete and numeric variables are handled automatically. The
-package can be used either interactively for adhoc creation of plots for
-specifical variables, or via the included wrapper function for hands-off
-monitoring reports.
+The \code{otvPlots} package uses \code{data.table} and \code{ggplot2} packages to 
+efficiently plot time series aggregated from large datasets. Plots of numerial
+variables are optionally returned ordered by correlation with date -- a 
+natural starting point for anomaly detection. Plots are automatically labeled
+if a variable dictionary is provided. Categorical and numerical variables are
+handled automatically.
 }
 \section{License}{
 
