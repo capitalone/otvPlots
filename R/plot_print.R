@@ -7,9 +7,7 @@
 #' Creates plots and outputs results to a pdf named as \code{outFl}. Creates
 #' letter-sized output with each page corresponding to a single variable.
 #'
-#' @inheritParams PrepData
 #' @inheritParams PlotVar
-#' @inheritParams OrderByR2
 #' @param outFl Name of output file (e.g., "otvPlots.pdf"). PDF will be
 #'   saved to your working directory unless a path is included in \code{outFl}
 #'   (e.g. "../plots/otvPlots.pdf").
@@ -65,7 +63,6 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' mean and +-1 SD control limits, and a a trace plot of missing and zerorates, 
 #' where all trace plots are grouped by \code{dateGp}.
 #'
-#' @inheritParams PrepData
 #' @inheritParams PlotCatVar
 #' @inheritParams PlotNumVar
 #' @inheritParams OrderByR2
