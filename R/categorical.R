@@ -74,7 +74,6 @@ PlotCatVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
 ###########################################
 #' Creates a bar plot for a discrete (or binary) variable
 #'
-#' @inheritParams PrepData
 #' @inheritParams PlotCatVar
 #' @export
 #' @return A \code{ggplot} object with a histogram of \code{myVar} ordered by 
@@ -132,7 +131,6 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #' binary) variable
 #'
 #' @inheritParams PlotCatVar
-#' @inheritParams PrepData
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
 #' @return A \code{ggplot} object, trace plots of categories' propotions 

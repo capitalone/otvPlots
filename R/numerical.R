@@ -95,7 +95,6 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 
 #' Create summary statistics for a numerical variable
 #' 
-#' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @export
 #' @return A \code{data.table} for use by the numerical variables' plotting 
@@ -198,7 +197,6 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #'
 #' @param meltdx A data.table with p1, p50, and p99 in long format, produced by
 #' \code{\link{SummaryStats}}
-#' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
 #'   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
@@ -245,7 +243,6 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 #' 
 #' @param meltdx A \code{data.table} with Mean and 1SD control limits in long format, 
 #' produced by \code{\link{SummaryStats}}
-#' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
 #'   \code{value} on the y axis, and variables \code{Mean}, \code{cl1}, and 
@@ -285,7 +282,6 @@ PlotMean <- function(meltdx, myVar, dateGp){
 #'
 #' @param meltdx A \code{data.table} with missing rate and zero rate in long
 #'   format, produced by \code{\link{SummaryStats}}
-#' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @export
 #' @return A \code{ggplot2} object with a \code{missingrate} and
@@ -318,7 +314,6 @@ PlotRates <- function(meltdx, myVar, dateGp) {
 #' values, if it is highly skewed, then all box plots can be plotted under the 
 #' log base 10 transformation. See the argument \code{skewOpt} for details.
 #'
-#' @inheritParams PrepData
 #' @inheritParams PlotNumVar
 #' @return A \code{ggplot2} object with a box plot of \code{myVar} grouped by 
 #'   \code{dateGpBp}
