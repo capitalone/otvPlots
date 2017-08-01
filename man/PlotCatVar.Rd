@@ -80,3 +80,8 @@ plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm = NULL,
 plot(PlotCatVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months"))
 }
+\seealso{
+\code{\link{PlotBarplot}}
+
+\code{\link{PlotRatesOverTime}}
+}

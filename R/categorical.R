@@ -8,7 +8,6 @@
 #' appliable to a binary varible, which is treated as categorical in this 
 #' package.
 #' 
-#'
 #' @inheritParams PrepData
 #' @param myVar The name of the variable to be plotted
 #' @param kCategories If a categorical variable has more than \code{kCategories},
@@ -26,6 +25,8 @@
 #'   histogram, and trace plots of categories' proportions. If the number of 
 #'   categories is larger than \code{kCategories}, then trace plots of only the
 #'   \code{kCategories} most prevalent categories are be plotted.  
+#' @seealso \code{\link{PlotBarplot}}
+#' @seealso \code{\link{PlotRatesOverTime}}
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance

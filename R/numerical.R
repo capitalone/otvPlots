@@ -10,7 +10,6 @@
 #'   \code{NULL} (no transformation). If numeric, say 5, then all box plots of
 #'   a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 #'   Negative input of \code{skewOpt} will be converted to 3.
-#'   
 #' @param kSample Either \code{NULL} or an positive integer. If an integer, 
 #'   indicates the sample size for both drawing boxplots and ordering numerical
 #'   graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
@@ -25,6 +24,10 @@
 #'   \code{dateGp}, a time series of mean and +-1 SD control limits grouped by
 #'   \code{dateGp}, and a time series of missing and zerorates grouped by 
 #'   \code{dateGp}.
+#' @seealso \code{\link{PlotDist}}
+#' @seealso \code{\link{PlotQuantiles}}
+#' @seealso \code{\link{PlotMean}}
+#' @seealso \code{\link{PlotRates}}
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
