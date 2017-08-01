@@ -10,8 +10,8 @@
 #' @inheritParams PrepData
 #' @inheritParams PlotVar
 #' @inheritParams OrderByR2
-#' @param outFl Name of output file (by default "otvPlots.pdf"). PDF will be
-#'   saved to your working directory unless path is included in \code{outFl}
+#' @param outFl Name of output file (e.g., "otvPlots.pdf"). PDF will be
+#'   saved to your working directory unless a path is included in \code{outFl}
 #'   (e.g. "../plots/otvPlots.pdf").
 #' @param sortVars A character vector of variable names in the order they will
 #'   be plotted. 
@@ -41,7 +41,6 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
   grDevices::pdf(file = outFl,  width = 11, height = 8, pointsize = 12,
       onefile = TRUE)
   
-  par(ask = FALSE)
   for (x in plotList)  {
     grid::grid.newpage()
     grid::grid.draw(x)
@@ -105,45 +104,12 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #'
 #' ## PlotVar will treat numerical and categorical data differently. 
 #' ## Binary data is always treated as categorical.
-#' plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, 
-#'      dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-#' plot(PlotVar(bankData, myVar = "job", weightNm = NULL,  
-#'      dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-#' plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, 
-#'      dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-#' plot(PlotVar(bankData, myVar = "y", weightNm = NULL, 
-#'      dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-#'
-#' ## It's possible to plot using dateNm as the grouping variable, or another
-#' ## custom grouping variable
-#'\dontrun{ 
-#'plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
-#'      dateGp = "date", dateGpBp = "date"))
-#'}
-#' ## If labels are provided, they will be added. If the variable being plotted 
-#' ## is in the "highlightNms", its label will be red.
-#' plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
-#'              dateGp = "months", dateGpBp = "quarters", labelFl = bankLabels))
-#' plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
-#'              dateGp = "months", dateGpBp = "quarters", 
-#'              highlightNms = c("balance"), labelFl = bankLabels))
-#'
-#' # It is possible to define a function for fuzzy label matching. For example, 
-#' # if variables look like VAR_nameofvar, and the attribute dictionary contains
-#' # defintions only for nameofvar, then a fuzzy matching function can be 
-#' # provided which would first attempt to match exactly, and then to attempt to 
-#' # match on the longest piece after splitting on the underscore:
-#' Fuzzy = function(LabelFl, myVar){
-#'    ll = labelFl[varCol == myVar, labelCol] # exact match
-#'    if (ll == ""){
-#'        # split on "_", search for exact match of longest piece
-#'        shortNm = names(which.max(sapply(strsplit(myVar, "_")[[1]], nchar)))
-#'        ll = labelFl[varCol == shortNm, labelCol]
-#'    }
-#'    return(ll)
-#'  }
-#'
-#'  # See otvPlots::PlotWrapper for additional examples of non-interactive use
+#' plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, dateNm = "date", 
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+#' plot(PlotVar(bankData, myVar = "job", weightNm = NULL, dateNm = "date", 
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+#' plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, dateNm = "date", 
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
 #'
 PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                     labelFl = NULL, highlightNms = NULL, skewOpt = NULL,

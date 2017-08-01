@@ -94,45 +94,12 @@ bankLabels = PrepLabels(bankLabels)
 
 ## PlotVar will treat numerical and categorical data differently. 
 ## Binary data is always treated as categorical.
-plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, 
-     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-plot(PlotVar(bankData, myVar = "job", weightNm = NULL,  
-     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, 
-     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-plot(PlotVar(bankData, myVar = "y", weightNm = NULL, 
-     dateNm = "date", dateGp = "months", dateGpBp =  "quarters"))
-
-## It's possible to plot using dateNm as the grouping variable, or another
-## custom grouping variable
-\dontrun{ 
-plot(PlotVar(bankData, myVar =  "y", weightNm = NULL, dateNm = "date", 
-     dateGp = "date", dateGpBp = "date"))
-}
-## If labels are provided, they will be added. If the variable being plotted 
-## is in the "highlightNms", its label will be red.
-plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
-             dateGp = "months", dateGpBp = "quarters", labelFl = bankLabels))
-plot(PlotVar(bankData, myVar = "balance", weightNm = NULL, dateNm = "date", 
-             dateGp = "months", dateGpBp = "quarters", 
-             highlightNms = c("balance"), labelFl = bankLabels))
-
-# It is possible to define a function for fuzzy label matching. For example, 
-# if variables look like VAR_nameofvar, and the attribute dictionary contains
-# defintions only for nameofvar, then a fuzzy matching function can be 
-# provided which would first attempt to match exactly, and then to attempt to 
-# match on the longest piece after splitting on the underscore:
-Fuzzy = function(LabelFl, myVar){
-   ll = labelFl[varCol == myVar, labelCol] # exact match
-   if (ll == ""){
-       # split on "_", search for exact match of longest piece
-       shortNm = names(which.max(sapply(strsplit(myVar, "_")[[1]], nchar)))
-       ll = labelFl[varCol == shortNm, labelCol]
-   }
-   return(ll)
- }
-
- # See otvPlots::PlotWrapper for additional examples of non-interactive use
+plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, dateNm = "date", 
+     dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+plot(PlotVar(bankData, myVar = "job", weightNm = NULL, dateNm = "date", 
+     dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, dateNm = "date", 
+     dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
 
 }
 \seealso{
