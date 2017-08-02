@@ -2,32 +2,33 @@
 #          The Main Function              #
 ###########################################
 
-#' Automated monitoring reports
+#' Create over time variable plots for variable level monitoring
 #' 
 #' Prepares input dataset and labels, sorts variables according to either user 
 #' input or correlation with time (among numerical variables only), 
-#' and outputs the plots to pdf, with each page illustrating one variable.
+#' and outputs the plots to a pdf file, with each page about one variable.
 #' 
 #' @inheritParams PrepData
 #' @inheritParams PrepLabels
 #' @inheritParams OrderByR2
 #' @inheritParams PrintPlots
-#' @param sortVars A pre-determined character vector of variable names, giving
-#' the order in which variables should be plotted, or \code{NULL} to keep
-#' original ordering except that numerical variables will be plotted before 
-#' categorical and binary ones. \code{sortVars} should be \code{NULL} when 
-#' the \code{sortFn} argument is used.
+#' @param sortVars Variables to be plotted. Either a character vector of variable
+#'   names, then variables will be plotted in the same order as in the 
+#'   \code{sortVars} argument, or \code{NULL} to keep original ordering, with  
+#'   numerical variables will being plotted before categorical and binary ones. 
+#'   \code{sortVars} should be \code{NULL} when the \code{sortFn} argument is 
+#'   used.
 #' @param sortFn A sorting function which returns \code{sortVars} as an output. 
-#' The function may take the following variables as input: \code{dataFl}, 
-#' \code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
-#' the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
-#' numerical variables in the order of strength of linear association with date. 
+#'   The function may take the following variables as input: \code{dataFl}, 
+#'   \code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
+#'   the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
+#'   numerical variables in the order of strength of linear association with date. 
 #' @param prepData Logical, indicates if data should be run through the 
-#' \code{\link{PrepData}} function. This should be set to \code{TRUE} unless the
-#' \code{\link{PrepData}} fucntion has been applied to the input data 
-#' \code{dataFl}. If this arugment is set to \code{FALSE}, then \code{dataFl} is 
-#' usually must be a \code{data.table} containing variables \code{weightNm}, 
-#' \code{dateNm}, \code{dateGp}, and \code{dateGpBp}.
+#'   \code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
+#'   the \code{\link{PrepData}} function has been applied to the input data 
+#'   \code{dataFl}. If this arugment is set to \code{FALSE}, then \code{dataFl}
+#'   is usually must be a \code{data.table} containing variables 
+#'   \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}.
 #' @return A pdf file of VLM report saved as \code{outFl}.
 #' @export
 #' @seealso \code{\link[otvPlots]{PrepData}}
@@ -46,17 +47,16 @@
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
 #' data(bankLabels)
-#' setDT(bankLabels)
+#' 
+#' ## The PrepData function should only need to be run once on a dataset, 
+#' ## after that vlm can be run with the argument PrepData = FALSE
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                    dateGpBp = "quarters")
+#' bankLabels = PrepLabels(bankLabels)
 #'\dontrun{ 
 #' 
-#' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
-#' PrepLabels(bankLabels)
-#' 
-#' # PrepData should only need to be run once on a dataset, after that plotv 
-#' # can be run with PrepData = FALSE 
-#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = TRUE, kSample = NULL, kCategories = 12)
 #'} 
@@ -65,18 +65,18 @@
 #' # not affect the time series plots, which always use all of the data 
 #'\dontrun{
 #'
-#'plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#'vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = 500)
 #'}
 #' 
 #' #  If weights are provided they will be used in all statistical calculations
 #'\dontrun{bankData[, weight := rnorm(.N, 1, .1)]
-#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
 #'}
-#' # plotv is designed for non-interactive use, and both dataFl and
+#' # vlm is designed for non-interactive use, and both dataFl and
 #' # labelFl could be passed as strings giving the location of the datasets on 
 #' # disk, as long as they are able to be parsed by fread. Since the example 
 #' # datasets bankData and bankLabels are saved as rda files, for this example 
@@ -87,7 +87,7 @@
 #' data(bankLabels) 
 #' setDT(bankLabels)
 #' \dontrun{ 
-#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 #'}
@@ -96,14 +96,14 @@
 #' # function will stop with a message warning us it cannot plot dates
 #'\dontrun{ 
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
-#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
 #'             sortVars = sortVars, kCategories = 9)
 #'} 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
-#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL, 
 #'             varNms = "age", sortVars = NULL)
@@ -111,7 +111,7 @@
 #' # See otvPlots::PlotVar for examples in interactive use, 
 #' # including use of the fuzzyLabels parameter
 #' 
-plotv <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
+vlm <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                      dropCols = NULL, dateFt = "%d%h%Y", dateGp = NULL, 
                      dateGpBp = NULL, weightNm = NULL, buildTm = NULL, 
                      highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
