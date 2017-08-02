@@ -54,9 +54,9 @@
 #' PrepData(bankData, dateNm = "date", dateGp = "months", dateGpB = "quarters")
 #' PrepLabels(bankLabels)
 #' 
-#' # PrepData should only need to be run once on a dataset, after that ovtplots 
+#' # PrepData should only need to be run once on a dataset, after that plotv 
 #' # can be run with PrepData = FALSE 
-#' ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = TRUE, kSample = NULL, kCategories = 12)
 #'} 
@@ -65,18 +65,18 @@
 #' # not affect the time series plots, which always use all of the data 
 #'\dontrun{
 #'
-#'ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#'plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
 #'             prepData = FALSE, kSample = 500)
 #'}
 #' 
 #' #  If weights are provided they will be used in all statistical calculations
 #'\dontrun{bankData[, weight := rnorm(.N, 1, .1)]
-#' ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
 #'}
-#' # ovtplots is designed for non-interactive use, and both dataFl and
+#' # plotv is designed for non-interactive use, and both dataFl and
 #' # labelFl could be passed as strings giving the location of the datasets on 
 #' # disk, as long as they are able to be parsed by fread. Since the example 
 #' # datasets bankData and bankLabels are saved as rda files, for this example 
@@ -87,7 +87,7 @@
 #' data(bankLabels) 
 #' setDT(bankLabels)
 #' \dontrun{ 
-#' ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
 #'}
@@ -96,14 +96,14 @@
 #' # function will stop with a message warning us it cannot plot dates
 #'\dontrun{ 
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
-#' ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
 #'             sortVars = sortVars, kCategories = 9)
 #'} 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
-#' ovtplots(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#' plotv(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL, 
 #'             varNms = "age", sortVars = NULL)
@@ -111,7 +111,7 @@
 #' # See otvPlots::PlotVar for examples in interactive use, 
 #' # including use of the fuzzyLabels parameter
 #' 
-ovtplots <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
+plotv <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                      dropCols = NULL, dateFt = "%d%h%Y", dateGp = NULL, 
                      dateGpBp = NULL, weightNm = NULL, buildTm = NULL, 
                      highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
@@ -190,5 +190,5 @@ ovtplots <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                kSample = kSample, fuzzyLabelFn = fuzzyLabelFn,
                kCategories = kCategories)
   }
-  }
+}
 
