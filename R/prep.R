@@ -41,7 +41,8 @@
 #'   \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
 #'   column names, after \code{dropCols} or \code{selectCols} have been applied,
 #'   if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-#'   (which will be added to the \code{dataFl} by this function).
+#'   (which will be added to the \code{dataFl} by function 
+#'   \code{\link{PrepData}}).
 #' @param dropConstants Logical indicates whether or not constant (all
 #'   duplicated or NA) variables should be dropped from \code{dataFl} prior to
 #'   plotting.
@@ -61,7 +62,8 @@
 #' @examples
 #' ## Use the bankData dataset in this package
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                      dateGpBp = "quarters")
 #' ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 #' str(bankData) 
  
@@ -166,6 +168,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     # Normalize weights for consistent treatment
     dataFl[, c(weightNm) := get(weightNm) / sum(get(weightNm))]
   }
+  
   # Convert date to IDate according to provided format and give warning
   # if format produces NAs
   tmp.N <-
@@ -328,7 +331,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #' @examples
 ## Use the bankLabels dataset in this package
 #' data(bankLabels)
-#' bankLabels = PrepLabels(bankLabels)
+#' bankLabels <- PrepLabels(bankLabels)
 
 PrepLabels <- function(labelFl, idx = 1:2) {
   

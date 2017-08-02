@@ -48,7 +48,8 @@ to be plotted. If \code{NULL}, will default to all columns which are not
 \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
 column names, after \code{dropCols} or \code{selectCols} have been applied,
 if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-(which will be added to the \code{dataFl} by this function).}
+(which will be added to the \code{dataFl} by function 
+\code{\link{PrepData}}).}
 
 \item{dropConstants}{Logical indicates whether or not constant (all
 duplicated or NA) variables should be dropped from \code{dataFl} prior to
@@ -82,7 +83,8 @@ governing permissions and limitations under the License.
 \examples{
 ## Use the bankData dataset in this package
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+                     dateGpBp = "quarters")
 ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 str(bankData) 
 }
