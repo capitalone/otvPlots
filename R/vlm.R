@@ -8,6 +8,19 @@
 #' input or correlation with time (among numerical variables only), 
 #' and outputs the plots to a pdf file, with each page about one variable.
 #' 
+#' If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
+#' \itemize{
+#' \item \code{dataFl} must be a \code{data.table} containing variables 
+#'   \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}, and 
+#'   names of these variables must be the same as the corresponding arguments
+#'   of the \code{\link{vlm}} function.
+#' \item the arguments \code{selectCols}, \code{dropCols}, \code{dateFt}, 
+#'   \code{dropConstants} will be ignored by the \code{\link{vlm}} function.
+#' \item When analyze a dataset for the first time, it is recommended to first
+#'   run the \code{\link{PrepData}} function on it, and then apply the 
+#'   \code{\link{vlm}} function with the arguement \code{dataNeedPrep = FALSE}.
+#'   Please see the examples for details. 
+#' }
 #' @inheritParams PrepData
 #' @inheritParams PrepLabels
 #' @inheritParams OrderByR2
@@ -23,12 +36,10 @@
 #'   \code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
 #'   the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
 #'   numerical variables in the order of strength of linear association with date. 
-#' @param prepData Logical, indicates if data should be run through the 
+#' @param dataNeedPrep Logical, indicates if data should be run through the 
 #'   \code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
 #'   the \code{\link{PrepData}} function has been applied to the input data 
-#'   \code{dataFl}. If this arugment is set to \code{FALSE}, then \code{dataFl}
-#'   is usually must be a \code{data.table} containing variables 
-#'   \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}.
+#'   \code{dataFl}. 
 #' @return A pdf file of VLM report saved as \code{outFl}.
 #' @export
 #' @seealso \code{\link[otvPlots]{PrepData}}
@@ -46,19 +57,19 @@
 #' KIND, either express or implied. See the License for the specific language
 #' governing permissions and limitations under the License.
 #' @examples
+#' ## Load the data and its label
 #' data(bankData)
 #' data(bankLabels)
 #' 
 #' ## The PrepData function should only need to be run once on a dataset, 
-#' ## after that vlm can be run with the argument PrepData = FALSE
+#' ## after that vlm can be run with the argument dataNeedPrep = FALSE
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                    dateGpBp = "quarters")
 #' bankLabels = PrepLabels(bankLabels)
 #'\dontrun{ 
-#' 
-#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
-#'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             prepData = TRUE, kSample = NULL, kCategories = 12)
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+#'     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
+#'     outFl = "bank.pdf", dataNeedPrep = FALSE)
 #'} 
 #' # Different values of kSample can affect the appearance of boxplots (and 
 #' # possibly the order of variable output if sortVars = 'R2' is used), but does 
@@ -67,14 +78,15 @@
 #'
 #'vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             prepData = FALSE, kSample = 500)
+#'             dataNeedPrep = FALSE, kSample = 500)
 #'}
 #' 
 #' #  If weights are provided they will be used in all statistical calculations
-#'\dontrun{bankData[, weight := rnorm(.N, 1, .1)]
+#'\dontrun{
+#' bankData[, weight := rnorm(.N, 1, .1)]
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
-#'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
+#'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL)
 #'}
 #' # vlm is designed for non-interactive use, and both dataFl and
 #' # labelFl could be passed as strings giving the location of the datasets on 
@@ -89,7 +101,7 @@
 #' \dontrun{ 
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
+#'             outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL)
 #'}
 #' # We can pass a vector of variable names to customize plotting order using
 #' # sortVars, but we must exclude the "date" column from sortVars or the 
@@ -98,27 +110,27 @@
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
+#'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL, 
 #'             sortVars = sortVars, kCategories = 9)
 #'} 
 #' # We can test that the function is working with a specific variable using 
 #' # the varNms parameter
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", prepData = TRUE, kSample = NULL, 
+#'             outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL, 
 #'             varNms = "age", sortVars = NULL)
 #' 
 #' # See otvPlots::PlotVar for examples in interactive use, 
 #' # including use of the fuzzyLabels parameter
 #' 
-vlm <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
-                     dropCols = NULL, dateFt = "%d%h%Y", dateGp = NULL, 
-                     dateGpBp = NULL, weightNm = NULL, buildTm = NULL, 
-                     highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
-                     outFl = "otvPlots.pdf", prepData = TRUE, varNms = NULL, 
-                     fuzzyLabelFn = NULL, dropConstants = TRUE, sortVars = NULL,
-                     sortFn = NULL, kCategories = 9, ...) {
+vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf", 
+                dataNeedPrep = TRUE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL, 
+                varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL, 
+                dropCols = NULL, dateFt = "%d%h%Y", buildTm = NULL, 
+                highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
+                fuzzyLabelFn = NULL, dropConstants = TRUE, kCategories = 9, ...) {
   
+  ## Assert statements about inputs
   if (!is.null(sortVars) & !is.null(sortFn)) {
     stop ("Please choose between sortVars (predetermined order of plotting) and
           sortFn (function to determine plotting order)")}
@@ -131,8 +143,15 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
   if (!is.null(selectCols) & !is.null(dropCols)) {
     stop("Please choose between selectCols or dropCols.")
   }
-  
-  if (prepData) {
+
+  ## Apply the PrepData function if not previously on dataFl
+  if (dataNeedPrep) { 
+    ## Need to prepare data first
+    # dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
+    #                      selectCols = selectCols, dropCols = dropCols,
+    #                      dateFt = dateFt, dateGp = dateGp, dateGpBp = dateGpBp,
+    #                      weightNm = weightNm, varNms = varNms,
+    #                      dropConstants = dropConstants, ...)
     if (is.character(dataFl)) {
       dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
                          selectCols = selectCols, dropCols = dropCols,
@@ -140,39 +159,39 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, selectCols = NULL,
                          weightNm = weightNm, varNms = varNms,
                          dropConstants = dropConstants, ...)
     } else {
-      dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols,
-                         dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
-                         dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
-                         dropConstants = dropConstants,  ...)
+      PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols,
+               dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
+               dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
+               dropConstants = dropConstants,  ...)
     }
   } else {
     stopifnot(is.data.table(dataFl) &&
-                all(c(weightNm, dateNm, dateGp, dateGpBp) %in%
-                      names(dataFl)))
+                all(c(weightNm, dateNm, dateGp, dateGpBp) %in% names(dataFl)))
+    ## Change integer64 data type to numeric
     for (var in names(dataFl)) {
       if (inherits(dataFl[[var]], "integer64")) {
         dataFl[, (var) := as.numeric(get(var))]
       }
     }
   }
-  if (is.character(labelFl)) {
-    labelFl <- PrepLabels(labelFl)
-  } else {
-    PrepLabels(labelFl)
-  }
-  
+
+  ## Apply the PrepLabels function 
+  labelFl <- PrepLabels(labelFl)
+
+  ## Apply sortFn to generate sortVars
   if (!is.null(sortFn) && is.character(sortFn)) {
     sortVars <- do.call(sortFn, list(dataFl = dataFl, dateNm = dateNm,
                                      buildTm = buildTm, weightNm = weightNm,
                                      kSample = kSample))
   } else {
     if (is.null(sortVars)) {
-      num_vars <- names(dataFl)[sapply(dataFl, inherits, "cntns")]
-      cat_vars <- names(dataFl)[sapply(dataFl, inherits, "dscrt")]
+      num_vars <- names(dataFl)[sapply(dataFl, inherits, "nmrcl")]
+      cat_vars <- names(dataFl)[sapply(dataFl, inherits, "ctgrl")]
       sortVars <- c(num_vars, cat_vars)
     }
   }
   
+  ## Create the plots
   if (!is.null(varNms)) {
     PrintPlots(outFl = outFl,
                dataFl = dataFl[, c(varNms, dateNm,

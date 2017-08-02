@@ -4,12 +4,12 @@
 \alias{vlm}
 \title{Create over time variable plots for variable level monitoring}
 \usage{
-vlm(dataFl, dateNm, labelFl = NULL, selectCols = NULL, dropCols = NULL,
-  dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
-  buildTm = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  outFl = "otvPlots.pdf", prepData = TRUE, varNms = NULL,
-  fuzzyLabelFn = NULL, dropConstants = TRUE, sortVars = NULL,
-  sortFn = NULL, kCategories = 9, ...)
+vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf",
+  dataNeedPrep = TRUE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
+  varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL,
+  dropCols = NULL, dateFt = "\%d\%h\%Y", buildTm = NULL,
+  highlightNms = NULL, skewOpt = NULL, kSample = 50000,
+  fuzzyLabelFn = NULL, dropConstants = TRUE, kCategories = 9, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
@@ -27,6 +27,47 @@ labels, an R object convertible to \code{data.table} (e.g. data frame) or
 contain at least 2 columns: \code{varCol} (variable names) and 
 \code{labelCol} (variable labels).}
 
+\item{outFl}{Name of output file (e.g., "otvPlots.pdf"). PDF will be
+saved to your working directory unless a path is included in \code{outFl}
+(e.g. "../plots/otvPlots.pdf").}
+
+\item{dataNeedPrep}{Logical, indicates if data should be run through the 
+\code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
+the \code{\link{PrepData}} function has been applied to the input data 
+\code{dataFl}.}
+
+\item{dateGp}{Name of the variable the time series plots should be grouped
+by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
+details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
+
+\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
+options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
+
+\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
+no weights (all rows recieve weight 1).}
+
+\item{varNms}{Either \code{NULL} or a vector of names or indices of variables
+to be plotted. If \code{NULL}, will default to all columns which are not 
+\code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
+column names, after \code{dropCols} or \code{selectCols} have been applied,
+if applicable, and not including \code{dateGp}, \code{dateGpBp} 
+(which will be added to the \code{dataFl} by function 
+\code{\link{PrepData}}).}
+
+\item{sortVars}{Variables to be plotted. Either a character vector of variable
+names, then variables will be plotted in the same order as in the 
+\code{sortVars} argument, or \code{NULL} to keep original ordering, with  
+numerical variables will being plotted before categorical and binary ones. 
+\code{sortVars} should be \code{NULL} when the \code{sortFn} argument is 
+used.}
+
+\item{sortFn}{A sorting function which returns \code{sortVars} as an output. 
+The function may take the following variables as input: \code{dataFl}, 
+\code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
+the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
+numerical variables in the order of strength of linear association with date.}
+
 \item{selectCols}{Either \code{NULL}, or a vector of names or indices of 
 variables to read into memory -- must include \code{dateNm}, 
 \code{weightNm} (if not \code{NULL}) and all variables to be plotted. If
@@ -40,17 +81,6 @@ of variables not to read into memory.}
 format \code{"\%d\%h\%Y"}. But input data with R date format 
 \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
-
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
-\code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
-details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
-
-\item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
-options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
-
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
 
 \item{buildTm}{Vector identify time period for ranking/anomaly detection
 (most likely model build period). Allows for a subset of plotting time
@@ -93,24 +123,6 @@ parameter should not be set to \code{NULL}, or boxplots may take a very
 long time to render. This setting has no impact on the accuracy of time 
 series plots on quantiles, mean, SD, and missing and zero rates.}
 
-\item{outFl}{Name of output file (e.g., "otvPlots.pdf"). PDF will be
-saved to your working directory unless a path is included in \code{outFl}
-(e.g. "../plots/otvPlots.pdf").}
-
-\item{prepData}{Logical, indicates if data should be run through the 
-\code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
-the \code{\link{PrepData}} function has been applied to the input data 
-\code{dataFl}. If this arugment is set to \code{FALSE}, then \code{dataFl}
-is usually must be a \code{data.table} containing variables 
-\code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}.}
-
-\item{varNms}{Either \code{NULL} or a vector of names or indices of variables
-to be plotted. If \code{NULL}, will default to all columns which are not 
-\code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
-column names, after \code{dropCols} or \code{selectCols} have been applied,
-if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-(which will be added to the \code{dataFl} by this function).}
-
 \item{fuzzyLabelFn}{Either \code{NULL} or a function of 2 parameters: A label
 file in the format of an output by \code{\link{PrepLabels}} and a string
 giving a variable name. The function should return the label corresponding
@@ -121,19 +133,6 @@ below). If \code{NULL}, only exact matches will be retuned.}
 \item{dropConstants}{Logical indicates whether or not constant (all
 duplicated or NA) variables should be dropped from \code{dataFl} prior to
 plotting.}
-
-\item{sortVars}{Variables to be plotted. Either a character vector of variable
-names, then variables will be plotted in the same order as in the 
-\code{sortVars} argument, or \code{NULL} to keep original ordering, with  
-numerical variables will being plotted before categorical and binary ones. 
-\code{sortVars} should be \code{NULL} when the \code{sortFn} argument is 
-used.}
-
-\item{sortFn}{A sorting function which returns \code{sortVars} as an output. 
-The function may take the following variables as input: \code{dataFl}, 
-\code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
-the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
-numerical variables in the order of strength of linear association with date.}
 
 \item{kCategories}{If a categorical variable has more than \code{kCategories},
 trace plots of only the \code{kCategories} most prevalent categories are
@@ -150,6 +149,21 @@ Prepares input dataset and labels, sorts variables according to either user
 input or correlation with time (among numerical variables only), 
 and outputs the plots to a pdf file, with each page about one variable.
 }
+\details{
+If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
+\itemize{
+\item \code{dataFl} must be a \code{data.table} containing variables 
+  \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}, and 
+  names of these variables must be the same as the corresponding arguments
+  of the \code{\link{vlm}} function.
+\item the arguments \code{selectCols}, \code{dropCols}, \code{dateFt}, 
+  \code{dropConstants} will be ignored by the \code{\link{vlm}} function.
+\item When analyze a dataset for the first time, it is recommended to first
+  run the \code{\link{PrepData}} function on it, and then apply the 
+  \code{\link{vlm}} function with the arguement \code{dataNeedPrep = FALSE}.
+  Please see the examples for details. 
+}
+}
 \section{License}{
  Copyright 2016 Capital One Services, LLC Licensed under the
 Apache License, Version 2.0 (the "License"); you may not use this file 
@@ -162,19 +176,19 @@ governing permissions and limitations under the License.
 }
 
 \examples{
+## Load the data and its label
 data(bankData)
 data(bankLabels)
 
 ## The PrepData function should only need to be run once on a dataset, 
-## after that vlm can be run with the argument PrepData = FALSE
+## after that vlm can be run with the argument dataNeedPrep = FALSE
 bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
                    dateGpBp = "quarters")
 bankLabels = PrepLabels(bankLabels)
 \dontrun{ 
-
-vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
-            dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-            prepData = TRUE, kSample = NULL, kCategories = 12)
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+    sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
+    outFl = "bank.pdf", dataNeedPrep = FALSE)
 } 
 # Different values of kSample can affect the appearance of boxplots (and 
 # possibly the order of variable output if sortVars = 'R2' is used), but does 
@@ -183,14 +197,15 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-            prepData = FALSE, kSample = 500)
+            dataNeedPrep = FALSE, kSample = 500)
 }
 
 #  If weights are provided they will be used in all statistical calculations
-\dontrun{bankData[, weight := rnorm(.N, 1, .1)]
+\dontrun{
+bankData[, weight := rnorm(.N, 1, .1)]
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
-            outFl = "bank.pdf", prepData = FALSE, kSample = NULL)
+            outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL)
 }
 # vlm is designed for non-interactive use, and both dataFl and
 # labelFl could be passed as strings giving the location of the datasets on 
@@ -205,7 +220,7 @@ setDT(bankLabels)
 \dontrun{ 
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
-            outFl = "bank.pdf", prepData = TRUE, kSample = NULL)
+            outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL)
 }
 # We can pass a vector of variable names to customize plotting order using
 # sortVars, but we must exclude the "date" column from sortVars or the 
@@ -214,14 +229,14 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 sortVars = sort(bankLabels[varCol!="date", varCol])
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-            outFl = "bank.pdf", prepData = FALSE, kSample = NULL, 
+            outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL, 
             sortVars = sortVars, kCategories = 9)
 } 
 # We can test that the function is working with a specific variable using 
 # the varNms parameter
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-            outFl = "bank.pdf", prepData = TRUE, kSample = NULL, 
+            outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL, 
             varNms = "age", sortVars = NULL)
 
 # See otvPlots::PlotVar for examples in interactive use, 
