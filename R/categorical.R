@@ -258,7 +258,9 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   setcolorder(cbytime, c(ncol(cbytime), 1:(ncol(cbytime) - 1)))
   ## Add a row of NA being all zero, if no missing
   if('NA' %in% cbytime$category == FALSE){
-    cbytime = rbind(cbytime, as.list(c(myVar, 'NA', rep(0, ncol(cbytime) - 2))) )
+    cbytime = rbind(cbytime, as.list(rep(NA, ncol(cbytime)))) 
+    cbytime[nrow(cbytime), 1:2] = list(myVar, 'NA')
+    cbytime[nrow(cbytime), 3:(ncol(cbytime))] = 0;
   }
   
   ## Plot less frequent category only for a binary variable.

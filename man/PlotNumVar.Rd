@@ -65,7 +65,7 @@ data(bankData)
 bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
                     dateGpBp = "years")
 plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
-                 skewOpt = NULL, kSample = NULL))
+                 skewOpt = NULL, kSample = NULL)$p)
 }
 \seealso{
 \code{\link{PlotDist}}

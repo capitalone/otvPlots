@@ -5,7 +5,7 @@ setDT(testData)
 suppressMessages(PrepData(testData, dateNm = "date", dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
 
 test_that("Numerical statistics are calculated correctly without weight", {
-	mdx  = SummaryStats(myVar = "age", dataFl = testData, dateGp = "weeks")
+	mdx  = SummaryStats(myVar = "age", dataFl = testData, dateGp = "weeks")$meltdx
 	Mean = mdx[variable=='Mean']
 	p1   = mdx[variable=='p1']
 	p99  = mdx[variable=='p99']
@@ -34,7 +34,7 @@ test_that("Numerical statistics are calculated correctly without weight", {
 
 
 test_that("Numerical statistics are calculated correctly with weight", {
-	mdx  = SummaryStats(myVar = "age", dataFl = testData, dateGp = "weeks", weightNm = "weight")
+	mdx  = SummaryStats(myVar = "age", dataFl = testData, dateGp = "weeks", weightNm = "weight")$meltdx
 	Mean = mdx[variable=='Mean']
 	p1   = mdx[variable=='p1']
 	p99  = mdx[variable=='p99']

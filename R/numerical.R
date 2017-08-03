@@ -44,7 +44,7 @@
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                     dateGpBp = "years")
 #' plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
-#'                  skewOpt = NULL, kSample = NULL))
+#'                  skewOpt = NULL, kSample = NULL)$p)
 
 PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
                         skewOpt = NULL, kSample = 50000) { #!# previous name: PlotContVar
@@ -54,8 +54,9 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
   }
   
   ## Compute the summary stats
-  meltdx <- SummaryStats(myVar = myVar, dataFl = dataFl, dateGp = dateGp,
+  meltdx_all <- SummaryStats(myVar = myVar, dataFl = dataFl, dateGp = dateGp,
                          weightNm = weightNm)
+  meltdx <- meltdx_all$meltdx
   
   ## Option for log10 transform of box plot y axis if skewness is high enough.
   ## Invalid choices revert to 3.
@@ -87,7 +88,7 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
   p  <- gridExtra::arrangeGrob(p1, p5,
                                layout_matrix = cbind(c(1, 1, 1), c(5, 5, 5)),
                                widths = 1:2)
-  return(p)
+  return(list(p = p, numVarSummary = meltdx_all$numVarSummary))
 }
 
 
@@ -115,8 +116,10 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", dateGpBp = "years")
-#' mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "quarters")
+#' bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", 
+#'                     dateGpBp = "years")
+#' mdx = SummaryStats(myVar = "age", dataFl = bankData, 
+#'                    dateGp = "quarters")$meltdx
 #' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
 #'                    "age", "quarters"))
 #' plot(PlotMean(mdx[variable %in% c("mean", "cl1", "cl2")], "age", "quarters"))
@@ -125,6 +128,7 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
   
   variable <- NULL
+  global <- NULL
   
   if (!is.null(weightNm)) {   ## If weights are available
     ## Compute a data.table of the summary statistics, grouped by dataGp
@@ -166,7 +170,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "p75"  = tmp1[4],
         "p99"  = tmp1[5],
         "mean"        = as.double(mean(get(myVar), na.rm = TRUE)),
-        #"sd"          = as.double(sd(get(myVar), na.rm = TRUE)),
+        "sd"          = as.double(sd(get(myVar), na.rm = TRUE)),
         "zerorate"    = mean(get(myVar) == 0, na.rm = TRUE),
         "missingrate" = mean(is.na(get(myVar)))
       )}, by = c(dateGp)]
@@ -183,11 +187,16 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
                              measure.vars = c("p99", "p50", "p1", "mean",
                                               "zerorate", "missingrate"))
   
-  # ## Add a row about global summary on dx 
-  # rbind(dx, as.list(c('global_stat', qq[5:1], cl, 
-  #                  mean(dataFl[[myVar]] == 0, na.rm = TRUE),
-  #                  mean(is.na(dataFl[[myVar]]))
-  #                  )));
+  ## Transpose dx
+  dx = melt(dx, id.vars = c(dateGp), 
+            measure.vars = c("p99", "p75", "p50", "p25", "p1", "mean", "sd", 
+                             "zerorate", "missingrate"))
+  names(dx)[names(dx) == dateGp] = 'date_group';
+  dx = dcast(dx, variable ~ date_group, value.var = 'value')
+  ## Add a column about global summary
+  dx[, global := c(qq, cl, mean(dataFl[[myVar]] == 0, na.rm = TRUE),
+                   mean(is.na(dataFl[[myVar]])))]
+  setcolorder(dx, c(1, ncol(dx), 2:(ncol(dx) - 1)))
   
   ## Mean +- 1 SD
   cl <- cl %*% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) 
@@ -205,7 +214,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
   
   ## Merge stats by dateGp (meltdx) and global stats in one table
   meltdx <- rbindlist(list(meltdx, globaldx))
-  return(meltdx)
+  return(list(meltdx = meltdx, numVarSummary = dx) )
 }
 
 

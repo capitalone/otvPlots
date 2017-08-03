@@ -30,7 +30,8 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
                        skewOpt = NULL, kSample = 50000, fuzzyLabelFn,
                        kCategories = 9) {
   
-  CatSummary <- NULL
+  catSummary <- NULL
+  numSummary <- NULL
   
   plotList <-
     lapply(sortVars, PlotVar,
@@ -47,11 +48,14 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
     grid::grid.draw(x$p)
     
     if(x$varType == "ctgrl")
-      CatSummary = rbind(CatSummary, x$varSummary) 
+      catSummary = rbind(catSummary, x$varSummary) 
+
+    if(x$varType == "nmrcl")
+      numSummary = rbind(numSummary, x$varSummary) 
   }
   dev.off()
   
-  return(CatSummary)
+  return(list(catSummary = catSummary, numSummary = numSummary))
 }
 
 ###########################################
@@ -153,9 +157,10 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
     varSummary <- p_all$catVarSummary
     varType <- "ctgrl"
   } else if (inherits(dataFl[[myVar]], "nmrcl")) {
-    p <- PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt,
+    p_all <- PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt,
                      kSample)
-    varSummary = NULL #!# to be changed
+    p <- p_all$p
+    varSummary = p_all$numVarSummary
     varType <- "nmrcl"
   }
   
