@@ -25,12 +25,12 @@
 #' @inheritParams PrepLabels
 #' @inheritParams OrderByR2
 #' @inheritParams PrintPlots
-#' @param sortVars Variables to be plotted. Either a character vector of variable
-#'   names, then variables will be plotted in the same order as in the 
-#'   \code{sortVars} argument, or \code{NULL} to keep original ordering, with  
-#'   numerical variables will being plotted before categorical and binary ones. 
-#'   \code{sortVars} should be \code{NULL} when the \code{sortFn} argument is 
-#'   used.
+#' @param sortVars Determines which variables to be plotted and their order. 
+#'   Either a character vector of variable names to plot variables in the same
+#'   order as in the \code{sortVars} argument), or \code{NULL} to keep the 
+#'   original ordering, with numerical variables will being plotted before 
+#'   categorical and binary ones. \code{sortVars} should be \code{NULL} when the
+#'   \code{sortFn} argument is used.
 #' @param sortFn A sorting function which returns \code{sortVars} as an output. 
 #'   The function may take the following variables as input: \code{dataFl}, 
 #'   \code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
@@ -66,63 +66,33 @@
 #' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                    dateGpBp = "quarters")
 #' bankLabels = PrepLabels(bankLabels)
+#'
 #'\dontrun{ 
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
 #'     outFl = "bank.pdf", dataNeedPrep = FALSE)
-#'} 
-#' # Different values of kSample can affect the appearance of boxplots (and 
-#' # possibly the order of variable output if sortVars = 'R2' is used), but does 
-#' # not affect the time series plots, which always use all of the data 
-#'\dontrun{
-#'
-#'vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
-#'             dateGp = "months", dateGpBp = "quarters", outFl = "bank.pdf", 
-#'             dataNeedPrep = FALSE, kSample = 500)
-#'}
 #' 
-#' #  If weights are provided they will be used in all statistical calculations
-#'\dontrun{
+#' ## If weights are provided, they will be used in all statistical calculations
 #' bankData[, weight := rnorm(.N, 1, .1)]
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
 #'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL)
-#'}
-#' # vlm is designed for non-interactive use, and both dataFl and
-#' # labelFl could be passed as strings giving the location of the datasets on 
-#' # disk, as long as they are able to be parsed by fread. Since the example 
-#' # datasets bankData and bankLabels are saved as rda files, for this example 
-#' # we will need to read them into memory using utils::data then convert 
-#' # to data.table
-#' data(bankData)
-#' setDT(bankData)
-#' data(bankLabels) 
-#' setDT(bankLabels)
-#' \dontrun{ 
-#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-#'             dateGp = "months", dateGpBp="quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL)
-#'}
-#' # We can pass a vector of variable names to customize plotting order using
-#' # sortVars, but we must exclude the "date" column from sortVars or the 
-#' # function will stop with a message warning us it cannot plot dates
-#'\dontrun{ 
+#'
+#' ## Customize plotting order by passing a vector of variable names to 
+#' ## sortVars, but the "date" column must be excluded from sortVars
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL, 
 #'             sortVars = sortVars, kCategories = 9)
-#'} 
-#' # We can test that the function is working with a specific variable using 
-#' # the varNms parameter
+#'             
+#' ## Create plots for a specific variable using the varNms parameter
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
 #'             outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL, 
 #'             varNms = "age", sortVars = NULL)
-#' 
-#' # See otvPlots::PlotVar for examples in interactive use, 
-#' # including use of the fuzzyLabels parameter
-#' 
+#'}
+
 vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf", 
                 dataNeedPrep = TRUE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL, 
                 varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL, 
@@ -146,24 +116,12 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf",
 
   ## Apply the PrepData function if not previously on dataFl
   if (dataNeedPrep) { 
-    ## Need to prepare data first
-    # dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
-    #                      selectCols = selectCols, dropCols = dropCols,
-    #                      dateFt = dateFt, dateGp = dateGp, dateGpBp = dateGpBp,
-    #                      weightNm = weightNm, varNms = varNms,
-    #                      dropConstants = dropConstants, ...)
-    if (is.character(dataFl)) {
-      dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
+    # Need to prepare data first
+    dataFl <- PrepData(dataFl = dataFl, dateNm = dateNm,
                          selectCols = selectCols, dropCols = dropCols,
                          dateFt = dateFt, dateGp = dateGp, dateGpBp = dateGpBp,
                          weightNm = weightNm, varNms = varNms,
                          dropConstants = dropConstants, ...)
-    } else {
-      PrepData(dataFl = dataFl, dateNm = dateNm, selectCols = selectCols,
-               dropCols = dropCols, dateFt = dateFt, dateGp = dateGp,
-               dateGpBp = dateGpBp, weightNm = weightNm, varNms = varNms,
-               dropConstants = dropConstants,  ...)
-    }
   } else {
     stopifnot(is.data.table(dataFl) &&
                 all(c(weightNm, dateNm, dateGp, dateGpBp) %in% names(dataFl)))
