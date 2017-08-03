@@ -5,6 +5,8 @@
 #' Boxplots and overtime plots of a numerical variable
 #'
 #' @inheritParams PrepData
+#' @param dataFl A \code{data.table} of data; must be the output of the
+#'   \code{\link{PrepData}} function. 
 #' @param myVar The name of the variable to be plotted
 #' @param skewOpt Either a numeric constant or \code{NULL}. Default is 
 #'   \code{NULL} (no transformation). If numeric, say 5, then all box plots of

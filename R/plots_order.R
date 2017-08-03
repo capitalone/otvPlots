@@ -13,6 +13,8 @@
 #'
 #' @inheritParams PrepData
 #' @inheritParams PlotNumVar
+#' @param dataFl A \code{data.table} of data; must be the output of the
+#'   \code{\link{PrepData}} function. 
 #' @param buildTm Vector identify time period for ranking/anomaly detection
 #' (most likely model build period). Allows for a subset of plotting time
 #' period to be used for anomaly detection.

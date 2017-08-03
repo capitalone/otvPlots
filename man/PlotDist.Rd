@@ -7,12 +7,8 @@
 PlotDist(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL)
 }
 \arguments{
-\item{dataFl}{Either the name of an object that can be converted using
-\code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
-character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
-file. If dataset is not in your working directory then \code{dataFl}
-must include (relative or absolute) path to file.}
+\item{dataFl}{A \code{data.table} of data; must be the output of the
+\code{\link{PrepData}} function.}
 
 \item{myVar}{The name of the variable to be plotted}
 

@@ -9,6 +9,8 @@
 #' package.
 #' 
 #' @inheritParams PrepData
+#' @param dataFl A \code{data.table} of data; must be the output of the
+#'   \code{\link{PrepData}} function. 
 #' @param myVar The name of the variable to be plotted
 #' @param kCategories If a categorical variable has more than \code{kCategories},
 #'   trace plots of only the \code{kCategories} most prevalent categories are
@@ -218,7 +220,8 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     }
   }
   
-  ## Compute the rates
+  ## Compute the rates: 
+  ## For a certain time, N.x is the count of the category, N.y is the total counts
   rateBy[, rate := N.x / N.y]
   rateBy[, (myVar) := factor(get(myVar), levels = newLevels)]
   

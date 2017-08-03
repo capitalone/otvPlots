@@ -52,16 +52,23 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 
 #' Create overtime variable plots for one variable
 #' 
-#' For categorical variables (including numerical variables with no more than 2
-#' unique levels not including NA), frequency/rate graphs are used. For a 
-#' categorical variable, the output includes a frequency bar plot on the left,
-#' and a grid of trace plots on categories' proportions over time. If the
+#' For a categorical variable (including a numerical variable with no more than 2
+#' unique levels not including NA), frequency/rate graphs are used. The output 
+#' includes 
+#' \itemize{
+#' \item a frequency bar plot on the left, and 
+#' \item a grid of trace plots on categories' proportions over time. If the
 #' variable contains more than \code{kCategories} number of categories, trace
-#' plots of only the largest \code{kCategories} will be plotted. For a numerical 
-#' variable, the output includes side-by-side boxplotx grouped by 
-#' \code{dateGpBp}, a trace plot of p1, p50 and p99 percentiles, a trace plot of
-#' mean and +-1 SD control limits, and a a trace plot of missing and zerorates, 
-#' where all trace plots are grouped by \code{dateGp}.
+#' plots of only the largest \code{kCategories} will be plotted. 
+#' }
+#' For a numerical variable, the output includes 
+#' \itemize{
+#' \item side-by-side boxplotx grouped by \code{dateGpBp}, 
+#' \item a trace plot of p1, p50 and p99 percentiles, 
+#' \item a trace plot of mean and +-1 SD control limits, and 
+#' \item a trace plot of missing and zerorates,
+#' }
+#' with all trace plots being grouped by \code{dateGp}.
 #'
 #' @inheritParams PlotCatVar
 #' @inheritParams PlotNumVar
@@ -81,7 +88,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #'   to the variable given by the second parameter. This function should 
 #'   describe how fuzzy matching should be performed to find labels (see example
 #'   below). If \code{NULL}, only exact matches will be retuned.
-#' @return a \code{grob} (i.e., \code{ggplot} grid) object. 
+#' @return A \code{grob} (i.e., \code{ggplot} grid) object. 
 #' @export
 #' @seealso \code{\link{PlotCatVar}}
 #' @seealso \code{\link{PlotNumVar}}

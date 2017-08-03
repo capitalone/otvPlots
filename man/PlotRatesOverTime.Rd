@@ -9,12 +9,8 @@ PlotRatesOverTime(dataFl, dateGp, myVar, normBy = "time", weightNm = NULL,
   newLevels = NULL, kCategories = 9)
 }
 \arguments{
-\item{dataFl}{Either the name of an object that can be converted using
-\code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
-character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
-file. If dataset is not in your working directory then \code{dataFl}
-must include (relative or absolute) path to file.}
+\item{dataFl}{A \code{data.table} of data; must be the output of the
+\code{\link{PrepData}} function.}
 
 \item{dateGp}{Name of the variable the time series plots should be grouped
 by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
