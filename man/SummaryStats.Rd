@@ -46,6 +46,6 @@ bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", dateGpBp = "
 mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "quarters")
 plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
                    "age", "quarters"))
-plot(PlotMean(mdx[variable \%in\% c("Mean", "cl1", "cl2")], "age", "quarters"))
+plot(PlotMean(mdx[variable \%in\% c("mean", "cl1", "cl2")], "age", "quarters"))
 plot(PlotRates(mdx, "age", "quarters"))
 }

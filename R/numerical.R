@@ -78,7 +78,7 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
   ## Time series plots for quantiles, mean+-SD, and missing rates
   p2 <- PlotQuantiles(meltdx[variable %in% c("p99", "p50", "p1", "p99_g",
                                              "p50_g", "p1_g")], myVar, dateGp)
-  p3 <- PlotMean(meltdx[variable %in% c("Mean", "cl1", "cl2")], myVar, dateGp)
+  p3 <- PlotMean(meltdx[variable %in% c("mean", "cl1", "cl2")], myVar, dateGp)
   p4 <- PlotRates(meltdx, myVar, dateGp)
   
   ## Combines the plots together
@@ -119,7 +119,7 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' mdx = SummaryStats(myVar = "age", dataFl = bankData, dateGp = "quarters")
 #' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
 #'                    "age", "quarters"))
-#' plot(PlotMean(mdx[variable %in% c("Mean", "cl1", "cl2")], "age", "quarters"))
+#' plot(PlotMean(mdx[variable %in% c("mean", "cl1", "cl2")], "age", "quarters"))
 #' plot(PlotRates(mdx, "age", "quarters"))
 
 SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
@@ -134,7 +134,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "p1"   = tmp1[1],
         "p50"  = tmp1[2],
         "p99"  = tmp1[3],
-        "Mean" = as.double(Hmisc::wtd.mean(get(myVar), get(weightNm),
+        "mean" = as.double(Hmisc::wtd.mean(get(myVar), get(weightNm),
                                            normwt = TRUE, na.rm = TRUE)),
         "zerorate"    = Hmisc::wtd.mean(get(myVar) == 0, get(weightNm),
                                         na.rm = TRUE, normwt = TRUE),
@@ -157,7 +157,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
         "p1"  = tmp1[1],
         "p50" = tmp1[2],
         "p99" = tmp1[3],
-        "Mean"        = as.double(mean(get(myVar), na.rm = TRUE)),
+        "mean"        = as.double(mean(get(myVar), na.rm = TRUE)),
         "zerorate"    = mean(get(myVar) == 0, na.rm = TRUE),
         "missingrate" = mean(is.na(get(myVar)))
       )}, by = c(dateGp)]
@@ -171,7 +171,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
   ## Melt the dx table to have only 3 columns: dateGp, variable, and value
   meltdx <- data.table::melt(dx,
                              id.vars = c(dateGp),
-                             measure.vars = c("p99", "p50", "p1", "Mean",
+                             measure.vars = c("p99", "p50", "p1", "mean",
                                               "zerorate", "missingrate")
   )
   ## Mean +- 1 SD
@@ -267,7 +267,7 @@ PlotMean <- function(meltdx, myVar, dateGp){
   
   ## Modify the column variable to be either 'mean' or '1SD CL'
   setnames(meltdx, "variable", "var")
-  meltdx[, variable := as.factor(ifelse(var != "Mean", "1SD CL", "mean"))]
+  meltdx[, variable := as.factor(ifelse(var != "mean", "1SD CL", "mean"))]
   
   ## Create a ggplots2 object
   ggplot2::ggplot(meltdx,
