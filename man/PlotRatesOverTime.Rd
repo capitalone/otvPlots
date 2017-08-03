@@ -37,8 +37,14 @@ trace plots of only the \code{kCategories} most prevalent categories are
 plotted.}
 }
 \value{
-A \code{ggplot} object, trace plots of categories' propotions 
-  \code{myVar} over time.
+A list:
+  \item{p}{\code{ggplot} object, trace plots of categories' propotions 
+    \code{myVar} over time.}
+  \item{catVarSummary}{A \code{data.table}, contains categories' proportions 
+    globally and over-time in each time period in \code{dateGp}. Each row is
+    a category of the categorical (or binary) variable \code{myVar}. The row
+    whose \code{category == 'NA'} corresponds to missing. Categories are 
+    ordered by global prevalence in descending order.}
 }
 \description{
 Creates trace plots of categories' propotions over time for a discrete (or

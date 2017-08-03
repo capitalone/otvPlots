@@ -36,10 +36,16 @@ are normalized by the total counts over time from only this category. This
 illustrates changes of categories' volumns over time.}
 }
 \value{
-a \code{grob} (i.e., \code{ggplot} grid) object, including a 
-  histogram, and trace plots of categories' proportions. If the number of 
-  categories is larger than \code{kCategories}, then trace plots of only the
-  \code{kCategories} most prevalent categories are be plotted.
+A list:
+  \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
+    histogram, and trace plots of categories' proportions. If the number of 
+    categories is larger than \code{kCategories}, then trace plots of only the
+    \code{kCategories} most prevalent categories are be plotted.}
+  \item{catVarSummary}{A \code{data.table}, contains categories' proportions 
+    globally and over-time in each time period in \code{dateGp}. Each row is
+    a category of the categorical (or binary) variable \code{myVar}. The row
+    whose \code{category == 'NA'} corresponds to missing. Categories are 
+    ordered by global prevalence in descending order.}
 }
 \description{
 Output plots include a bar plot with cateogries ordered by counts,
@@ -65,16 +71,16 @@ bankData = PrepData(bankData, dateNm = "date", dateGp = "months",
                     dateGpBp = "quarters", weightNm = NULL)
 # Single histogram is plotted for job type since there are 12 categories
 plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
-                     dateNm = "date", dateGp = "months"))
+                     dateNm = "date", dateGp = "months")$p)
                      
 plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm = NULL, 
-                     dateNm = "date", dateGp = "months", kCategories = 12))
+                     dateNm = "date", dateGp = "months", kCategories = 12)$p)
 
 
 ## Binary data is treated as categorical, 
 ## and only the less frequent category is plotted over time.
 plot(PlotCatVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
-                     dateNm = "date", dateGp = "months"))
+                     dateNm = "date", dateGp = "months")$p)
 }
 \seealso{
 \code{\link{PlotBarplot}}
