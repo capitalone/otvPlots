@@ -94,7 +94,7 @@
 #'}
 
 vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf", 
-                dataNeedPrep = TRUE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL, 
+                dataNeedPrep = FALSE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL, 
                 varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL, 
                 dropCols = NULL, dateFt = "%d%h%Y", buildTm = NULL, 
                 highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
