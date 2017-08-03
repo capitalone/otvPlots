@@ -7,7 +7,7 @@ require(ggplot2)
 suppressMessages(PrepData(testData, dateNm = "date", 
 				 dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
 p <- PlotRatesOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
-    weightNm = "weight", newLevels = NULL)
+    weightNm = "weight", newLevels = NULL)$p
 test_that("expected plot elements are returned", {	
   expect_is(p$layers[[1]], "ggproto")
   expect_is(p$layers[[1]]$geom, "GeomLine")
@@ -42,7 +42,7 @@ test_that("rates are calculated correctly normalized by time", {
 
 test_that("rates are calculated correctly normalized by var", {
   p <- PlotRatesOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
-                        weightNm = "weight", newLevels = NULL, normBy = "var")
+                        weightNm = "weight", newLevels = NULL, normBy = "var")$p
   dat = p$data
   dat[, sum := sum(rate), by = "job"]
   

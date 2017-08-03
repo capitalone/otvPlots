@@ -66,7 +66,7 @@ PlotCatVar <- function(myVar, dataFl, weightNm = NULL, dateNm, dateGp,
                           myVar = myVar, newLevels = newLevels, normBy = normBy,
                           kCategories = kCategories)
   
-  p  <- gridExtra::arrangeGrob(ggplot2::ggplotGrob(p), p2, widths = c(1, 2))
+  p  <- gridExtra::arrangeGrob(ggplot2::ggplotGrob(p), p2$p, widths = c(1, 2))
   
   return(p)
 }
@@ -165,6 +165,9 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   rate <- NULL
   N <- NULL
   count <- NULL
+  global_count <- NULL
+  global_rate <- NULL
+  variable <- NULL
   
   ## A subset dataset to work on
   dataSub <- dataFl[, c(dateGp, myVar, weightNm), with = FALSE]
@@ -225,6 +228,26 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   rateBy[, rate := N.x / N.y]
   rateBy[, (myVar) := factor(get(myVar), levels = newLevels)]
   
+  ## Compute summary statistics in a wide format
+  cbytime = copy(rateBy);
+  names(cbytime)[names(cbytime) == myVar] = 'category'
+  names(cbytime)[names(cbytime) == dateGp] = 'date_group'
+  ## Compute global counts and rates
+  cglobal = cbytime[, list(global_count = sum(N.x)), by = 'category'];
+  cglobal[, global_rate := global_count / sum(global_count)];
+  ## Change cbytime into the wide format
+  cbytime = dcast(cbytime[, c('date_group', 'category', 'rate')], 
+                  category ~ date_group, value.var = 'rate');
+  ## Combine cglobal into cbytime
+  cbytime = merge(cglobal, cbytime, by = 'category')
+  ## Add a column: variable
+  cbytime[, variable := myVar];
+  setcolorder(cbytime, c(ncol(cbytime), 1:(ncol(cbytime) - 1)))
+  ## Add a row of NA being all zero, if no missing
+  if('NA' %in% cbytime$category == FALSE){
+    cbytime = rbind(cbytime, as.list(c(myVar, 'NA', rep(0, ncol(cbytime) - 2))) )
+  }
+  
   ## Plot less frequent category only for a binary variable.
   ## This helps when there is a large class imbalance, because the range of y-axis for all trace plots is the same.
   if (length(newLevels) == 2) {
@@ -247,6 +270,6 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
     ggplot2::theme(axis.text.x=ggplot2::element_text(angle = 30, hjust = 1)) +
     ggplot2::scale_y_continuous(labels=scales::percent)
   
-  return(p)
+  return(list(p = p, catVarSummary = cbytime));
   
 }
