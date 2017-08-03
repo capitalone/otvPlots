@@ -29,6 +29,9 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
                        labelFl = NULL, highlightNms = NULL,
                        skewOpt = NULL, kSample = 50000, fuzzyLabelFn,
                        kCategories = 9) {
+  
+  CatSummary <- NULL
+  
   plotList <-
     lapply(sortVars, PlotVar,
            dataFl = dataFl, weightNm = weightNm, dateNm = dateNm,
@@ -41,9 +44,14 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
   
   for (x in plotList)  {
     grid::grid.newpage()
-    grid::grid.draw(x)
+    grid::grid.draw(x$p)
+    
+    if(x$varType == "ctgrl")
+      CatSummary = rbind(CatSummary, x$varSummary) 
   }
   dev.off()
+  
+  return(CatSummary)
 }
 
 ###########################################
@@ -109,11 +117,11 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' ## PlotVar will treat numerical and categorical data differently. 
 #' ## Binary data is always treated as categorical.
 #' plot(PlotVar(bankData, myVar = "duration", weightNm = NULL, dateNm = "date", 
-#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels)$p)
 #' plot(PlotVar(bankData, myVar = "job", weightNm = NULL, dateNm = "date", 
-#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels)$p)
 #' plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, dateNm = "date", 
-#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels))
+#'      dateGp = "months", dateGpBp =  "quarters", labelFl = bankLabels)$p)
 #'
 PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
                     labelFl = NULL, highlightNms = NULL, skewOpt = NULL,
@@ -140,10 +148,15 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   
   ## Generate a grid of plots
   if (inherits(dataFl[[myVar]], "ctgrl")) {
-    p <- PlotCatVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories)
+    p_all <- PlotCatVar(myVar, dataFl, weightNm, dateNm, dateGp, kCategories)
+    p <- p_all$p
+    varSummary <- p_all$catVarSummary
+    varType <- "ctgrl"
   } else if (inherits(dataFl[[myVar]], "nmrcl")) {
     p <- PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt,
                      kSample)
+    varSummary = NULL #!# to be changed
+    varType <- "nmrcl"
   }
   
   ## If no fuzzy matching functions are provided, provide exact matches on the 
@@ -174,5 +187,5 @@ PlotVar <- function(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   grobHeights <- grid::unit.c(grid::unit(1, "npc") - subHeight, subHeight)
   p <- gridExtra::arrangeGrob(p, top = subText)
   
-  return(p)
+  return(list(p = p, varSummary = varSummary, varType = varType))
 }
