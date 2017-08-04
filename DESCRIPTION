@@ -6,12 +6,14 @@ Authors@R: c(
     person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut")),
 		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", email = "OpenSourceOffice@capitalone.com", role = "cph"))
-Description: The over time variable plots package enables automated visualization of variable distribution and change over time for
-    predictive model building.
+Description: This package enables automated visualization of variable 
+    distribution and change over time for predictive model building.
+    It efficiently computes summary statistics aggreated by time for 
+    large datasets, and create plots for variable level monitoring.  
 Depends:
-    R (>= 3.2.0),
-    data.table (>= 1.9.6)
+    R (>= 3.2.0)
 Imports:
+    data.table (>= 1.9.6),
     ggplot2 (>= 2.1.0),
     grid (>= 3.2.0),
     gridExtra (>= 2.2.1),
