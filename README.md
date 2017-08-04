@@ -37,16 +37,16 @@ treatment. All binary variables are treated as categorical. Output files include
      corresponds to missing. Categories among the same variable are ordered by
      global prevalence in a descending order.
 
-#### Here is an example of a numeric plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/cntns_ex.png" 
-     alt="numeric plot" 
+#### Here is an example page of plots for a numerical variable 
+<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_numerical.png" 
+     alt="numerical plot" 
    width="1285" 
    height="700">
 
 
-#### Here is an example of a discrete plot 
-<img src="https://github.kdc.capitalone.com/sju922/Velma/blob/master/vignettes/Figs/dscrt_ex.png" 
-     alt="discrete plot" 
+#### Here is an example page of plots for a categorical variable 
+<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_categorical.png" 
+     alt="categorical plot" 
    width="1285" 
    height="700">
 
