@@ -12,13 +12,13 @@ SummaryStats(myVar, dataFl, dateGp, weightNm = NULL)
 \item{dataFl}{A \code{data.table} of data; must be the output of the
 \code{\link{PrepData}} function.}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\item{dateGp}{Name of the variable that the time series plots should be 
+grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 }
 \value{
 A \code{data.table} for use by the numerical variables' plotting 

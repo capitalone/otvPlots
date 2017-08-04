@@ -15,15 +15,15 @@ vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf",
 \item{dataFl}{Either the name of an object that can be converted using
 \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
-file. If dataset is not in your working directory then \code{dataFl}
-must include (relative or absolute) path to file.}
+\code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+your working directory then \code{dataFl} must include (relative or 
+absolute) path to file.}
 
-\item{dateNm}{Name of column containing \code{date} variable.}
+\item{dateNm}{Name of column containing the date variable.}
 
-\item{labelFl}{Either the path of a dataset (csv or Rdata file) containing
-labels, an R object convertible to \code{data.table} (e.g. data frame) or 
-\code{NULL}. If \code{NULL} no labels will be used. Label dataset must 
+\item{labelFl}{Either the path of a dataset (a csv file) containing
+labels, an R object convertible to \code{data.table} (e.g., data frame) or 
+\code{NULL}. If \code{NULL}, no labels will be used. The label dataset must 
 contain at least 2 columns: \code{varCol} (variable names) and 
 \code{labelCol} (variable labels).}
 
@@ -36,8 +36,8 @@ saved to your working directory unless a path is included in \code{outFl}
 the \code{\link{PrepData}} function has been applied to the input data 
 \code{dataFl}.}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\item{dateGp}{Name of the variable that the time series plots should be 
+grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
@@ -45,14 +45,14 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 
 \item{varNms}{Either \code{NULL} or a vector of names or indices of variables
 to be plotted. If \code{NULL}, will default to all columns which are not 
 \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
 column names, after \code{dropCols} or \code{selectCols} have been applied,
 if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-(which will be added to the \code{dataFl} by function 
+(which will be added to the \code{dataFl} by the function 
 \code{\link{PrepData}}).}
 
 \item{sortVars}{Determines which variables to be plotted and their order. 
@@ -75,7 +75,8 @@ both \code{selectCols} and \code{dropCols} are \code{NULL}, then all
 variables will be read in.}
 
 \item{dropCols}{Either \code{NULL}, or a vector of variables names or indices
-of variables not to read into memory.}
+of variables not to read into memory. If both \code{selectCols} and 
+\code{dropCols} are \code{NULL}, then all variables will be read in.}
 
 \item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 

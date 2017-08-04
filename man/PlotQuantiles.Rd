@@ -12,8 +12,8 @@ PlotQuantiles(meltdx, myVar, dateGp)
 
 \item{myVar}{The name of the variable to be plotted}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\item{dateGp}{Name of the variable that the time series plots should be 
+grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 }

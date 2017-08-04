@@ -16,7 +16,7 @@ PlotDist(dataFl, myVar, dateGpBp, weightNm = NULL, skewOpt = NULL)
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 
 \item{skewOpt}{Either a numeric constant or \code{NULL}. Default is 
 \code{NULL} (no transformation). If numeric, say 5, then all box plots of

@@ -11,7 +11,7 @@ OrderByR2(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 \item{dataFl}{A \code{data.table} of data; must be the output of the
 \code{\link{PrepData}} function.}
 
-\item{dateNm}{Name of column containing \code{date} variable.}
+\item{dateNm}{Name of column containing the date variable.}
 
 \item{buildTm}{Vector identify time period for ranking/anomaly detection
 (most likely model build period). Allows for a subset of plotting time
@@ -37,7 +37,7 @@ period to be used for anomaly detection.
 }}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 
 \item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical

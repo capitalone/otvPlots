@@ -13,7 +13,7 @@ PlotBarplot(dataFl, myVar, weightNm = NULL)
 \item{myVar}{The name of the variable to be plotted}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 }
 \value{
 A \code{ggplot} object with a histogram of \code{myVar} ordered by 

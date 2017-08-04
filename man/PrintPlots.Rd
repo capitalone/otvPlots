@@ -20,10 +20,10 @@ output of the \code{\link{PrepData}} function.}
 \item{sortVars}{A character vector of variable names in the order they will
 be plotted.}
 
-\item{dateNm}{Name of column containing \code{date} variable.}
+\item{dateNm}{Name of column containing the date variable.}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\item{dateGp}{Name of the variable that the time series plots should be 
+grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
@@ -31,7 +31,7 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 
 \item{labelFl}{A \code{data.table} containing variable labels, or \code{NULL}
 for no labels; usually an output of \code{\link{PrepLabels}}.}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/prep.R
 \name{PrepData}
 \alias{PrepData}
-\title{Clean an input dataset for plotting}
+\title{Prepare an input dataset for plotting}
 \usage{
 PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
@@ -12,11 +12,11 @@ PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 \item{dataFl}{Either the name of an object that can be converted using
 \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
-file. If dataset is not in your working directory then \code{dataFl}
-must include (relative or absolute) path to file.}
+\code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+your working directory then \code{dataFl} must include (relative or 
+absolute) path to file.}
 
-\item{dateNm}{Name of column containing \code{date} variable.}
+\item{dateNm}{Name of column containing the date variable.}
 
 \item{selectCols}{Either \code{NULL}, or a vector of names or indices of 
 variables to read into memory -- must include \code{dateNm}, 
@@ -25,15 +25,16 @@ both \code{selectCols} and \code{dropCols} are \code{NULL}, then all
 variables will be read in.}
 
 \item{dropCols}{Either \code{NULL}, or a vector of variables names or indices
-of variables not to read into memory.}
+of variables not to read into memory. If both \code{selectCols} and 
+\code{dropCols} are \code{NULL}, then all variables will be read in.}
 
 \item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 
 \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
 
-\item{dateGp}{Name of the variable the time series plots should be grouped
-by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+\item{dateGp}{Name of the variable that the time series plots should be 
+grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
@@ -41,14 +42,14 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
 \item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieve weight 1).}
+no weights (all rows recieving weight 1).}
 
 \item{varNms}{Either \code{NULL} or a vector of names or indices of variables
 to be plotted. If \code{NULL}, will default to all columns which are not 
 \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
 column names, after \code{dropCols} or \code{selectCols} have been applied,
 if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-(which will be added to the \code{dataFl} by function 
+(which will be added to the \code{dataFl} by the function 
 \code{\link{PrepData}}).}
 
 \item{dropConstants}{Logical indicates whether or not constant (all
@@ -59,14 +60,23 @@ plotting.}
 \code{\link[data.table]{fread}}.}
 }
 \value{
-A \code{data.table} formated for use by \code{PlotVar} function.
+A \code{data.table} object, formated for use by all plotting 
+functions in this package \code{\link{otvPlots}}, including the main function
+\code{\link{vlm}}, and the individual variable plotting function 
+\code{\link{PlotVar}}.
 }
 \description{
-Cleans an input dataset for use by the plotting function \code{otvPlots}. 
+This function prepares an input dataset for use by all plotting functions
+in this package, including the main function \code{\link{vlm}}. 
 The input data \code{dataFl} must contain, at a minimum, a date column 
 \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-convereted to a data.table class, and all changes are made to it by 
+convereted to a \code{data.table} class, and all changes are made to it by 
 reference.
+}
+\details{
+If weights (\code{weightNm}) are provided, then it is normalized to have a
+sum of weights equal the total sample size, and the weights are used in all 
+summary statistics calculations and plotting.
 }
 \section{License}{
 

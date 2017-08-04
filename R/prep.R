@@ -2,46 +2,52 @@
 #         Prepare Data                    #
 ###########################################
 
-#' Clean an input dataset for plotting
+#' Prepare an input dataset for plotting
 #'
-#' Cleans an input dataset for use by the plotting function \code{otvPlots}. 
+#' This function prepares an input dataset for use by all plotting functions
+#' in this package, including the main function \code{\link{vlm}}. 
 #' The input data \code{dataFl} must contain, at a minimum, a date column 
 #' \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-#' convereted to a data.table class, and all changes are made to it by 
+#' convereted to a \code{data.table} class, and all changes are made to it by 
 #' reference.
+#' 
+#' If weights (\code{weightNm}) are provided, then it is normalized to have a
+#' sum of weights equal the total sample size, and the weights are used in all 
+#' summary statistics calculations and plotting. 
 #'
 #' @param dataFl Either the name of an object that can be converted using
 #'   \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 #'   character string containing the name of dataset that can be loaded using 
-#'   \code{\link[data.table]{fread}} (e.g., a csv file), or a file path  of Rdata
-#'   file. If dataset is not in your working directory then \code{dataFl}
-#'   must include (relative or absolute) path to file.
+#'   \code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+#'   your working directory then \code{dataFl} must include (relative or 
+#'   absolute) path to file.
 #' @param selectCols Either \code{NULL}, or a vector of names or indices of 
 #'   variables to read into memory -- must include \code{dateNm}, 
 #'   \code{weightNm} (if not \code{NULL}) and all variables to be plotted. If
 #'   both \code{selectCols} and \code{dropCols} are \code{NULL}, then all
 #'   variables will be read in.
 #' @param dropCols Either \code{NULL}, or a vector of variables names or indices
-#'   of variables not to read into memory.
-#' @param dateNm Name of column containing \code{date} variable.
+#'   of variables not to read into memory. If both \code{selectCols} and 
+#'   \code{dropCols} are \code{NULL}, then all variables will be read in.
+#' @param dateNm Name of column containing the date variable.
 #' @param dateFt \code{\link{strptime}} format of date variable. Default is SAS
 #'   format \code{"\%d\%h\%Y"}. But input data with R date format 
 #'   \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 #'   parsed automatically. 
-#' @param dateGp Name of the variable the time series plots should be grouped
-#'   by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
+#' @param dateGp Name of the variable that the time series plots should be 
+#'   grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
 #'   \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 #'   details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.
 #' @param dateGpBp Name of variable the boxplots should be grouped by. Same
 #'   options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.
 #' @param weightNm Name of variable containing row weights, or \code{NULL} for 
-#'   no weights (all rows recieve weight 1).
+#'   no weights (all rows recieving weight 1).
 #' @param varNms Either \code{NULL} or a vector of names or indices of variables
 #'   to be plotted. If \code{NULL}, will default to all columns which are not 
 #'   \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
 #'   column names, after \code{dropCols} or \code{selectCols} have been applied,
 #'   if applicable, and not including \code{dateGp}, \code{dateGpBp} 
-#'   (which will be added to the \code{dataFl} by function 
+#'   (which will be added to the \code{dataFl} by the function 
 #'   \code{\link{PrepData}}).
 #' @param dropConstants Logical indicates whether or not constant (all
 #'   duplicated or NA) variables should be dropped from \code{dataFl} prior to
@@ -49,7 +55,10 @@
 #' @param ... Additional parameters to be passed to 
 #'   \code{\link[data.table]{fread}}.
 #' @export
-#' @return A \code{data.table} formated for use by \code{PlotVar} function.
+#' @return A \code{data.table} object, formated for use by all plotting 
+#' functions in this package \code{\link{otvPlots}}, including the main function
+#' \code{\link{vlm}}, and the individual variable plotting function 
+#' \code{\link{PlotVar}}.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -302,23 +311,23 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #           Prepare Labels                #
 ###########################################
 
-#' Clean a dataset containing variable labels
+#' Prepare variable labels
 #'
-#' Prepares a dataset containing variable labels for use by \code{otvPlots}. 
-#' To work correctly, input must contain names in first column and labels in 
-#' second column. All other columns will be dropped. Special characters will 
-#' create errors and should be stripped outside of R. All labels will be 
-#' truncated at 145 characters.
+#' This function prepares a dataset containing variable labels for use by 
+#' the main plotting function \code{\link{vlm}}. The input must contain 
+#' variables' names in first column and labels in second column. All other 
+#' columns will be dropped. Special characters will create errors and should 
+#' be stripped outside of R. All labels will be truncated at 145 characters.
 #'
-#' @param labelFl Either the path of a dataset (csv or Rdata file) containing
-#'   labels, an R object convertible to \code{data.table} (e.g. data frame) or 
-#'   \code{NULL}. If \code{NULL} no labels will be used. Label dataset must 
+#' @param labelFl Either the path of a dataset (a csv file) containing
+#'   labels, an R object convertible to \code{data.table} (e.g., data frame) or 
+#'   \code{NULL}. If \code{NULL}, no labels will be used. The label dataset must 
 #'   contain at least 2 columns: \code{varCol} (variable names) and 
 #'   \code{labelCol} (variable labels).
 #' @param idx Vector of length 2 giving column index of variable names (first
-#'   position) and labels (second position)
+#'   position) and labels (second position).
 #' @export
-#' @return A data table formated for use by \code{PlotVar} function.
+#' @return A data table formated for use by the \code{\link{vlm}} function.
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the
 #' Apache License, Version 2.0 (the "License"); you may not use this file
