@@ -197,6 +197,11 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
   dx[, global := c(qq, cl, mean(dataFl[[myVar]] == 0, na.rm = TRUE),
                    mean(is.na(dataFl[[myVar]])))]
   setcolorder(dx, c(1, ncol(dx), 2:(ncol(dx) - 1)))
+  ## Change the column name of variable to statistic
+  names(dx)[names(dx) == 'variable'] = 'statistic';
+  ## Add a column: variable
+  dx[, variable := myVar];
+  setcolorder(dx, c(ncol(dx), 1:(ncol(dx) - 1)))
   
   ## Mean +- 1 SD
   cl <- cl %*% matrix(c(1, 1, 1, -1), byrow = TRUE, nrow = 2) 
