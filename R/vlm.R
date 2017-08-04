@@ -42,12 +42,13 @@
 #'   \code{dataFl}. 
 #' @return A pdf file of VLM report saved as \code{outFl}.
 #' @export
-#' @seealso \code{\link[otvPlots]{PrepData}}
-#' @seealso \code{\link[otvPlots]{PrepLabels}}
-#' @seealso \code{\link[otvPlots]{OrderByR2}}
-#' @seealso \code{\link[otvPlots]{PrintPlots}}
-#' @seealso \code{\link[base]{strptime}}
-#' @seealso \code{\link[data.table]{IDate}}
+#' 
+#' @seealso This function depends on:
+#'          \code{\link{PrintPlots}},
+#'          \code{\link{OrderByR2}},
+#'          \code{\link{PrepData}},
+#'          \code{\link{PrepLabels}}.
+#'          
 #' @section License: Copyright 2016 Capital One Services, LLC Licensed under the
 #' Apache License, Version 2.0 (the "License"); you may not use this file 
 #' except in compliance with the License. You may obtain a copy of the License

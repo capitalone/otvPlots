@@ -2,8 +2,15 @@
 #        Plots for Numerical Data         #
 ###########################################
 
-#' Boxplots and overtime plots of a numerical variable
+#' Create plots and summary statistics for a numerical variable
 #'
+#' Output plots include a boxplot on the left, grouped by a courser time scale 
+#' (\code{dateGpBp}), and three trace plots on the right, on p1, p50, 
+#' and p99 qunatiles, mean and +-1 SD control limits, missing and zerorates,
+#' all grouped by a finer time scale as in \code{dateGp}. In addition to plots, 
+#' a \code{data.table} of summary statistics are generated, on global and
+#' over time summary statistics. 
+#'    
 #' @inheritParams PrepData
 #' @param dataFl A \code{data.table} of data; must be the output of the
 #'   \code{\link{PrepData}} function. 
@@ -21,15 +28,26 @@
 #'   long time to render. This setting has no impact on the accuracy of time 
 #'   series plots on quantiles, mean, SD, and missing and zero rates.
 #' @export
-#' @return a \code{grob} (i.e., \code{ggplot} grid) object, including a boxplot
-#'   grouped by \code{dateGpBp}, a time series of p1, p50 and p99 grouped by 
-#'   \code{dateGp}, a time series of mean and +-1 SD control limits grouped by
-#'   \code{dateGp}, and a time series of missing and zerorates grouped by 
-#'   \code{dateGp}.
-#' @seealso \code{\link{PlotDist}}
-#' @seealso \code{\link{PlotQuantiles}}
-#' @seealso \code{\link{PlotMean}}
-#' @seealso \code{\link{PlotRates}}
+#' @return
+#'   \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
+#'     side-byside boxplot grouped by \code{dateGpBp}, a time series plot of p1,
+#'     p50 (median), and p99 grouped by \code{dateGp}, a time series plot of 
+#'     mean and +-1 SD control limits grouped by \code{dateGp}, and a time 
+#'     series plot of missing and zerorates grouped by \code{dateGp}.}
+#'   \item{numVarSummary}{A \code{data.table}, contains global and over time
+#'     summary statistics, including p1, p25, p50, p75, and p99 qunatiles, mean 
+#'     and SD, missing and zerorates.}
+#'     
+#' @seealso Functions depend on this function:
+#'          \code{\link{PlotVar}}.
+#' @seealso This function depends on:
+#'          \code{\link{SummaryStats}},
+#'          \code{\link{PlotDist}},
+#'          \code{\link{PlotQuantiles}},
+#'          \code{\link{PlotMean}},
+#'          \code{\link{PlotRates}},
+#'          \code{\link{PrepData}}.
+#' 
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -41,7 +59,7 @@
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
 #'                     dateGpBp = "years")
 #' plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
 #'                  skewOpt = NULL, kSample = NULL)$p)
@@ -100,9 +118,11 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' 
 #' @inheritParams PlotNumVar
 #' @export
-#' @return A \code{data.table} for use by the numerical variables' plotting 
-#'   funtions \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
-#'   \code{\link{PlotRates}}.
+#' @return 
+#'   \item{meltdx}{A \code{data.table} for use by the plotting funtions 
+#'     \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
+#'     \code{\link{PlotRates}}.}
+#'   \item{numVarSummary}{A \code{data.table} of summary statistics.}
 #' @importFrom Hmisc wtd.mean
 #' @importFrom Hmisc wtd.quantile
 #' @section License:
@@ -116,12 +136,12 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", 
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "quarters", 
 #'                     dateGpBp = "years")
-#' mdx = SummaryStats(myVar = "age", dataFl = bankData, 
+#' mdx <- SummaryStats(myVar = "age", dataFl = bankData, 
 #'                    dateGp = "quarters")$meltdx
-#' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
-#'                    "age", "quarters"))
+#' plot(PlotQuantiles(mdx[variable %in% c("p99", "p50", "p1", "p99_g", "p50_g",
+#'                    "p1_g")], "age", "quarters"))
 #' plot(PlotMean(mdx[variable %in% c("mean", "cl1", "cl2")], "age", "quarters"))
 #' plot(PlotRates(mdx, "age", "quarters"))
 

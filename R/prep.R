@@ -59,6 +59,23 @@
 #' functions in this package \code{\link{otvPlots}}, including the main function
 #' \code{\link{vlm}}, and the individual variable plotting function 
 #' \code{\link{PlotVar}}.
+#' 
+#' @seealso Functions depend on this function:
+#'          \code{\link{PlotBarplot}},
+#'          \code{\link{PlotRatesOverTime}},
+#'          \code{\link{PlotCatVar}},
+#'          \code{\link{SummaryStats}},
+#'          \code{\link{PlotMean}},
+#'          \code{\link{PlotQuantiles}},
+#'          \code{\link{PlotRates}},
+#'          \code{\link{PlotDist}},
+#'          \code{\link{PlotNumVar}},
+#'          \code{\link{PlotVar}},
+#'          \code{\link{PrintPlots}},
+#'          \code{\link{CalcR2}},
+#'          \code{\link{OrderByR2}},
+#'          \code{\link{vlm}}.
+#' 
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -328,6 +345,11 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #'   position) and labels (second position).
 #' @export
 #' @return A data table formated for use by the \code{\link{vlm}} function.
+#' 
+#' @seealso Functions depend on this function:
+#'          \code{\link{PrintPlots}},
+#'          \code{\link{vlm}}.
+#' 
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the
 #' Apache License, Version 2.0 (the "License"); you may not use this file

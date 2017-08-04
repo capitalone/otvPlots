@@ -110,7 +110,11 @@ plot(PlotVar(bankData, myVar = "loan", weightNm = NULL, dateNm = "date",
 
 }
 \seealso{
-\code{\link{PlotCatVar}}
+Functions depend on this function:
+         \code{\link{PrintPlots}}.
 
-\code{\link{PlotNumVar}}
+This function depends on:
+         \code{\link{PlotCatVar}},
+         \code{\link{PlotNumVar}},
+         \code{\link{PrepData}}.
 }

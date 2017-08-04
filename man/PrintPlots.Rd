@@ -84,3 +84,11 @@ KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 }
 
+\seealso{
+Functions depend on this function:
+         \code{\link{vlm}}.
+
+This function depends on:
+         \code{\link{PlotVar}},
+         \code{\link{PrepData}}.
+}

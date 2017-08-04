@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical.R
 \name{PlotNumVar}
 \alias{PlotNumVar}
-\title{Boxplots and overtime plots of a numerical variable}
+\title{Create plots and summary statistics for a numerical variable}
 \usage{
 PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt = NULL,
   kSample = 50000)
@@ -39,14 +39,22 @@ long time to render. This setting has no impact on the accuracy of time
 series plots on quantiles, mean, SD, and missing and zero rates.}
 }
 \value{
-a \code{grob} (i.e., \code{ggplot} grid) object, including a boxplot
-  grouped by \code{dateGpBp}, a time series of p1, p50 and p99 grouped by 
-  \code{dateGp}, a time series of mean and +-1 SD control limits grouped by
-  \code{dateGp}, and a time series of missing and zerorates grouped by 
-  \code{dateGp}.
+\item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
+    side-byside boxplot grouped by \code{dateGpBp}, a time series plot of p1,
+    p50 (median), and p99 grouped by \code{dateGp}, a time series plot of 
+    mean and +-1 SD control limits grouped by \code{dateGp}, and a time 
+    series plot of missing and zerorates grouped by \code{dateGp}.}
+  \item{numVarSummary}{A \code{data.table}, contains global and over time
+    summary statistics, including p1, p25, p50, p75, and p99 qunatiles, mean 
+    and SD, missing and zerorates.}
 }
 \description{
-Boxplots and overtime plots of a numerical variable
+Output plots include a boxplot on the left, grouped by a courser time scale 
+(\code{dateGpBp}), and three trace plots on the right, on p1, p50, 
+and p99 qunatiles, mean and +-1 SD control limits, missing and zerorates,
+all grouped by a finer time scale as in \code{dateGp}. In addition to plots, 
+a \code{data.table} of summary statistics are generated, on global and
+over time summary statistics.
 }
 \section{License}{
 
@@ -62,17 +70,20 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
                     dateGpBp = "years")
 plot(PlotNumVar("balance", bankData, NULL, "months", "years", 
                  skewOpt = NULL, kSample = NULL)$p)
 }
 \seealso{
-\code{\link{PlotDist}}
+Functions depend on this function:
+         \code{\link{PlotVar}}.
 
-\code{\link{PlotQuantiles}}
-
-\code{\link{PlotMean}}
-
-\code{\link{PlotRates}}
+This function depends on:
+         \code{\link{SummaryStats}},
+         \code{\link{PlotDist}},
+         \code{\link{PlotQuantiles}},
+         \code{\link{PlotMean}},
+         \code{\link{PlotRates}},
+         \code{\link{PrepData}}.
 }

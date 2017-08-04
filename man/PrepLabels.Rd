@@ -42,3 +42,8 @@ specific language governing permissions and limitations under the License.
 data(bankLabels)
 bankLabels <- PrepLabels(bankLabels)
 }
+\seealso{
+Functions depend on this function:
+         \code{\link{PrintPlots}},
+         \code{\link{vlm}}.
+}

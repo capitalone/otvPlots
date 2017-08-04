@@ -2,7 +2,7 @@
 % Please edit documentation in R/categorical.R
 \name{PlotCatVar}
 \alias{PlotCatVar}
-\title{Creates over time variable plots for a categorical variable}
+\title{Create plots and summary statistics for a categorical variable}
 \usage{
 PlotCatVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp, kCategories = 9,
   normBy = "time")
@@ -36,22 +36,24 @@ are normalized by the total counts over time from only this category. This
 illustrates changes of categories' volumns over time.}
 }
 \value{
-A list:
-  \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
-    histogram, and trace plots of categories' proportions. If the number of 
+\item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
+    bar plot, and trace plots of categories' proportions. If the number of 
     categories is larger than \code{kCategories}, then trace plots of only the
-    \code{kCategories} most prevalent categories are be plotted.}
+    \code{kCategories} most prevalent categories are be plotted. For a binary
+    variable, only the trace plot of the less prevalent category is plotted.}
   \item{catVarSummary}{A \code{data.table}, contains categories' proportions 
-    globally and over-time in each time period in \code{dateGp}. Each row is
+    globally, and over-time in each time period in \code{dateGp}. Each row is
     a category of the categorical (or binary) variable \code{myVar}. The row
     whose \code{category == 'NA'} corresponds to missing. Categories are 
-    ordered by global prevalence in descending order.}
+    ordered by global prevalence in a descending order.}
 }
 \description{
-Output plots include a bar plot with cateogries ordered by counts,
+Output plots include a bar plot with cateogries ordered by global counts,
 and trace plots of categories' proportions over time. This function is also
 appliable to a binary varible, which is treated as categorical in this 
-package.
+package. In addition to plots, a \code{data.table} of summary statistics
+are generated, on global counts and proportions by cateory, and proportions 
+by category over time.
 }
 \section{License}{
 
@@ -67,7 +69,7 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
                     dateGpBp = "quarters", weightNm = NULL)
 # Single histogram is plotted for job type since there are 12 categories
 plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm =  NULL, 
@@ -77,13 +79,19 @@ plot(PlotCatVar(myVar = "job", dataFl = bankData, weightNm = NULL,
                      dateNm = "date", dateGp = "months", kCategories = 12)$p)
 
 
-## Binary data is treated as categorical, 
-## and only the less frequent category is plotted over time.
+## Binary data is treated as categorical,  and only the less frequent 
+## category is plotted over time.
 plot(PlotCatVar(myVar = "default", dataFl = bankData, weightNm = NULL, 
                      dateNm = "date", dateGp = "months")$p)
 }
 \seealso{
-\code{\link{PlotBarplot}}
+Functions depend on this function:
+         \code{\link{PlotVar}},
+         \code{\link{PrintPlots}},
+         \code{\link{vlm}}.
 
-\code{\link{PlotRatesOverTime}}
+This function depends on:
+         \code{\link{PlotBarplot}},
+         \code{\link{PlotRatesOverTime}},
+         \code{\link{PrepData}}.
 }

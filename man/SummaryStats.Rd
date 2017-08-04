@@ -21,9 +21,10 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 no weights (all rows recieving weight 1).}
 }
 \value{
-A \code{data.table} for use by the numerical variables' plotting 
-  funtions \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
-  \code{\link{PlotRates}}.
+\item{meltdx}{A \code{data.table} for use by the plotting funtions 
+    \code{\link{PlotMean}}, \code{\link{PlotQuantiles}}, and 
+    \code{\link{PlotRates}}.}
+  \item{numVarSummary}{A \code{data.table} of summary statistics.}
 }
 \description{
 Create summary statistics for a numerical variable
@@ -42,12 +43,12 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "quarters", 
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "quarters", 
                     dateGpBp = "years")
-mdx = SummaryStats(myVar = "age", dataFl = bankData, 
+mdx <- SummaryStats(myVar = "age", dataFl = bankData, 
                    dateGp = "quarters")$meltdx
-plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", "p50_g", "p1_g")], 
-                   "age", "quarters"))
+plot(PlotQuantiles(mdx[variable \%in\% c("p99", "p50", "p1", "p99_g", "p50_g",
+                   "p1_g")], "age", "quarters"))
 plot(PlotMean(mdx[variable \%in\% c("mean", "cl1", "cl2")], "age", "quarters"))
 plot(PlotRates(mdx, "age", "quarters"))
 }

@@ -38,6 +38,13 @@
 #'      }
 #' }
 #' @export
+#' 
+#' @seealso Functions depend on this function:
+#'          \code{\link{vlm}}.
+#' @seealso This function depends on:
+#'          \code{\link{CalcR2}},
+#'          \code{\link{PrepData}}.
+#'          
 #' @return A vector of variable names sorted by R2 of \code{lm} of the formula
 #'   \code{var} ~ \code{dateNm} (highest R2 to lowest)
 #' @section License: 
@@ -126,6 +133,14 @@ OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 #' @param imputeValue Either \code{NULL} or numeric. If \code{NULL}, model will
 #'   be fit on only non-NA components of \code{myVar}. If numeric, missing cases
 #'   of \code{myVar} will be imputed to \code{imputeValue}.
+#' @return A numeric value of R2.
+#' @export
+#'   
+#' @seealso Functions depend on this function:
+#'          \code{\link{OrderByR2}}.
+#' @seealso This function depends on:
+#'          \code{\link{PrepData}}.
+#'   
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -135,7 +150,6 @@ OrderByR2 <- function(dataFl, dateNm, buildTm = NULL, weightNm = NULL,
 #' distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
-#' @export
 
 CalcR2 <- function(myVar, dataFl, dateNm, weightNm = NULL, imputeValue = NULL) {
 

@@ -14,6 +14,13 @@
 #' @param sortVars A character vector of variable names in the order they will
 #'   be plotted. 
 #' @return A pdf of plots saved to file \code{outFl}.
+#' 
+#' @seealso Functions depend on this function:
+#'          \code{\link{vlm}}.
+#' @seealso This function depends on:
+#'          \code{\link{PlotVar}},
+#'          \code{\link{PrepData}}.
+#'          
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -125,8 +132,14 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #'   below). If \code{NULL}, only exact matches will be retuned.
 #' @return A \code{grob} (i.e., \code{ggplot} grid) object. 
 #' @export
-#' @seealso \code{\link{PlotCatVar}}
-#' @seealso \code{\link{PlotNumVar}}
+#' 
+#' @seealso Functions depend on this function:
+#'          \code{\link{PrintPlots}}.
+#' @seealso This function depends on:
+#'          \code{\link{PlotCatVar}},
+#'          \code{\link{PlotNumVar}},
+#'          \code{\link{PrepData}}.
+#'          
 #' @section License: Copyright 2016 Capital One Services, LLC Licensed under the
 #' Apache License, Version 2.0 (the "License"); you may not use this file
 #' except in compliance with the License. You may obtain a copy of the  License

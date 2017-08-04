@@ -85,3 +85,11 @@ setDT(bankData)
 PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
 OrderByR2(bankData, dateNm = "date")
 }
+\seealso{
+Functions depend on this function:
+         \code{\link{vlm}}.
+
+This function depends on:
+         \code{\link{CalcR2}},
+         \code{\link{PrepData}}.
+}

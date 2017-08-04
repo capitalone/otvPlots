@@ -98,3 +98,20 @@ bankData <- PrepData(bankData, dateNm = "date", dateGp = "months",
 ## Columns have been assigned a plotting class (nmrcl/ctgrl)
 str(bankData) 
 }
+\seealso{
+Functions depend on this function:
+         \code{\link{PlotBarplot}},
+         \code{\link{PlotRatesOverTime}},
+         \code{\link{PlotCatVar}},
+         \code{\link{SummaryStats}},
+         \code{\link{PlotMean}},
+         \code{\link{PlotQuantiles}},
+         \code{\link{PlotRates}},
+         \code{\link{PlotDist}},
+         \code{\link{PlotNumVar}},
+         \code{\link{PlotVar}},
+         \code{\link{PrintPlots}},
+         \code{\link{CalcR2}},
+         \code{\link{OrderByR2}},
+         \code{\link{vlm}}.
+}

@@ -23,6 +23,9 @@ then the \code{\link{lm.fit}} function will be called, otherwise the
 be fit on only non-NA components of \code{myVar}. If numeric, missing cases
 of \code{myVar} will be imputed to \code{imputeValue}.}
 }
+\value{
+A numeric value of R2.
+}
 \description{
 Calculates weighted R2 of a univariate weighted linear model with
 \code{dateNm} as x and \code{myVar} as y using the workhorse \code{lm.fit}
@@ -40,3 +43,10 @@ KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 }
 
+\seealso{
+Functions depend on this function:
+         \code{\link{OrderByR2}}.
+
+This function depends on:
+         \code{\link{PrepData}}.
+}

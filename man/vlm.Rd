@@ -214,15 +214,9 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 }
 }
 \seealso{
-\code{\link[otvPlots]{PrepData}}
-
-\code{\link[otvPlots]{PrepLabels}}
-
-\code{\link[otvPlots]{OrderByR2}}
-
-\code{\link[otvPlots]{PrintPlots}}
-
-\code{\link[base]{strptime}}
-
-\code{\link[data.table]{IDate}}
+This function depends on:
+         \code{\link{PrintPlots}},
+         \code{\link{OrderByR2}},
+         \code{\link{PrepData}},
+         \code{\link{PrepLabels}}.
 }

@@ -44,3 +44,10 @@ PlotBarplot(bankData, "job")
 bankData[sample.int(.N)[1:1000], education := NA]
 PlotBarplot(bankData, "education")
 }
+\seealso{
+Functions depend on this function:
+         \code{\link{PlotCatVar}}.
+
+This function depends on:
+         \code{\link{PrepData}}.
+}
