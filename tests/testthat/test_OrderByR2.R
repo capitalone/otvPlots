@@ -1,12 +1,13 @@
 library(otvPlots)
 context("Order by R-squared")
 load("../testthat/testData.rda")
-testData = setDT(testData)
+#testData = setDT(testData)
+testData = PrepData(testData, dateNm = "date", weightNm = "weight")
 
 
 testOrder <- function(out, testData){
-	cntnsVars <- names(Filter(is.cntns, testData))
-	dscrtVars <- names(Filter(is.dscrt, testData))
+	cntnsVars <- names(Filter(is.nmrcl, testData))
+	dscrtVars <- names(Filter(is.ctgrl, testData))
 		
 	# testing that number of variables in output is equal to number of classed variables in input
 	expect_equal(length(out), length(cntnsVars) + length(dscrtVars))
@@ -108,7 +109,7 @@ test_that("OrderByR2 works when kSample is too small to calculate R2, with numer
 	testOrder(out, testData)
 
 	#testing that all continous variables appear in data order
-	cntnsVars <- names(Filter(is.cntns, testData))
+	cntnsVars <- names(Filter(is.nmrcl, testData))
 	cntnsOrder <- match(cntnsVars, out)
 	expect_equal(order(cntnsOrder), 1:length(cntnsOrder))
 })

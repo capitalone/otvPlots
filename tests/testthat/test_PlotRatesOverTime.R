@@ -1,13 +1,13 @@
 library(otvPlots)
 library(proto)
-context("Plot histogram over time")
+context("Plot trace plots of categories' proportions over time")
 load("../testthat/testData.rda")
 setDT(testData)
 require(ggplot2)
 suppressMessages(PrepData(testData, dateNm = "date", 
 				 dateGp = "weeks", dateGpBp = "weeks", weightNm = "weight"))
-p <- PlotHistOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
-    weightNm = "weight", newLevels = NULL)
+p <- PlotRatesOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
+    weightNm = "weight", newLevels = NULL)$p
 test_that("expected plot elements are returned", {	
   expect_is(p$layers[[1]], "ggproto")
   expect_is(p$layers[[1]]$geom, "GeomLine")
@@ -41,8 +41,8 @@ test_that("rates are calculated correctly normalized by time", {
 })
 
 test_that("rates are calculated correctly normalized by var", {
-  p <- PlotHistOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
-                        weightNm = "weight", newLevels = NULL, normBy = "var")
+  p <- PlotRatesOverTime(dataFl = testData, dateGp = "weeks", myVar = "job",
+                        weightNm = "weight", newLevels = NULL, normBy = "var")$p
   dat = p$data
   dat[, sum := sum(rate), by = "job"]
   

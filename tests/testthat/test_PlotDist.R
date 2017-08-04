@@ -47,7 +47,7 @@ test_that("invalid log transform returns message and untransformed plot", {
 })
 
 test_that("valid log transform returns transformed scale",{
-	testData[, posBalance := ifelse(balance >= 0, balance, 0)]
+	testData[, posBalance := ifelse(balance >= 0.1, balance, 0.1)]
 	p <- PlotDist(dataFl = testData, myVar = "posBalance", dateGpBp = "weeks", skewOpt = 3)
 	expect_message(PlotDist(dataFl = testData, myVar = "posBalance", dateGpBp = "weeks", skewOpt = 3), 
 		"Scale for 'y' is already present")

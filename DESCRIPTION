@@ -1,6 +1,6 @@
 Package: otvPlots
 Title: Over Time Variable Plots
-Version: 0.1
+Version: 0.2.0
 Authors@R: c(
     person("Rebecca", "Payne", role = "aut"),
     person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut")),
