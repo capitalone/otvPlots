@@ -15,23 +15,29 @@ variables can be given a highlighted label. A custom fuzzy matching algorithm
 can be provided by the user. 
 
 Discrete and numeric variables are handled automatically and given separate 
-treatment. All binary variables are treated as categorical. Output files include:
-* A PDF file of plots, with each indivual page on one variable. For each 
-  numerical variable, the output plots include 
-** side-by-side boxplots (left), 
-** a trace plot of p1, p50 and p99 percentiles, 
-** a trace plot of mean and +-1 SD control limits, and 
-** a trace plot of missing and zerorates (bottom right).
+treatment. All binary variables are treated as categorical. 
+
+## Output files geneated by this package:
+
+1. A PDF file of plots, with each indivual page on one variable. 
+
+For each numerical variable, the output plots include 
+* side-by-side boxplots (left), 
+* a trace plot of p1, p50 and p99 percentiles, 
+* a trace plot of mean and +-1 SD control limits, and 
+* a trace plot of missing and zerorates (bottom right).
+
 For each categorical variable (including a numerical variable with no more 
   than 2 unique levels not including NA), the output plots include 
-** a frequency bar plot (left), and 
-** a grid of trace plots on categories' proportions over time (right). 
-* CSV file(s) on summary statistics of variable, both globally and over
+* a frequency bar plot (left), and 
+* a grid of trace plots on categories' proportions over time (right). 
+
+2. CSV file(s) on summary statistics of variable, both globally and over
   time. The order of variables in the CSV files are the same as in the PDF file. 
-** A CSV file for numerical varaibles, including number of observations 
+* A CSV file for numerical varaibles, including number of observations 
      (counts), p1, p25, p50, p75, and p99 qunatiles, mean, SD, missing and 
      zerorates.
-** A CSV file for categorical varaibles, including number of observations 
+* A CSV file for categorical varaibles, including number of observations 
      (counts) and categories' proportions. Each row is a category of a 
      categorical (or binary) variable. The row whose \code{category == 'NA'}
      corresponds to missing. Categories among the same variable are ordered by
