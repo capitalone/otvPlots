@@ -55,6 +55,26 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
   }
   dev.off()
   
+  ## Compute counts in each time
+  if (is.null(weightNm)){  
+    total_counts = dataFl[, list(count = .N), by = dateGp]
+  } else{
+    total_counts = dataFl[, list(count = sum(get(weightNm))), by = dateGp]
+  }
+  
+  ## Add a row of counts at the begining of catSummary
+  catSummary = rbind(as.list(rep(NA, ncol(catSummary))), catSummary)
+  catSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
+  catSummary[1, 3:4] = list(sum(total_counts), 1)
+  catSummary[1, names(catSummary)[-(1:4)] := total_counts];  
+
+  ## Add a row of counts at the begining of numSummary
+  numSummary = rbind(as.list(rep(NA, ncol(numSummary))), numSummary)
+  numSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
+  numSummary[1, 3] = sum(total_counts)
+  numSummary[1, names(numSummary)[-(1:3)] := total_counts];  
+  
+  
   return(list(catSummary = catSummary, numSummary = numSummary))
 }
 
