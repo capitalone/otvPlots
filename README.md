@@ -27,10 +27,22 @@ For each numerical variable, the output plots include
 * a trace plot of mean and +-1 SD control limits, and 
 * a trace plot of missing and zerorates (bottom right).
 
+#### Here is an example page of plots for a numerical variable 
+<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_numerical.png" 
+     alt="numerical plot" 
+   width="1028" 
+   height="560">
+
 For each categorical variable (including a numerical variable with no more 
   than 2 unique levels not including NA), the output plots include 
 * a frequency bar plot (left), and 
 * a grid of trace plots on categories' proportions over time (right). 
+
+#### Here is an example page of plots for a categorical variable 
+<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_categorical.png" 
+     alt="categorical plot" 
+   width="1028" 
+   height="560">
 
 ### CSV file(s) on summary statistics of variable, both globally and over time. 
 
@@ -44,18 +56,8 @@ The order of variables in the CSV files are the same as in the PDF file.
      corresponds to missing. Categories among the same variable are ordered by
      global prevalence in a descending order.
 
-#### Here is an example page of plots for a numerical variable 
-<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_numerical.png" 
-     alt="numerical plot" 
-   width="1285" 
-   height="700">
 
 
-#### Here is an example page of plots for a categorical variable 
-<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_categorical.png" 
-     alt="categorical plot" 
-   width="1285" 
-   height="700">
 
 # Installation
 First, *turn on the proxy*. Then, open an R (or RStudio) console and run the 
