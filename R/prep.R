@@ -165,8 +165,8 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
       warning ("Missings in weight column. Imputing to zero.")
       dataFl[is.na(get(weightNm)), (weightNm) := 0]
     }
-    # Normalize weights for consistent treatment
-    dataFl[, c(weightNm) := get(weightNm) / sum(get(weightNm))]
+    # Normalize weights for consistent treatment (total weights equals sample size)
+    dataFl[, c(weightNm) := get(weightNm) / mean(get(weightNm))]
   }
   
   # Convert date to IDate according to provided format and give warning
