@@ -30,7 +30,7 @@ For each numerical variable, the output plots include
 #### Here is an example page of plots for a numerical variable 
 <img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_numerical.png" 
      alt="numerical plot" 
-   width="1028" 
+   width="770" 
    height="560">
 
 For each categorical variable (including a numerical variable with no more 
@@ -41,7 +41,7 @@ For each categorical variable (including a numerical variable with no more
 #### Here is an example page of plots for a categorical variable 
 <img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/dev3-add_summary_outputs/figures/sample_plots_categorical.png" 
      alt="categorical plot" 
-   width="1028" 
+   width="770" 
    height="560">
 
 ### CSV file(s) on summary statistics of variable, both globally and over time. 
