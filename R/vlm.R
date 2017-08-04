@@ -64,39 +64,43 @@
 #' 
 #' ## The PrepData function should only need to be run once on a dataset, 
 #' ## after that vlm can be run with the argument dataNeedPrep = FALSE
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
-#'                    dateGpBp = "quarters")
-#' bankLabels = PrepLabels(bankLabels)
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                     dateGpBp = "quarters")
+#' bankLabels <- PrepLabels(bankLabels)
 #'
 #'\dontrun{ 
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
-#'     outFl = "bank.pdf", dataNeedPrep = FALSE)
-#' 
+#'     outFl = "bank")
+#'     
+#' ## If csv files of summary statistics are not need, set genCSV = FALSE
+#' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, genCSV = FALSE,
+#'     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
+#'     outFl = "bank")
+#'     
 #' ## If weights are provided, they will be used in all statistical calculations
 #' bankData[, weight := rnorm(.N, 1, .1)]
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
-#'             dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
-#'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL)
+#'     dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
+#'     outFl = "bank")
 #'
 #' ## Customize plotting order by passing a vector of variable names to 
 #' ## sortVars, but the "date" column must be excluded from sortVars
 #' sortVars = sort(bankLabels[varCol!="date", varCol])
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-#'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL, 
-#'             sortVars = sortVars, kCategories = 9)
+#'     dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+#'     sortVars = sortVars)
 #'             
 #' ## Create plots for a specific variable using the varNms parameter
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-#'             dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-#'             outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL, 
-#'             varNms = "age", sortVars = NULL)
+#'     dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+#'     varNms = "age", sortVars = NULL)
 #'}
 
-vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf", 
-                dataNeedPrep = FALSE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL, 
-                varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL, 
+vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", 
+                genCSV = TRUE, dataNeedPrep = FALSE, dateGp = NULL, 
+                dateGpBp = NULL, weightNm = NULL, varNms = NULL, 
+                sortVars = NULL, sortFn = NULL, selectCols = NULL, 
                 dropCols = NULL, dateFt = "%d%h%Y", buildTm = NULL, 
                 highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
                 fuzzyLabelFn = NULL, dropConstants = TRUE, kCategories = 9, ...) {
@@ -153,17 +157,17 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf",
   ## Create the plots
   if (!is.null(varNms)) {
     PrintPlots(outFl = outFl,
-               dataFl = dataFl[, c(varNms, dateNm,
-                                   dateGp, dateGpBp, weightNm), with = FALSE],
+               dataFl = dataFl[, c(varNms, dateNm, dateGp, dateGpBp, weightNm),
+                               with = FALSE],
                sortVars = sortVars[sortVars %in% varNms], dateNm = dateNm,
                dateGp = dateGp, dateGpBp = dateGpBp, weightNm = weightNm,
-               labelFl = labelFl, highlightNms = highlightNms,
+               labelFl = labelFl, genCSV = genCSV, highlightNms = highlightNms,
                skewOpt = skewOpt, kSample = kSample,
                fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories)
   } else {
     PrintPlots(outFl = outFl, dataFl = dataFl, sortVars = sortVars,
                dateNm = dateNm, dateGp = dateGp, dateGpBp = dateGpBp,
-               weightNm = weightNm, labelFl = labelFl,
+               weightNm = weightNm, labelFl = labelFl, genCSV = genCSV,
                highlightNms = highlightNms, skewOpt = skewOpt,
                kSample = kSample, fuzzyLabelFn = fuzzyLabelFn,
                kCategories = kCategories)

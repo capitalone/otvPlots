@@ -4,7 +4,7 @@
 \alias{vlm}
 \title{Create over time variable plots for variable level monitoring}
 \usage{
-vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots.pdf",
+vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", genCSV = TRUE,
   dataNeedPrep = FALSE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
   varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL,
   dropCols = NULL, dateFt = "\%d\%h\%Y", buildTm = NULL,
@@ -27,9 +27,14 @@ labels, an R object convertible to \code{data.table} (e.g., data frame) or
 contain at least 2 columns: \code{varCol} (variable names) and 
 \code{labelCol} (variable labels).}
 
-\item{outFl}{Name of output file (e.g., "otvPlots.pdf"). PDF will be
-saved to your working directory unless a path is included in \code{outFl}
-(e.g. "../plots/otvPlots.pdf").}
+\item{outFl}{Name of output file, without extension name (e.g., "bank"). 
+A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
+("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
+saved to your working directory, unless a path is included in \code{outFl}
+(e.g. "../plots/bank").}
+
+\item{genCSV}{Logical, whether to generate the two csv files of summary
+statistics for numerical and categorical variables.}
 
 \item{dataNeedPrep}{Logical, indicates if data should be run through the 
 \code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
@@ -183,34 +188,32 @@ data(bankLabels)
 
 ## The PrepData function should only need to be run once on a dataset, 
 ## after that vlm can be run with the argument dataNeedPrep = FALSE
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
-                   dateGpBp = "quarters")
-bankLabels = PrepLabels(bankLabels)
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+                    dateGpBp = "quarters")
+bankLabels <- PrepLabels(bankLabels)
 
 \dontrun{ 
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
-    outFl = "bank.pdf", dataNeedPrep = FALSE)
+    outFl = "bank")
 
 ## If weights are provided, they will be used in all statistical calculations
 bankData[, weight := rnorm(.N, 1, .1)]
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
-            dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
-            outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL)
+    dateGp = "months", dateGpBp = "quarters", weightNm = "weight", 
+    outFl = "bank")
 
 ## Customize plotting order by passing a vector of variable names to 
 ## sortVars, but the "date" column must be excluded from sortVars
 sortVars = sort(bankLabels[varCol!="date", varCol])
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-            dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-            outFl = "bank.pdf", dataNeedPrep = FALSE, kSample = NULL, 
-            sortVars = sortVars, kCategories = 9)
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    sortVars = sortVars)
             
 ## Create plots for a specific variable using the varNms parameter
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-            dateGp = "months", dateGpBp = "quarters", weightNm = NULL, 
-            outFl = "bank.pdf", dataNeedPrep = TRUE, kSample = NULL, 
-            varNms = "age", sortVars = NULL)
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    varNms = "age", sortVars = NULL)
 }
 }
 \seealso{

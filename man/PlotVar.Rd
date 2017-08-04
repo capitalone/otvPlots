@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_print.R
 \name{PlotVar}
 \alias{PlotVar}
-\title{Create overtime variable plots for one variable}
+\title{Create over time variable plots and summary statitsics for one variable}
 \usage{
 PlotVar(dataFl, myVar, weightNm, dateNm, dateGp, dateGpBp = NULL,
   labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
@@ -61,26 +61,37 @@ trace plots of only the \code{kCategories} most prevalent categories are
 plotted.}
 }
 \value{
-A \code{grob} (i.e., \code{ggplot} grid) object.
+\item{p}{A \code{grob} (i.e., \code{ggplot} grid) object. See the output
+    \code{p} of the function or \code{\link{PlotNumVar}}
+    \code{\link{PlotCatVar}} for details.}
+  \item{varSummary}{A \code{data.table} of summary statistics. See the output
+    \code{numVarSummary} of the function \code{\link{PlotNumVar}}, or the 
+    output \code{catVarSummary} of the function \code{\link{PlotCatVar}} for 
+    details.}
+  \item{varType}{Indicator of the variable's type, either \code{"nmrcl"} or 
+    \code{"ctgrl"}.}
 }
 \description{
-For a categorical variable (including a numerical variable with no more than 2
-unique levels not including NA), frequency/rate graphs are used. The output 
-includes 
-\itemize{
-\item a frequency bar plot on the left, and 
-\item a grid of trace plots on categories' proportions over time. If the
-variable contains more than \code{kCategories} number of categories, trace
-plots of only the largest \code{kCategories} will be plotted. 
-}
 For a numerical variable, the output includes 
 \itemize{
-\item side-by-side boxplotx grouped by \code{dateGpBp}, 
-\item a trace plot of p1, p50 and p99 percentiles, 
-\item a trace plot of mean and +-1 SD control limits, and 
-\item a trace plot of missing and zerorates,
+\item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
+\item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+  (top right), 
+\item a trace plot of mean and +-1 SD control limits, grouped by 
+  \code{dateGp}(middle right), and 
+\item a trace plot of missing and zerorates, grouped by \code{dateGp} 
+  (bottom right).
 }
-with all trace plots being grouped by \code{dateGp}.
+For a categorical variable (including a numerical variable with no more than 2
+unique levels not including NA), the output includes 
+\itemize{
+\item a frequency bar plot (left), and 
+\item a grid of trace plots on categories' proportions over time (right). 
+If the variable contains more than \code{kCategories} number of categories, 
+trace plots of only the largest \code{kCategories} will be plotted. 
+}
+In addition to plots, a \code{data.table} of summary statistics are generated,
+on global and over time summary statistics.
 }
 \section{License}{
  Copyright 2016 Capital One Services, LLC Licensed under the
@@ -95,9 +106,10 @@ governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+                     dateGpBp = "quarters")
 data(bankLabels)
-bankLabels = PrepLabels(bankLabels)
+bankLabels <- PrepLabels(bankLabels)
 
 ## PlotVar will treat numerical and categorical data differently. 
 ## Binary data is always treated as categorical.

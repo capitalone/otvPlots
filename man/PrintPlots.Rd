@@ -2,16 +2,18 @@
 % Please edit documentation in R/plot_print.R
 \name{PrintPlots}
 \alias{PrintPlots}
-\title{Create pdf output with plots for each variable arranged on a single page}
+\title{Create a pdf file with plots and compute summary statistics for all variables}
 \usage{
 PrintPlots(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, weightNm = NULL,
-  labelFl = NULL, highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  fuzzyLabelFn, kCategories = 9)
+  labelFl = NULL, genCSV = TRUE, highlightNms = NULL, skewOpt = NULL,
+  kSample = 50000, fuzzyLabelFn = NULL, kCategories = 9)
 }
 \arguments{
-\item{outFl}{Name of output file (e.g., "otvPlots.pdf"). PDF will be
-saved to your working directory unless a path is included in \code{outFl}
-(e.g. "../plots/otvPlots.pdf").}
+\item{outFl}{Name of output file, without extension name (e.g., "bank"). 
+A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
+("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
+saved to your working directory, unless a path is included in \code{outFl}
+(e.g. "../plots/bank").}
 
 \item{dataFl}{A \code{data.table} containing at least the following columns:
 \code{myVar}, \code{weightNm}, \code{dateGp}, \code{dateGpBp}; usually an
@@ -35,6 +37,9 @@ no weights (all rows recieving weight 1).}
 
 \item{labelFl}{A \code{data.table} containing variable labels, or \code{NULL}
 for no labels; usually an output of \code{\link{PrepLabels}}.}
+
+\item{genCSV}{Logical, whether to generate the two csv files of summary
+statistics for numerical and categorical variables.}
 
 \item{highlightNms}{Either \code{NULL} or a character vector of variables to
 recieve red label. Currently \code{NULL} means all variables will get a 
@@ -66,11 +71,15 @@ trace plots of only the \code{kCategories} most prevalent categories are
 plotted.}
 }
 \value{
-A pdf of plots saved to file \code{outFl}.
+A pdf of plots saved to file \code{outFl}.pdf, and if the argument
+  \code{genCSV == TRUE}, also two csv files of summary statistics for 
+  numerical and categorical variables.
 }
 \description{
-Creates plots and outputs results to a pdf named as \code{outFl}. Creates
-letter-sized output with each page corresponding to a single variable.
+Creates plots and outputs results to a letter-sized pdf file, with each 
+individual page containing plots on a single variable in the data. In 
+addition, two summary statistics \code{data.table} are returned, one for
+numerical variables, and one for categorical (and binary) ones.
 }
 \section{License}{
 

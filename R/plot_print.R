@@ -2,18 +2,26 @@
 #           Create output                 #
 ###########################################
 
-#' Create pdf output with plots for each variable arranged on a single page
+#' Create a pdf file with plots and compute summary statistics for all variables 
 #'
-#' Creates plots and outputs results to a pdf named as \code{outFl}. Creates
-#' letter-sized output with each page corresponding to a single variable.
-#'
+#' Creates plots and outputs results to a letter-sized pdf file, with each 
+#' individual page containing plots on a single variable in the data. In 
+#' addition, two summary statistics \code{data.table} are returned, one for
+#' numerical variables, and one for categorical (and binary) ones. 
+#' 
 #' @inheritParams PlotVar
-#' @param outFl Name of output file (e.g., "otvPlots.pdf"). PDF will be
-#'   saved to your working directory unless a path is included in \code{outFl}
-#'   (e.g. "../plots/otvPlots.pdf").
+#' @param outFl Name of output file, without extension name (e.g., "bank"). 
+#'   A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
+#'   ("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
+#'   saved to your working directory, unless a path is included in \code{outFl}
+#'   (e.g. "../plots/bank").
+#' @param genCSV Logical, whether to generate the two csv files of summary
+#'   statistics for numerical and categorical variables.    
 #' @param sortVars A character vector of variable names in the order they will
 #'   be plotted. 
-#' @return A pdf of plots saved to file \code{outFl}.
+#' @return A pdf of plots saved to file \code{outFl}.pdf, and if the argument
+#'   \code{genCSV == TRUE}, also two csv files of summary statistics for 
+#'   numerical and categorical variables. 
 #' 
 #' @seealso Functions depend on this function:
 #'          \code{\link{vlm}}.
@@ -31,11 +39,10 @@
 #' KIND, either express or implied. See the License for the specific language 
 #' governing permissions and limitations under the License.
 #' @export
-PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
-                       dateGpBp, weightNm = NULL,
-                       labelFl = NULL, highlightNms = NULL,
-                       skewOpt = NULL, kSample = 50000, fuzzyLabelFn,
-                       kCategories = 9) {
+PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, 
+                       weightNm = NULL, labelFl = NULL, genCSV = TRUE, 
+                       highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
+                       fuzzyLabelFn = NULL, kCategories = 9) {
   
   catSummary <- NULL
   numSummary <- NULL
@@ -48,69 +55,83 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
            highlightNms = highlightNms, skewOpt = skewOpt,
            fuzzyLabelFn = fuzzyLabelFn, kCategories = kCategories)
   
-  grDevices::pdf(file = outFl,  width = 11, height = 8, pointsize = 12,
-      onefile = TRUE)
+  grDevices::pdf(file = paste(outFl, '.pdf', sep = ''),  width = 11, height = 8,
+                 pointsize = 12, onefile = TRUE)
   
   for (x in plotList)  {
     grid::grid.newpage()
     grid::grid.draw(x$p)
     
-    if(x$varType == "ctgrl")
-      catSummary = rbind(catSummary, x$varSummary) 
-
-    if(x$varType == "nmrcl")
-      numSummary = rbind(numSummary, x$varSummary) 
+    if(genCSV == TRUE){
+      if(x$varType == "ctgrl")
+        catSummary = rbind(catSummary, x$varSummary) 
+      if(x$varType == "nmrcl")
+        numSummary = rbind(numSummary, x$varSummary) 
+    }  
   }
   dev.off()
   
-  ## Compute counts in each time
-  if (is.null(weightNm)){  
-    total_counts = dataFl[, list(count = .N), by = dateGp]
-  } else{
-    total_counts = dataFl[, list(count = sum(get(weightNm))), by = dateGp]
+  ## Generate CSV files
+  if(genCSV == TRUE){
+    ## Compute counts in each time
+    if (is.null(weightNm)){  
+      total_counts = dataFl[, list(count = .N), by = dateGp]
+    } else{
+      total_counts = dataFl[, list(count = sum(get(weightNm))), by = dateGp]
+    }
+    total_counts = dcast(total_counts, . ~ months, value.var = 'count')
+    total_counts[, . := NULL]
+  
+    ## For numerical variables
+    if(!is.null(numSummary)){
+      ## Add a row of counts at the begining of numSummary
+      numSummary = rbind(as.list(rep(NA, ncol(numSummary))), numSummary)
+      numSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
+      numSummary[1, 3] = sum(total_counts)
+      numSummary[1, names(numSummary)[-(1:3)] := total_counts];  
+      ## Write the csv file
+      fwrite(numSummary, file = paste(outFl, '_numerical_summary.csv', sep = ''))
+    }
+    
+    ## For categorical variables
+    if(!is.null(catSummary)){
+      ## Add a row of counts at the begining of catSummary
+      catSummary = rbind(as.list(rep(NA, ncol(catSummary))), catSummary)
+      catSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
+      catSummary[1, 3:4] = list(sum(total_counts), 1)
+      catSummary[1, names(catSummary)[-(1:4)] := total_counts];  
+      ## Write the csv file
+      fwrite(catSummary, file = paste(outFl, '_categorical_summary.csv', sep = ''))
+    }  
   }
-  total_counts = dcast(total_counts, . ~ months, value.var = 'count')
-  total_counts[, . := NULL]
-  
-  ## Add a row of counts at the begining of catSummary
-  catSummary = rbind(as.list(rep(NA, ncol(catSummary))), catSummary)
-  catSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
-  catSummary[1, 3:4] = list(sum(total_counts), 1)
-  catSummary[1, names(catSummary)[-(1:4)] := total_counts];  
-
-  ## Add a row of counts at the begining of numSummary
-  numSummary = rbind(as.list(rep(NA, ncol(numSummary))), numSummary)
-  numSummary[1, 1:2] = list('ALL_DATA', 'COUNTS')
-  numSummary[1, 3] = sum(total_counts)
-  numSummary[1, names(numSummary)[-(1:3)] := total_counts];  
-  
-  
-  return(list(catSummary = catSummary, numSummary = numSummary))
 }
 
 ###########################################
 #          Main Plot Function             #
 ###########################################
 
-#' Create overtime variable plots for one variable
+#' Create over time variable plots and summary statitsics for one variable
 #' 
-#' For a categorical variable (including a numerical variable with no more than 2
-#' unique levels not including NA), frequency/rate graphs are used. The output 
-#' includes 
-#' \itemize{
-#' \item a frequency bar plot on the left, and 
-#' \item a grid of trace plots on categories' proportions over time. If the
-#' variable contains more than \code{kCategories} number of categories, trace
-#' plots of only the largest \code{kCategories} will be plotted. 
-#' }
 #' For a numerical variable, the output includes 
 #' \itemize{
-#' \item side-by-side boxplotx grouped by \code{dateGpBp}, 
-#' \item a trace plot of p1, p50 and p99 percentiles, 
-#' \item a trace plot of mean and +-1 SD control limits, and 
-#' \item a trace plot of missing and zerorates,
+#' \item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
+#' \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+#'   (top right), 
+#' \item a trace plot of mean and +-1 SD control limits, grouped by 
+#'   \code{dateGp}(middle right), and 
+#' \item a trace plot of missing and zerorates, grouped by \code{dateGp} 
+#'   (bottom right).
 #' }
-#' with all trace plots being grouped by \code{dateGp}.
+#' For a categorical variable (including a numerical variable with no more than 2
+#' unique levels not including NA), the output includes 
+#' \itemize{
+#' \item a frequency bar plot (left), and 
+#' \item a grid of trace plots on categories' proportions over time (right). 
+#' If the variable contains more than \code{kCategories} number of categories, 
+#' trace plots of only the largest \code{kCategories} will be plotted. 
+#' }
+#' In addition to plots, a \code{data.table} of summary statistics are generated,
+#' on global and over time summary statistics. 
 #'
 #' @inheritParams PlotCatVar
 #' @inheritParams PlotNumVar
@@ -130,7 +151,16 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #'   to the variable given by the second parameter. This function should 
 #'   describe how fuzzy matching should be performed to find labels (see example
 #'   below). If \code{NULL}, only exact matches will be retuned.
-#' @return A \code{grob} (i.e., \code{ggplot} grid) object. 
+#' @return
+#'   \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object. See the output
+#'     \code{p} of the function or \code{\link{PlotNumVar}}
+#'     \code{\link{PlotCatVar}} for details.}
+#'   \item{varSummary}{A \code{data.table} of summary statistics. See the output
+#'     \code{numVarSummary} of the function \code{\link{PlotNumVar}}, or the 
+#'     output \code{catVarSummary} of the function \code{\link{PlotCatVar}} for 
+#'     details.}
+#'   \item{varType}{Indicator of the variable's type, either \code{"nmrcl"} or 
+#'     \code{"ctgrl"}.}
 #' @export
 #' 
 #' @seealso Functions depend on this function:
@@ -150,9 +180,10 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                      dateGpBp = "quarters")
 #' data(bankLabels)
-#' bankLabels = PrepLabels(bankLabels)
+#' bankLabels <- PrepLabels(bankLabels)
 #'
 #' ## PlotVar will treat numerical and categorical data differently. 
 #' ## Binary data is always treated as categorical.
