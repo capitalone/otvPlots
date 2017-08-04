@@ -17,7 +17,6 @@ Imports:
     gridExtra (>= 2.2.1),
     Hmisc (>= 3.17-4),
     moments,
-    quantreg,
     scales (>= 0.4.0),
     stringi (>= 1.1.1)
 License: file LICENSE
