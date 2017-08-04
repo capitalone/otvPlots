@@ -9,7 +9,7 @@ PrintPlots(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp, weightNm = NULL,
   kSample = 50000, fuzzyLabelFn = NULL, kCategories = 9)
 }
 \arguments{
-\item{outFl}{Name of output file, without extension name (e.g., "bank"). 
+\item{outFl}{Name of the output file, with no extension names (e.g., "bank"). 
 A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
 ("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
 saved to your working directory, unless a path is included in \code{outFl}

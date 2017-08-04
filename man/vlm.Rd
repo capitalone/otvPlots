@@ -2,7 +2,7 @@
 % Please edit documentation in R/vlm.R
 \name{vlm}
 \alias{vlm}
-\title{Create over time variable plots for variable level monitoring}
+\title{Create over time variable plots and summary statistics for variable level monitoring}
 \usage{
 vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", genCSV = TRUE,
   dataNeedPrep = FALSE, dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
@@ -27,7 +27,7 @@ labels, an R object convertible to \code{data.table} (e.g., data frame) or
 contain at least 2 columns: \code{varCol} (variable names) and 
 \code{labelCol} (variable labels).}
 
-\item{outFl}{Name of output file, without extension name (e.g., "bank"). 
+\item{outFl}{Name of the output file, with no extension names (e.g., "bank"). 
 A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
 ("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
 saved to your working directory, unless a path is included in \code{outFl}
@@ -153,7 +153,44 @@ A pdf file of VLM report saved as \code{outFl}.
 \description{
 Prepares input dataset and labels, sorts variables according to either user 
 input or correlation with time (among numerical variables only), 
-and outputs the plots to a pdf file, with each page about one variable.
+and create output files including:
+\itemize{
+ \item A PDF file of plots saved as \code{outFl}.pdf, with each indivual page 
+ on one variable. For each numerical variable, the output plots include 
+ \itemize{
+   \item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
+   \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+     (top right), 
+   \item a trace plot of mean and +-1 SD control limits, grouped by 
+     \code{dateGp}(middle right), and 
+   \item a trace plot of missing and zerorates, grouped by \code{dateGp} 
+     (bottom right).
+  }
+  For each categorical variable (including a numerical variable with no more 
+  than 2 unique levels not including NA), the output plots include 
+  \itemize{
+    \item a frequency bar plot (left), and 
+    \item a grid of trace plots on categories' proportions over time (right). 
+      If the variable contains more than \code{kCategories} number of 
+      categories, trace plots of only the largest \code{kCategories} will be 
+      plotted. If the variable contains only two categories, then only the 
+      trace plot of the less prevalent cateogy will be plotted.
+  }
+  \item CSV file(s) on summary statistics of variable, both globally and over
+  time aggregated by \code{dateGp}. The order of variables in the CSV files
+  are the same as in the PDF file. 
+  \itemize{
+    \item For numerical varaible, number of observations (counts), p1, p25, 
+    p50, p75, and p99 qunatiles, mean, SD, missing and zerorates are saved
+    as \code{outFl}_numerical_summary.csv.
+    \item For categorical varaible, number of observations (counts) and 
+    categories' proportions are saved as \code{outFl}_categorical_summary.csv. 
+    Each row is a category of a categorical (or binary) variable \code{myVar}.
+    The row whose \code{category == 'NA'} corresponds to missing. Categories
+    among the same variable are ordered by global prevalence in a descending 
+    order.
+  }
+}
 }
 \details{
 If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
@@ -196,7 +233,12 @@ bankLabels <- PrepLabels(bankLabels)
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
     sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
     outFl = "bank")
-
+    
+## If csv files of summary statistics are not need, set genCSV = FALSE
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, genCSV = FALSE,
+    sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", 
+    outFl = "bank")
+    
 ## If weights are provided, they will be used in all statistical calculations
 bankData[, weight := rnorm(.N, 1, .1)]
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
@@ -205,7 +247,7 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 
 ## Customize plotting order by passing a vector of variable names to 
 ## sortVars, but the "date" column must be excluded from sortVars
-sortVars = sort(bankLabels[varCol!="date", varCol])
+sortVars <- sort(bankLabels[varCol!="date", varCol])
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
     dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
     sortVars = sortVars)

@@ -10,7 +10,7 @@
 #' numerical variables, and one for categorical (and binary) ones. 
 #' 
 #' @inheritParams PlotVar
-#' @param outFl Name of output file, without extension name (e.g., "bank"). 
+#' @param outFl Name of the output file, with no extension names (e.g., "bank"). 
 #'   A pdf file of plots ("bank.pdf"), and two csv files of summary statistics
 #'   ("bank_categorical_summary.csv" and "bank_numerical_summary.csv") will be
 #'   saved to your working directory, unless a path is included in \code{outFl}
@@ -106,9 +106,9 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp,
   }
 }
 
-###########################################
-#          Main Plot Function             #
-###########################################
+###############################################
+#   Main Plot Function for a single variable  #
+###############################################
 
 #' Create over time variable plots and summary statitsics for one variable
 #' 

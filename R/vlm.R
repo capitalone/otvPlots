@@ -2,11 +2,48 @@
 #          The Main Function              #
 ###########################################
 
-#' Create over time variable plots for variable level monitoring
+#' Create over time variable plots and summary statistics for variable level monitoring
 #' 
 #' Prepares input dataset and labels, sorts variables according to either user 
 #' input or correlation with time (among numerical variables only), 
-#' and outputs the plots to a pdf file, with each page about one variable.
+#' and create output files including:
+#' \itemize{
+#'  \item A PDF file of plots saved as \code{outFl}.pdf, with each indivual page 
+#'  on one variable. For each numerical variable, the output plots include 
+#'  \itemize{
+#'    \item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
+#'    \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+#'      (top right), 
+#'    \item a trace plot of mean and +-1 SD control limits, grouped by 
+#'      \code{dateGp}(middle right), and 
+#'    \item a trace plot of missing and zerorates, grouped by \code{dateGp} 
+#'      (bottom right).
+#'   }
+#'   For each categorical variable (including a numerical variable with no more 
+#'   than 2 unique levels not including NA), the output plots include 
+#'   \itemize{
+#'     \item a frequency bar plot (left), and 
+#'     \item a grid of trace plots on categories' proportions over time (right). 
+#'       If the variable contains more than \code{kCategories} number of 
+#'       categories, trace plots of only the largest \code{kCategories} will be 
+#'       plotted. If the variable contains only two categories, then only the 
+#'       trace plot of the less prevalent cateogy will be plotted.
+#'   }
+#'   \item CSV file(s) on summary statistics of variable, both globally and over
+#'   time aggregated by \code{dateGp}. The order of variables in the CSV files
+#'   are the same as in the PDF file. 
+#'   \itemize{
+#'     \item For numerical varaible, number of observations (counts), p1, p25, 
+#'     p50, p75, and p99 qunatiles, mean, SD, missing and zerorates are saved
+#'     as \code{outFl}_numerical_summary.csv.
+#'     \item For categorical varaible, number of observations (counts) and 
+#'     categories' proportions are saved as \code{outFl}_categorical_summary.csv. 
+#'     Each row is a category of a categorical (or binary) variable \code{myVar}.
+#'     The row whose \code{category == 'NA'} corresponds to missing. Categories
+#'     among the same variable are ordered by global prevalence in a descending 
+#'     order.
+#'   }
+#' }
 #' 
 #' If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
 #' \itemize{
@@ -21,6 +58,7 @@
 #'   \code{\link{vlm}} function with the arguement \code{dataNeedPrep = FALSE}.
 #'   Please see the examples for details. 
 #' }
+#' 
 #' @inheritParams PrepData
 #' @inheritParams PrepLabels
 #' @inheritParams OrderByR2
@@ -86,7 +124,7 @@
 #'
 #' ## Customize plotting order by passing a vector of variable names to 
 #' ## sortVars, but the "date" column must be excluded from sortVars
-#' sortVars = sort(bankLabels[varCol!="date", varCol])
+#' sortVars <- sort(bankLabels[varCol!="date", varCol])
 #' vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
 #'     dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
 #'     sortVars = sortVars)
