@@ -20,7 +20,7 @@ Output files include:
  \code{sortVars} or \code{sortFn}. 
  For each numerical variable, the output plots include 
  \itemize{
-   \item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
+   \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
    \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
      (top right), 
    \item a trace plot of mean and +-1 SD control limits, grouped by 
@@ -42,12 +42,12 @@ Output files include:
   time aggregated by \code{dateGp}. The order of variables in the CSV files
   are the same as in the PDF file. 
   \itemize{
-    \item For numerical varaible, number of observations (counts), p1, p25, 
+    \item For numerical varaibles, number of observations (counts), p1, p25, 
     p50, p75, and p99 qunatiles, mean, SD, missing and zerorates are saved
     as \code{outFl}_numerical_summary.csv.
-    \item For categorical varaible, number of observations (counts) and 
+    \item For categorical varaibles, number of observations (counts) and 
     categories' proportions are saved as \code{outFl}_categorical_summary.csv. 
-    Each row is a category of a categorical (or binary) variable \code{myVar}.
+    Each row is a category of a categorical (or binary) variable.
     The row whose \code{category == 'NA'} corresponds to missing. Categories
     among the same variable are ordered by global prevalence in a descending 
     order.

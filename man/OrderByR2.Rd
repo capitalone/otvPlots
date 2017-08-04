@@ -74,15 +74,8 @@ specific language governing permissions and limitations under the License.
 
 \examples{
 data(bankData)
-setDT(bankData)
-# Nothing will be returned because the variables are uncategorized. Run
-# PrepData first to get appropriate classes added to the columns.
-\dontrun{OrderByR2(bankData, dateNm = "date", buildTm = NULL)}
-# The returned vector will have the numeric columns first, sorted (pdays,
-# previous, campaign, balance, duration, age) followed by the categorical
-# variables in the same order they appear in bankData (job, marital,
-# education, etc). Binary variables are always considered categorical.
-PrepData(bankData, dateNm = "date", dateGp = "months", dateGpBp = "quarters")
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+                     dateGpBp = "quarters")
 OrderByR2(bankData, dateNm = "date")
 }
 \seealso{

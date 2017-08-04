@@ -183,15 +183,11 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 #' governing permissions and limitations under the License.
 #' @examples
 #' data(bankData)
-#' setDT(bankData)
-#' bankData[, weight := rpois(.N, 5)]
-#' bankData[, weight := weight/sum(weight)]
-#' bankData = PrepData(bankData, dateNm = "date", dateGp = "months", 
-#'                     dateGpBp = "quarters", weightNm = "weight")
+#' bankData$weight = rpois(nrow(bankData), 5)
+#' bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+#'                      dateGpBp = "quarters", weightNm = "weight")
 #' PlotRatesOverTime(dataFl = bankData, dateGp = "months", weightNm = "weight",
 #'                   myVar = "job", newLevels = NULL, normBy = "time")
-#' PlotRatesOverTime(dataFl = bankData, dateGp = "months",  weightNm = "weight",
-#'                   myVar = "job", newLevels = NULL, normBy = "var")
 #' 
 PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
                              weightNm = NULL, newLevels = NULL, kCategories = 9){ #!# previous name: PlotHistOverTime
