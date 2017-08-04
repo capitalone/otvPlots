@@ -61,6 +61,8 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
   } else{
     total_counts = dataFl[, list(count = sum(get(weightNm))), by = dateGp]
   }
+  total_counts = dcast(total_counts, . ~ months, value.var = 'count')
+  total_counts[, . := NULL]
   
   ## Add a row of counts at the begining of catSummary
   catSummary = rbind(as.list(rep(NA, ncol(catSummary))), catSummary)
