@@ -17,9 +17,9 @@ can be provided by the user.
 Discrete and numeric variables are handled automatically and given separate 
 treatment. All binary variables are treated as categorical. 
 
-## Output files geneated by this package:
+## Output files geneated by this package
 
-1. A PDF file of plots, with each indivual page on one variable. 
+### A PDF file of plots, with each indivual page on one variable. 
 
 For each numerical variable, the output plots include 
 * side-by-side boxplots (left), 
@@ -32,8 +32,9 @@ For each categorical variable (including a numerical variable with no more
 * a frequency bar plot (left), and 
 * a grid of trace plots on categories' proportions over time (right). 
 
-2. CSV file(s) on summary statistics of variable, both globally and over
-  time. The order of variables in the CSV files are the same as in the PDF file. 
+### CSV file(s) on summary statistics of variable, both globally and over time. 
+
+The order of variables in the CSV files are the same as in the PDF file. 
 * A CSV file for numerical varaibles, including number of observations 
      (counts), p1, p25, p50, p75, and p99 qunatiles, mean, SD, missing and 
      zerorates.
