@@ -181,7 +181,7 @@ vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2",
 ```
 
 # What's New in Version 0.2.0
-* Creating summary statistics aggreated global and over time, and outputing them
+* Create summary statistics aggreated global and over time, and output them
 as csv files separately for numerical and categorical variables. 
 
 * The name of the main function is changed to `vlm` (from `PlotWrapper`).
@@ -205,6 +205,6 @@ histogram (for categorical variable) -> bar plot
 
 
 # Bug Reports
-Velma is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
+The `otvPlots` package is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
 
 
