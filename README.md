@@ -184,6 +184,8 @@ vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2",
 * Creating summary statistics aggreated global and over time, and outputing them
 as csv files separately for numerical and categorical variables. 
 
+* The name of the main function is changed to `vlm` (from `PlotWrapper`).
+
 * Change to a color-blind friendly color palette.
 
 * For categorical variabls' trace plots of proportions (rates) over time, use 
