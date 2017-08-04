@@ -86,13 +86,13 @@ For running Velma on aws, there is an [ionize playbook](https://github.kdc.capit
 
 # Getting Started
 
-### Load the package
+## Load the package
 Open an R console (or RStudio). Load the `otvPlots` pacakge first (all it 
 dependent packages should be loaded automatically).
 
 ```
 library(otvPlots)
-``
+```
 
 The main function of the package is `vlm`. Before execuate this function, 
 input data need to be prepared using the `PrepData` function. 
@@ -104,38 +104,89 @@ help(vlm)
 help(PrepData)
 ```
 
-### First example
+## Examples 
 
+The data `bankData` and its labels `bankLables` are built-in datasets in the
+`otvPlots` package. 
 
-## Test it's working
-```
-example(PlotVar)
-```
-
-## Simple usage example
-```
-
- data(bankData);  setDT(bankData)
- data(bankLabels);  setDT(bankLabels)
- 
- PlotWrapper(
-   dataFl   = bankData, 
-   labelFl  = bankLabels, 
-   dateNm   = "date", 
-   dateGp   = "months", 
-   dateGpBp = "quarters", 
-   outFl    = "bank.pdf", 
-   sortFn   = "OrderByR2",
-   prepData = TRUE
-   )
+### The first example
+After running the following code, a pdf file named "bank.pdf" and two csv files
+named "bank_numerical_summary.csv" and "bank_categorical_summary.csv" will be
+generated in the current working directory. 
 
 ```
+## Load the datasets
+data(bankData)
+data(bankLabels)
+
+## Prepare data and labels
+bankData <- PrepData(bankData, dateNm = "date", dateGp = "months", 
+                     dateGpBp = "quarters")
+bankLabels <- PrepLabels(bankLabels)
+
+## Generate a pdf file of vlm plots, and csv files of summary statistics
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+    sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", outFl = "bank")
+```
+
+### More examples on the `bankData` data
+The `PrepData` function only needs to be run once on a dataset. After that `vlm`
+can berun directly with the argument `dataNeedPrep = FALSE` (the default).
+
+* If csv files of summary statistics are not need, set `genCSV = FALSE`.
+
+```
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, genCSV = FALSE,
+    sortFn = "OrderByR2", dateGp = "months", dateGpBp = "quarters", outFl = "bank2")
+```     
+* If weights are provided, they will be used in all statistical calculations
+
+```
+bankData[, weight := rnorm(.N, 1, .1)]
+bankData[, weight := weight / mean(weight)]
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
+    dateGp = "months", dateGpBp = "quarters", weightNm = "weight", outFl = "bank3")
+```
+
+* Customize plotting order by passing a vector of variable names to argument
+`sortVars`, but the `"date"` column must be excluded from `sortVars`
+
+```
+sortVars <- sort(bankLabels[varCol!="date", varCol])
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    sortVars = sortVars)
+```
+
+* Create plots for a specific variable using the `varNms` argument
+
+```
+vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    varNms = "age", sortVars = NULL)
+```
+
+### Example: input from a csv file
+Suppose in the working directory, the data is in the format of a csv file
+named "bd_efx_fc_mergable_sample_rand.csv". 
+
+```
+## Prep data first
+bd_efx = PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
+                   dateGp = "months", dateGpBp = "quarters")
+                   
+## Then run the vlm function
+vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2", 
+    dateGp = "months", dateGpBp = "quarters", outFl = "bd_efx")
+```
+
+
 
 # Bug Reports
 Velma is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
 
 
-## New changes
+## What's new in version 0.2.0
 * For categorical variabls' rate trace plots over time, use percentage instead of fraction as y-axis label.
 
 * Previously, for a categorial varaible with more than `kCategories` number of categories, no traceplots of categories' proportions are displayed. In the new version, 
