@@ -32,6 +32,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp,
   
   catSummary <- NULL
   numSummary <- NULL
+  . <- NULL
   
   plotList <-
     lapply(sortVars, PlotVar,
