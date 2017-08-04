@@ -4,12 +4,13 @@
 
 #' Create over time variable plots and summary statistics for variable level monitoring
 #' 
-#' Prepares input dataset and labels, sorts variables according to either user 
-#' input or correlation with time (among numerical variables only), 
-#' and create output files including:
+#' Sorts variables according to either user input or correlation with time 
+#' (among numerical variables only), and create output files including:
 #' \itemize{
 #'  \item A PDF file of plots saved as \code{outFl}.pdf, with each indivual page 
-#'  on one variable. For each numerical variable, the output plots include 
+#'  on one variable. Variables are plotted in the order indicated in the argument
+#'  \code{sortVars} or \code{sortFn}. 
+#'  For each numerical variable, the output plots include 
 #'  \itemize{
 #'    \item side-by-side boxplotx grouped by \code{dateGpBp} (left), 
 #'    \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
@@ -73,12 +74,13 @@
 #'   The function may take the following variables as input: \code{dataFl}, 
 #'   \code{dateNm}, \code{buildTm}, \code{weightNm}, \code{kSample}. Currently, 
 #'   the only build-in sorting function is \code{\link{OrderByR2}}, which sorts
-#'   numerical variables in the order of strength of linear association with date. 
+#'   numerical variables in the order of strength of linear association with date,
+#'   and adds categorical (and binary) variables sorted in alphabetical order
+#'   after the numerical ones. 
 #' @param dataNeedPrep Logical, indicates if data should be run through the 
 #'   \code{\link{PrepData}} function. This should be set to \code{TRUE} unless 
 #'   the \code{\link{PrepData}} function has been applied to the input data 
 #'   \code{dataFl}. 
-#' @return A pdf file of VLM report saved as \code{outFl}.
 #' @export
 #' 
 #' @seealso This function depends on:
