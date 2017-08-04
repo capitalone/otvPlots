@@ -180,23 +180,29 @@ vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2",
     dateGp = "months", dateGpBp = "quarters", outFl = "bd_efx")
 ```
 
+# What's New in Version 0.2.0
+* Creating summary statistics aggreated global and over time, and outputing them
+as csv files separately for numerical and categorical variables. 
+
+* Change to a color-blind friendly color palette.
+
+* For categorical variabls' trace plots of proportions (rates) over time, use 
+percentage instead of fraction as the y-axis label.
+
+* Previously, for a categorial varaible with more than `kCategories` number of 
+categories, no traceplots of categories' proportions are displayed. In Version
+0.2.0, trace plots of the `kCategories` most prevalent categories will be plotted. 
+
+* For numerical variables' boxplots, only apply log transformation if the 
+variable is all positive (no zeros).
+
+* Change of terminology:
+continouous variable -> numerical variable
+discrete variable -> categorical variable
+histogram (for categorical variable) -> bar plot
 
 
 # Bug Reports
 Velma is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
 
 
-## What's new in version 0.2.0
-* For categorical variabls' rate trace plots over time, use percentage instead of fraction as y-axis label.
-
-* Previously, for a categorial varaible with more than `kCategories` number of categories, no traceplots of categories' proportions are displayed. In the new version, 
-trace plots of the `kCategories` most prevalent categories will be plotted. 
-
-* Change quantile plots with color-blind friendly color palette
-
-* Only apply log transformation for boxplots if the variable is all positive (no zeros).
-
-* Change of terminology:
-** continouous variable -> numerical variable
-** discrete variable -> categorical variable
-** histogram (for categorical variable) -> bar plot
