@@ -1,16 +1,21 @@
 # Bug Reports
-Velma is now being maintained by Zoey Zhu (Zoey.Zhu@capitalone.com)
+Velma is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
 
 # Installation
+First, turn on the proxy. Then, open an R (or RStudio) console and run the 
+following code:
 
+1. Install the `devtools` package if not yet (You only need to do this once, so
+feel free to skip this step if the `devtools` is already installed.)
 ```
-Sys.setenv(https_proxy="https://EID:SSO@proxy.kdc.capitalone.com:8099")
-Sys.setenv(http_proxy="https://EID:SSO@proxy.kdc.capitalone.com:8099")
-# On AWS, I found I had the most success with the Iowa State CRAN repo
-# This isn't necessary on local, and results may vary on statgw
-options(repos = "https://mirror.las.iastate.edu/CRAN/")
 install.packages("devtools")
-devtools::install_github("JamesFiedler/Velma", host="github.kdc.capitalone.com/api/v3")
+```
+You will be asked to select a CRAN mirror. Usually, any mirror near your area
+is fine. I usually choose USA (CA 1). 
+
+2. Install the `otvPlots` package (i.e., the Velma package).
+```
+devtools::install_github("YingboLi/Velma", host="github.kdc.capitalone.com/api/v3")
 ```
 
 You can also download the latest build from the issues page, or build the package yourself by cloning the repo, setting your working directory to the otvPlots/Velma folder and running `devtools::build() `. 
