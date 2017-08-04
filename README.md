@@ -52,12 +52,9 @@ The order of variables in the CSV files are the same as in the PDF file.
      zerorates.
 * A CSV file for categorical varaibles, including number of observations 
      (counts) and categories' proportions. Each row is a category of a 
-     categorical (or binary) variable. The row whose \code{category == 'NA'}
+     categorical (or binary) variable. The row whose `category == 'NA'`
      corresponds to missing. Categories among the same variable are ordered by
      global prevalence in a descending order.
-
-
-
 
 # Installation
 First, *turn on the proxy*. Then, open an R (or RStudio) console and run the 
@@ -89,22 +86,26 @@ For running Velma on aws, there is an [ionize playbook](https://github.kdc.capit
 
 # Getting Started
 
-
-
-
-## Installation on statgw 
-
-Use of statgw for R development is not recommended. AWS or local R will be more stable. If you must, follow the tips [here](https://github.kdc.capitalone.com/FSGalaxyVulcan/Infrastructure/wiki/R-on-the-server) to fix some known issues with the statgw server.
-
-
-# Getting started
-
-### Velma is extensively documented using R's man pages, so please check out the documentation to see all of the options and many additional usage examples
+### Load the package
+Open an R console (or RStudio). Load the `otvPlots` pacakge first (all it 
+dependent packages should be loaded automatically).
 
 ```
 library(otvPlots)
-?PlotWrapper
+``
+
+The main function of the package is `vlm`. Before execuate this function, 
+input data need to be prepared using the `PrepData` function. 
+**Please check out the help files to see all options and many usage examples 
+(highly recommended!)**
+
 ```
+help(vlm)
+help(PrepData)
+```
+
+### First example
+
 
 ## Test it's working
 ```
