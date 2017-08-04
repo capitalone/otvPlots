@@ -199,8 +199,11 @@ categories, no traceplots of categories' proportions are displayed. In Version
 variable is all positive (no zeros).
 
 * Change of terminology:
+
 continouous variable -> numerical variable
+
 discrete variable -> categorical variable
+
 histogram (for categorical variable) -> bar plot
 
 
