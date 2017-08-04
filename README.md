@@ -154,7 +154,7 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 ```
 sortVars <- sort(bankLabels[varCol!="date", varCol])
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank4", 
     sortVars = sortVars)
 ```
 
@@ -162,7 +162,7 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 
 ```
 vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels, 
-    dateGp = "months", dateGpBp = "quarters", outFl = "bank", 
+    dateGp = "months", dateGpBp = "quarters", outFl = "bank5", 
     varNms = "age", sortVars = NULL)
 ```
 
