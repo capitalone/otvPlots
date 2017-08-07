@@ -9,7 +9,7 @@ vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", genCSV = TRUE,
   varNms = NULL, sortVars = NULL, sortFn = NULL, selectCols = NULL,
   dropCols = NULL, dateFt = "\%d\%h\%Y", buildTm = NULL,
   highlightNms = NULL, skewOpt = NULL, kSample = 50000,
-  fuzzyLabelFn = NULL, dropConstants = TRUE, kCategories = 9, ...)
+  fuzzyLabelFn = NULL, dropConstants = FALSE, kCategories = 9, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using
