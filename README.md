@@ -181,7 +181,6 @@ data prep step by specifying the argument "dateFt", as follows.
 # bd_efx <- PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
 #                   dateGp = "months", dateGpBp = "quarters", dateFt = "%m/%d/%y")
 
-                   
 ## Then run the vlm function
 vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2", 
     dateGp = "months", dateGpBp = "quarters", outFl = "bd_efx")
