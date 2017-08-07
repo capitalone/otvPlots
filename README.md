@@ -203,11 +203,14 @@ continouous variable -> numerical variable,
 discrete variable -> categorical variable, 
 histogram (for categorical variable) -> bar plot
 
-* A variable will be treated as a binary (and thus, categorical) variable, if
+* A variable will be treated as a binary variable, and thus, a categorical 
+variable if
 (1) it contains only two different values, with no `NA`s, or
 (2) it contains only two different values, with some `NA`s, or
-(3) it contains only one values, with some `NA`s (NEW!), or 
-(4) it only contains `NA`s, with argument `dropConstants == FALSE` (NEW!)
+(3) it contains only one values, with no `NA`s 
+(if the argument `dropConstants == FALSE`), or 
+(4) it contains only one values, with some `NA`s, or 
+(5) it only contains `NA`s.
 
 
 # Bug Reports
