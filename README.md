@@ -204,7 +204,7 @@ discrete variable -> categorical variable,
 histogram (for categorical variable) -> bar plot
 
 * A variable will be treated as a binary variable, and thus, a categorical 
-variable if
+variable, if
 (1) it contains only two different values, with no `NA`, or
 (2) it contains only two different values, with some `NA`, or
 (3) it contains only one value, with no `NA` 
