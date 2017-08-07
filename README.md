@@ -172,8 +172,15 @@ named "bd_efx_fc_mergable_sample_rand.csv".
 
 ```
 ## Prep data first
-bd_efx = PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
+bd_efx <- PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
                    dateGp = "months", dateGpBp = "quarters")
+                   
+## Note: if the "app_date" column has a different date format, say "%m/%d/%y" (in
+this case, a sample entry would be "4/11/13"), then we can modify the above 
+data prep step by specifying the argument "dateFt", as follows.
+# bd_efx <- PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
+#                   dateGp = "months", dateGpBp = "quarters", dateFt = "%m/%d/%y")
+
                    
 ## Then run the vlm function
 vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2", 
@@ -202,6 +209,19 @@ variable is all positive (no zeros).
 continouous variable -> numerical variable, 
 discrete variable -> categorical variable, 
 histogram (for categorical variable) -> bar plot
+
+* A variable will be treated as a binary variable, and thus, a categorical 
+variable, if
+(1) it contains only two different values, with no `NA`, or
+(2) it contains only two different values, with some `NA`, or
+(3) it contains only one value, with no `NA` 
+(if the argument `dropConstants == FALSE`), or 
+(4) it contains only one value, with some `NA`, or 
+(5) it only contains `NA`.
+
+* By default, contanst columns will be included in plotting and summary statistics
+outputs, i.e., the default value of the argument `dropConstants` is changed to
+`FALSE`. 
 
 
 # Bug Reports
