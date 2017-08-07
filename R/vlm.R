@@ -143,7 +143,7 @@ vlm <- function(dataFl, dateNm, labelFl = NULL, outFl = "otvplots",
                 sortVars = NULL, sortFn = NULL, selectCols = NULL, 
                 dropCols = NULL, dateFt = "%d%h%Y", buildTm = NULL, 
                 highlightNms = NULL, skewOpt = NULL, kSample = 50000, 
-                fuzzyLabelFn = NULL, dropConstants = TRUE, kCategories = 9, ...) {
+                fuzzyLabelFn = NULL, dropConstants = FALSE, kCategories = 9, ...) {
   
   ## Assert statements about inputs
   if (!is.null(sortVars) & !is.null(sortFn)) {

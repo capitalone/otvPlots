@@ -6,7 +6,7 @@
 \usage{
 PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   dateFt = "\%d\%h\%Y", dateGp = NULL, dateGpBp = NULL, weightNm = NULL,
-  varNms = NULL, dropConstants = TRUE, ...)
+  varNms = NULL, dropConstants = FALSE, ...)
 }
 \arguments{
 \item{dataFl}{Either the name of an object that can be converted using

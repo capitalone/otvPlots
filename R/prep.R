@@ -95,7 +95,7 @@
  
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                      dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
-                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
+                     weightNm = NULL, varNms = NULL, dropConstants = FALSE, ...){
   
   ## Remove all '/', '-', '"', and spaces in the string inputs: dateNm, weightNm
   dateNm <- gsub("/|\\-|\"|\\s", "", dateNm)
@@ -148,7 +148,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   if (!is.null(dropCols) & is.character(dropCols)) {
     dropCols <- gsub("/|\\-|\"|\\s", "", dropCols)
   }
-  ## Apply selectCols and dropCols only apply to non-csv input dataFl.
+  ## Apply selectCols and dropCols to non-csv input dataFl.
   if (!csvfile) {
     if (!is.null(selectCols)) {
       if (is.character(selectCols)) {
@@ -292,7 +292,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
     class(z)[1] %in% c("character", "factor"), logical(1) )
   # Logical indicator vector: binary variables (nominal or numeric)
   bin_ind  <- sapply(dataFl[, c(vars), with = FALSE], function(z)
-    uniqueN(stats::na.omit(z)) == 2)
+    uniqueN(stats::na.omit(z)) <= 2)
   
   ## Names of variables to be plots. 
   ## Binary conitnous variables are treated as categorical.
