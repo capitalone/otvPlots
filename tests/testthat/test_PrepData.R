@@ -191,9 +191,9 @@ test_that("dropConstants works as expected", {
 	
 	# test that attempting to group at too coarse a level results in the grouping variable being dropped 
 	out <- suppressWarnings(PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
- 		   dateGp = "weeks", dateGpBp = "quarters", dateFt = "%d-%m-%Y"))
+ 		   dateGp = "weeks", dateGpBp = "quarters", dateFt = "%d-%m-%Y", dropConstants = TRUE))
     expect_warning(PrepData("../testthat/rawData.csv", dateNm = "date", weightNm = "weight", 
- 		   dateGp = "weeks", dateGpBp = "quarters", dateFt = "%d-%m-%Y"),
+ 		   dateGp = "weeks", dateGpBp = "quarters", dateFt = "%d-%m-%Y", dropConstants = TRUE),
  		   "The following variables have no variability")
 	expect_null(out[["quarters"]])
 	
