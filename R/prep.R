@@ -95,7 +95,7 @@
  
 PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
                      dateFt = "%d%h%Y", dateGp = NULL, dateGpBp = NULL,
-                     weightNm = NULL, varNms = NULL, dropConstants = TRUE, ...){
+                     weightNm = NULL, varNms = NULL, dropConstants = FALSE, ...){
   
   ## Remove all '/', '-', '"', and spaces in the string inputs: dateNm, weightNm
   dateNm <- gsub("/|\\-|\"|\\s", "", dateNm)
