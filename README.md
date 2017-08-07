@@ -207,9 +207,9 @@ histogram (for categorical variable) -> bar plot
 variable if
 (1) it contains only two different values, with no `NA`, or
 (2) it contains only two different values, with some `NA`, or
-(3) it contains only one values, with no `NA` 
+(3) it contains only one value, with no `NA` 
 (if the argument `dropConstants == FALSE`), or 
-(4) it contains only one values, with some `NA`, or 
+(4) it contains only one value, with some `NA`, or 
 (5) it only contains `NA`.
 
 
