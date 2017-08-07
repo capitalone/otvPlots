@@ -129,7 +129,7 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
   ## A subset dataset to work on
   dataSub <- dataFl[, c(myVar, weightNm), with = FALSE]
   ## NA is converted to a character, i.e., treated as a new category
-  dataSub[is.na(get(myVar)), (myVar) := "NA"]
+  dataSub[is.na(get(myVar)) | get(myVar) == "", (myVar) := "NA"]
   
   ## Create glbTotals, a frequency table of myVar 
   if (is.null(weightNm)) {
@@ -203,7 +203,7 @@ PlotRatesOverTime <- function(dataFl, dateGp, myVar, normBy = "time",
   ## A subset dataset to work on
   dataSub <- dataFl[, c(dateGp, myVar, weightNm), with = FALSE]
   ## NA is converted to a character, i.e., treated as a new category
-  dataSub[is.na(get(myVar)), (myVar) := "NA"]
+  dataSub[is.na(get(myVar)) | get(myVar) == "", (myVar) := "NA"]
   
   ## Create glbTotals, a frequency table of myVar 
   ## Create newLevels, a vector of category names, in descending order of counts
