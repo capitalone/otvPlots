@@ -79,7 +79,8 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp,
     } else{
       total_counts = dataFl[, list(count = sum(get(weightNm))), by = dateGp]
     }
-    total_counts = dcast(total_counts, . ~ months, value.var = 'count')
+    names(total_counts)[1] = "date_group"
+    total_counts = dcast(total_counts, . ~ date_group, value.var = 'count')
     total_counts[, . := NULL]
   
     ## For numerical variables
