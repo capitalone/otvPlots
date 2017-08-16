@@ -39,7 +39,7 @@ For each categorical variable (including a numerical variable with no more
 * a grid of trace plots on categories' proportions over time (right). 
 
 #### Here is an example page of plots for a categorical variable 
-<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/master/figures/sample_plots_categorical.png" 
+<img src="/figures/sample_plots_categorical.png" 
      alt="categorical plot" 
    width="770" 
    height="560">
