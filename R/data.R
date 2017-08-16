@@ -4,7 +4,7 @@
 #' Often, more than one contact to the same client was required, in order to 
 #' access if the product (bank term deposit) would be ('yes') or not ('no') 
 #' subscribed. Records are ordered by date (from May 2008 to November 2010), 
-#' similar to data analyzed in Moro et al., [2014].
+#' similar to data analyzed in Moro et al. [2014].
 #'
 #'
 #' @format A data frame with 45,211 rows and 19 variables:
@@ -48,24 +48,23 @@
 #' }
 #' @source \url{https://archive.ics.uci.edu/ml/datasets/Bank+Marketing}
 #' @source \cite{Lichman, M. (2013). UCI Machine Learning Repository 
-#'   [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, 
+#'   [\url{http://archive.ics.uci.edu/ml}]. Irvine, CA: University of California, 
 #'   School of Information and Computer Science.}
-#' @source \cite{S. Moro, P. Cortez, and P. Rita. A Data-Driven Approach
+#' @source \cite{S. Moro, P. Cortez, and P. Rita. (2014) A Data-Driven Approach
 #'   to Predict the Success of Bank Telemarketing. Decision Support Systems, 
-#'   Elsevier, 62:22-31, June 2014}
+#'   Elsevier, 62:22-31, June 2014.}
 "bankData"
 
 #' Labels for bankData
 #'
 #' A dataset containing the attribute labels also found in \code{\link{bankData}}.
 #' This data set is used to illustrate the \code{\link{PrepLabels}} function and
-#' other label functionality in the \code{\link{otvPlots}} package in R
+#' other label functionality in the \code{\link{otvPlots}} package in R.
 #'
 #' @format A data frame with 16 rows and 3 variables:
 #' \describe{
 #'   \item{V1}{Name of each variable in \code{\link{bankData}}.}
 #'   \item{V2}{Label of each variable in \code{\link{bankData}}.}
 #'   \item{V3}{A numeric variable, corresponding to the row number.}
-#'   ...
 #' }
 "bankLabels"

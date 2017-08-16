@@ -47,12 +47,12 @@
 \url{https://archive.ics.uci.edu/ml/datasets/Bank+Marketing}
 
 \cite{Lichman, M. (2013). UCI Machine Learning Repository 
-  [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, 
+  [\url{http://archive.ics.uci.edu/ml}]. Irvine, CA: University of California, 
   School of Information and Computer Science.}
 
-\cite{S. Moro, P. Cortez, and P. Rita. A Data-Driven Approach
+\cite{S. Moro, P. Cortez, and P. Rita. (2014) A Data-Driven Approach
   to Predict the Success of Bank Telemarketing. Decision Support Systems, 
-  Elsevier, 62:22-31, June 2014}
+  Elsevier, 62:22-31, June 2014.}
 }
 \usage{
 bankData
@@ -62,6 +62,6 @@ The marketing campaigns were based on phone calls.
 Often, more than one contact to the same client was required, in order to 
 access if the product (bank term deposit) would be ('yes') or not ('no') 
 subscribed. Records are ordered by date (from May 2008 to November 2010), 
-similar to data analyzed in Moro et al., [2014].
+similar to data analyzed in Moro et al. [2014].
 }
 \keyword{datasets}
