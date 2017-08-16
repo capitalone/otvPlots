@@ -28,7 +28,7 @@ For each numerical variable, the output plots include
 * a trace plot of missing and zerorates (bottom right).
 
 #### Here is an example page of plots for a numerical variable 
-<img src="https://github.kdc.capitalone.com/YingboLi/Velma/blob/master/figures/sample_plots_numerical.png" 
+<img src="/figures/sample_plots_numerical.png" 
      alt="numerical plot" 
    width="770" 
    height="560">
