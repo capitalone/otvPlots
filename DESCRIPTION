@@ -3,9 +3,9 @@ Title: Over Time Variable Plots
 Version: 0.2.0
 Authors@R: c(
     person("Rebecca", "Payne", role = "aut"),
-    person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut")),
-		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
-		person("Capital One", email = "OpenSourceOffice@capitalone.com", role = "cph"))
+    person("Zoey", "Zhu", role = c("aut")),
+		person("Yingbo", "Li", email = "opensource@capitalone.com", role = c("aut", "cre")),
+		person("Capital One", role = "cph"))
 Description: This package enables automated visualization of variable 
     distribution and change over time for predictive model building.
     It efficiently computes summary statistics aggreated by time for 
