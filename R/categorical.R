@@ -23,7 +23,7 @@
 #'   categories in that time period. This illustrates changes of categories' 
 #'   proportions over time. If \code{"var"}, then for each category, its counts 
 #'   are normalized by the total counts over time from only this category. This
-#'   illustrates changes of categories' volumns over time.
+#'   illustrates changes of categories' volumes over time.
 #' @export
 #' @return 
 #'   \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
@@ -152,14 +152,14 @@ PlotBarplot <- function(dataFl, myVar, weightNm = NULL){ #!# previous name: Plot
 }
 
 
-#' Creates trace plots of categories' propotions over time for a discrete (or
+#' Creates trace plots of categories' proportions over time for a discrete (or
 #' binary) variable
 #'
 #' @inheritParams PlotCatVar
 #' @param newLevels categories of \code{myVar} in order of global frequency
 #' @export
 #' @return A list:
-#'   \item{p}{\code{ggplot} object, trace plots of categories' propotions 
+#'   \item{p}{\code{ggplot} object, trace plots of categories' proportions 
 #'     \code{myVar} over time.}
 #'   \item{catVarSummary}{A \code{data.table}, contains categories' proportions 
 #'     globally, and over-time in each time period in \code{dateGp}. Each row is

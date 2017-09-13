@@ -33,7 +33,7 @@ or \code{"var"}. If \code{"time"}, then for each time period of
 categories in that time period. This illustrates changes of categories' 
 proportions over time. If \code{"var"}, then for each category, its counts 
 are normalized by the total counts over time from only this category. This
-illustrates changes of categories' volumns over time.}
+illustrates changes of categories' volumes over time.}
 }
 \value{
 \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 
