@@ -23,7 +23,7 @@ treatment. All binary variables are treated as categorical.
 
 For each numerical variable, the output plots include 
 * side-by-side boxplots (left), 
-* a trace plot of p1, p50 and p99 percentiles, 
+* a trace plot of p1, p50, and p99 percentiles, 
 * a trace plot of mean and +-1 SD control limits, and 
 * a trace plot of missing and zero rates (bottom right).
 
@@ -85,14 +85,14 @@ the DESCRIPTION file.
 # Getting Started
 
 ## Load the package
-Open an R console (or RStudio). Load the `otvPlots` pacakge first (all it 
+Open an R console (or RStudio). Load the `otvPlots` pacakge first (all its 
 dependent packages should be loaded automatically).
 
 ```
 library(otvPlots)
 ```
 
-The main function of the package is `vlm`. Before execuate this function, 
+The main function of the package is `vlm`. Before execute this function, 
 input data need to be prepared using the `PrepData` function. 
 **Please check out the help files to see all options and many usage examples 
 (highly recommended!)**
@@ -101,6 +101,10 @@ input data need to be prepared using the `PrepData` function.
 help(vlm)
 help(PrepData)
 ```
+
+To run Velma on AWS, there is an [ionize playbook](https://github.kdc.capitalone.com/CharlesDrotar/ionize-playbooks/tree/master/anaconda-r-velma-playbook) that automatically installs Velma. If you find that there are any out of date dependencies in this playbook, please reach out to the creator Charles Drotar (charles.drotar@capitalone.com).
+
+
 
 ## Examples 
 
@@ -129,7 +133,7 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 
 ### More examples on the `bankData` data
 The `PrepData` function only needs to be run once on a dataset. After that `vlm`
-can berun directly with the argument `dataNeedPrep = FALSE` (the default).
+can be run directly with the argument `dataNeedPrep = FALSE` (the default).
 
 * If csv files of summary statistics are not need, set `genCSV = FALSE`.
 
