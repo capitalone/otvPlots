@@ -45,8 +45,8 @@ series plots on quantiles, mean, SD, and missing and zero rates.}
     mean and +-1 SD control limits grouped by \code{dateGp}, and a time 
     series plot of missing and zerorates grouped by \code{dateGp}.}
   \item{numVarSummary}{A \code{data.table}, contains global and over time
-    summary statistics, including p1, p25, p50, p75, and p99 qunatiles, mean 
-    and SD, missing and zerorates.}
+    summary statistics, including p1, p25, p50, p75, and p99 quantiles, mean 
+    and SD, missing and zero rates.}
 }
 \description{
 Output plots include a boxplot on the left, grouped by a courser time scale 
