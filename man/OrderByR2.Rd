@@ -36,8 +36,8 @@ period to be used for anomaly detection.
      }
 }}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical

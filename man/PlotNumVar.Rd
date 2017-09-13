@@ -13,8 +13,8 @@ PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt = NULL,
 \item{dataFl}{A \code{data.table} of data; must be the output of the
 \code{\link{PrepData}} function.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{dateGp}{Name of the variable that the time series plots should be 
 grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 

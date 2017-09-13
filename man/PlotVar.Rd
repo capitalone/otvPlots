@@ -15,8 +15,8 @@ output of the \code{\link{PrepData}} function.}
 
 \item{myVar}{Name of the variable to be plotted.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{dateNm}{Name of column containing the date variable.}
 

@@ -32,8 +32,8 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{labelFl}{A \code{data.table} containing variable labels, or \code{NULL}
 for no labels; usually an output of \code{\link{PrepLabels}}.}

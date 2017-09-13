@@ -49,8 +49,8 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{varNms}{Either \code{NULL} or a vector of names or indices of variables
 to be plotted. If \code{NULL}, will default to all columns which are not 
@@ -85,7 +85,7 @@ variables will be read in.}
 of variables not to read into memory. If both \code{selectCols} and 
 \code{dropCols} are \code{NULL}, then all variables will be read in.}
 
-\item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
+\item{dateFt}{\code{\link{strptime}} format of date variable. The default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 
 \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
@@ -138,7 +138,7 @@ to the variable given by the second parameter. This function should
 describe how fuzzy matching should be performed to find labels (see example
 below). If \code{NULL}, only exact matches will be retuned.}
 
-\item{dropConstants}{Logical indicates whether or not constant (all
+\item{dropConstants}{Logical, indicates whether or not constant (all
 duplicated or NA) variables should be dropped from \code{dataFl} prior to
 plotting.}
 
