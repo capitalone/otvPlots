@@ -19,7 +19,7 @@
 #'   \code{NULL} (no transformation). If numeric, say 5, then all box plots of
 #'   a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 #'   Negative input of \code{skewOpt} will be converted to 3.
-#' @param kSample Either \code{NULL} or an positive integer. If an integer, 
+#' @param kSample Either \code{NULL} or a positive integer. If an integer, 
 #'   indicates the sample size for both drawing boxplots and ordering numerical
 #'   graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 #'   reasonable value (default is 50K) dramatically improves processing speed. 

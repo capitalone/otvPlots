@@ -22,7 +22,7 @@ period to be used for anomaly detection.
      \item Must be either \code{NULL}, a vector of length 2, or a vector of 
        length 3. 
      \item If \code{NULL}, the entire dataset will be used for 
-       ranking/anamoly detection. 
+       ranking/anomaly detection. 
      \item If a vector of length 2, the format of the dates must be
        a character vector in default R date format (e.g. "2016-01-30"). 
      \item If a vector of length 3, the first two columns must contain dates 
@@ -39,7 +39,7 @@ period to be used for anomaly detection.
 \item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
 no weights (all rows receiving weight 1).}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 
@@ -54,10 +54,10 @@ A vector of variable names sorted by R2 of \code{lm} of the formula
 }
 \description{
 Calculates R2 of a linear model of the formula \code{var} ~ \code{dateNm} for
-each \code{var} of class \code{nmrcl} (or \code{ctgrl}??) and returns a vector of
+each \code{var} of class \code{nmrcl} and returns a vector of
 variable names ordered by highest R2. The linear model can be calculated over
 a subset of dates, see details of parameter \code{buildTm}. Non-numerical
-variables are returned in alphabetical order after the sorted numberical
+variables are returned in alphabetical order after the sorted numerical
 variables.
 }
 \section{License}{

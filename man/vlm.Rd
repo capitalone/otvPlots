@@ -99,7 +99,7 @@ period to be used for anomaly detection.
      \item Must be either \code{NULL}, a vector of length 2, or a vector of 
        length 3. 
      \item If \code{NULL}, the entire dataset will be used for 
-       ranking/anamoly detection. 
+       ranking/anomaly detection. 
      \item If a vector of length 2, the format of the dates must be
        a character vector in default R date format (e.g. "2016-01-30"). 
      \item If a vector of length 3, the first two columns must contain dates 
@@ -122,7 +122,7 @@ black legend. Ignored this argument if \code{labelFl == NULL}.}
 a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 
