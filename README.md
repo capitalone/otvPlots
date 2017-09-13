@@ -82,6 +82,9 @@ Note that otvPlots/Velma does depend on R and several R packages to run. You can
 see a complete and up to date list of dependencies in the Imports field in
 the DESCRIPTION file.
 
+To run Velma on AWS, there is an [ionize playbook](https://github.kdc.capitalone.com/CharlesDrotar/ionize-playbooks/tree/master/anaconda-r-velma-playbook) that automatically installs Velma. If you find that there are any out of date dependencies in this playbook, please reach out to the creator Charles Drotar (charles.drotar@capitalone.com).
+
+
 # Getting Started
 
 ## Load the package
@@ -102,7 +105,6 @@ help(vlm)
 help(PrepData)
 ```
 
-To run Velma on AWS, there is an [ionize playbook](https://github.kdc.capitalone.com/CharlesDrotar/ionize-playbooks/tree/master/anaconda-r-velma-playbook) that automatically installs Velma. If you find that there are any out of date dependencies in this playbook, please reach out to the creator Charles Drotar (charles.drotar@capitalone.com).
 
 
 
