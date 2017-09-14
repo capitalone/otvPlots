@@ -4,7 +4,7 @@ Version: 0.2.0
 Authors@R: c(
     person("Rebecca", "Payne", role = "aut"),
     person("Zoey", "Zhu", role = c("aut")),
-		person("Yingbo", "Li", email = "opensource@capitalone.com", role = c("aut", "cre")),
+		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", role = "cph"))
 Description: This package enables automated visualization of variable 
     distribution and changes over time for predictive model building.
