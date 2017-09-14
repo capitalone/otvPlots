@@ -2,14 +2,14 @@
 An important part of model building is the "proc eyeball" sanity check. It can
 also be a painful part of the process, when you are the data scientist tasked 
 with creating and checking 10,000 or more near-identical plots. The `otvPlots`
-package (previous name: Velma) is designed to streamline this process. Velma is
+package is designed to streamline this process. `otvPlots` is
 an R package which takes a csv file as input and provides a pdf of VLM plots 
-and **csv files of summary statistics (new!)** as output, optionally ordered so 
-that *any severely abnormal time series will be at the top of the pdf*. The only
+and csv files of summary statistics as output, optionally ordered so 
+that any severely abnormal time series will be at the top of the pdf. The only
 strict requirement of the data scientist is to specify which column of the input
 data file contains the date variable. 
 
-Velma is efficiently implemented using `data.table` and `ggplot2` packages in R.
+`otvPlots` is efficiently implemented using `data.table` and `ggplot2` packages in R.
 Plots are automatically labeled if a variable dictionary is provided. Important
 variables can be given a highlighted label. A custom fuzzy matching algorithm 
 can be provided by the user. 
@@ -57,32 +57,29 @@ The order of variables in the CSV files is the same as in the PDF file.
      global prevalence in a descending order.
 
 # Installation
-First, *turn on the proxy*. Then, open an R (or RStudio) console and run the 
+Open an R (or RStudio) console and run the 
 following code:
 
 1. Install the `devtools` package if not yet. You only need to do this once, so
 feel free to skip this step if the `devtools` is already installed. You will be
-asked to select a CRAN mirror. Usually, any mirror near your area is fine. I 
-usually choose USA (CA 1). 
+asked to select a CRAN mirror. 
 
 ```
 install.packages("devtools")
 ```
 
-2. Install the `otvPlots` package (i.e., the Velma package).
+2. Install the `otvPlots` package
 ```
-devtools::install_github("YingboLi/Velma", host="github.kdc.capitalone.com/api/v3")
+devtools::install_github("capitalone/otvPlots")
 ```
 
 You can also build the package yourself by cloning the repo, setting your 
-working directory to the otvPlots/Velma folder and running `devtools::build()`
+working directory to the otvPlots folder and running `devtools::build()`
 in R, after installing the `devtools` package. 
 
-Note that otvPlots/Velma does depend on R and several R packages to run. You can
+Note that otvPlots does depend on R and several R packages to run. You can
 see a complete and up to date list of dependencies in the Imports field in
 the DESCRIPTION file.
-
-To run Velma on AWS, there is an [ionize playbook](https://github.kdc.capitalone.com/CharlesDrotar/ionize-playbooks/tree/master/anaconda-r-velma-playbook) that automatically installs Velma. If you find that there are any out of date dependencies in this playbook, please reach out to the creator Charles Drotar (charles.drotar@capitalone.com).
 
 
 # Getting Started
@@ -104,9 +101,6 @@ input data need to be prepared using the `PrepData` function.
 help(vlm)
 help(PrepData)
 ```
-
-
-
 
 ## Examples 
 
@@ -169,65 +163,5 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
     dateGp = "months", dateGpBp = "quarters", outFl = "bank5", 
     varNms = "age", sortVars = NULL)
 ```
-
-### Example: input from a csv file
-Suppose in the working directory, the data is in the format of a csv file
-named "bd_efx_fc_mergable_sample_rand.csv". 
-
-```
-## Prep data first
-bd_efx <- PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
-                   dateGp = "months", dateGpBp = "quarters")
-                   
-## Note: if the "app_date" column has a different date format, say "%m/%d/%y" 
-## (in this case, a sample entry would be "4/11/13"), then we can modify the 
-## above data prep step by specifying the argument "dateFt", as follows.
-# bd_efx <- PrepData('bd_efx_fc_mergable_sample_rand.csv', dateNm = "app_date", 
-#                   dateGp = "months", dateGpBp = "quarters", dateFt = "%m/%d/%y")
-
-## Then run the vlm function
-vlm(dataFl = bd_efx, dateNm = "app_date", sortFn = "OrderByR2", 
-    dateGp = "months", dateGpBp = "quarters", outFl = "bd_efx")
-```
-
-# What's New in Version 0.2.0
-* Create summary statistics aggregated global and over time, and output them
-as csv files separately for numerical and categorical variables. 
-
-* The name of the main function is changed to `vlm` (from `PlotWrapper`).
-
-* Change to a color-blind friendly color palette.
-
-* For categorical variables' trace plots of proportions (rates) over time, use 
-percentages instead of fractions as the y-axis label.
-
-* Previously, for a categorical variable with more than `kCategories` number of 
-categories, no traceplots of categories' proportions are displayed. In Version
-0.2.0, trace plots of the `kCategories` most prevalent categories will be plotted. 
-
-* For numerical variables' boxplots, only apply log transformation if the 
-variable is all positive (no zeros).
-
-* Change of terminology:
-continouous variable -> numerical variable, 
-discrete variable -> categorical variable, 
-histogram (for categorical variable) -> bar plot
-
-* A variable will be treated as a binary variable, and thus, a categorical 
-variable, if
-(1) it contains only two different values, with no `NA`, or
-(2) it contains only two different values, with some `NA`, or
-(3) it contains only one value, with no `NA` 
-(if the argument `dropConstants == FALSE`), or 
-(4) it contains only one value, with some `NA`, or 
-(5) it only contains `NA`.
-
-* By default, constant columns will be included in plotting and summary statistics
-outputs, i.e., the default value of the argument `dropConstants` is changed to
-`FALSE`. 
-
-
-# Bug Reports
-The `otvPlots` package is now being maintained by Yingbo Li (yingbo.li@capitalone.com)
 
 
