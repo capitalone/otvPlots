@@ -8,7 +8,7 @@
 #' in this package, including the main function \code{\link{vlm}}. 
 #' The input data \code{dataFl} must contain, at a minimum, a date column 
 #' \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-#' convereted to a \code{data.table} class, and all changes are made to it by 
+#' converted to a \code{data.table} class, and all changes are made to it by 
 #' reference.
 #' 
 #' If weights (\code{weightNm}) are provided, then it is normalized to have a
@@ -18,7 +18,7 @@
 #' @param dataFl Either the name of an object that can be converted using
 #'   \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 #'   character string containing the name of dataset that can be loaded using 
-#'   \code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+#'   \code{\link[data.table]{fread}} (e.g., a csv file). If the dataset is not in 
 #'   your working directory then \code{dataFl} must include (relative or 
 #'   absolute) path to file.
 #' @param selectCols Either \code{NULL}, or a vector of names or indices of 
@@ -30,7 +30,7 @@
 #'   of variables not to read into memory. If both \code{selectCols} and 
 #'   \code{dropCols} are \code{NULL}, then all variables will be read in.
 #' @param dateNm Name of column containing the date variable.
-#' @param dateFt \code{\link{strptime}} format of date variable. Default is SAS
+#' @param dateFt \code{\link{strptime}} format of date variable. The default is SAS
 #'   format \code{"\%d\%h\%Y"}. But input data with R date format 
 #'   \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 #'   parsed automatically. 
@@ -40,8 +40,8 @@
 #'   details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.
 #' @param dateGpBp Name of variable the boxplots should be grouped by. Same
 #'   options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.
-#' @param weightNm Name of variable containing row weights, or \code{NULL} for 
-#'   no weights (all rows recieving weight 1).
+#' @param weightNm Name of the variable containing row weights, or \code{NULL} for 
+#'   no weights (all rows receiving weight 1).
 #' @param varNms Either \code{NULL} or a vector of names or indices of variables
 #'   to be plotted. If \code{NULL}, will default to all columns which are not 
 #'   \code{dateNm} or \code{weightNm}. Can also be a vector of indices of the 
@@ -49,13 +49,13 @@
 #'   if applicable, and not including \code{dateGp}, \code{dateGpBp} 
 #'   (which will be added to the \code{dataFl} by the function 
 #'   \code{\link{PrepData}}).
-#' @param dropConstants Logical indicates whether or not constant (all
+#' @param dropConstants Logical, indicates whether or not constant (all
 #'   duplicated or NA) variables should be dropped from \code{dataFl} prior to
 #'   plotting.
 #' @param ... Additional parameters to be passed to 
 #'   \code{\link[data.table]{fread}}.
 #' @export
-#' @return A \code{data.table} object, formated for use by all plotting 
+#' @return A \code{data.table} object, formatted for use by all plotting 
 #' functions in this package \code{\link{otvPlots}}, including the main function
 #' \code{\link{vlm}}, and the individual variable plotting function 
 #' \code{\link{PlotVar}}.
@@ -202,7 +202,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   nonNADateIndex <- which(!is.na(dataFl[, dateNm, with = FALSE]))
   firstNonNA <- min(nonNADateIndex)
   ## Recognize data format (overwrite user input dataFt!). 
-  ## Question: handle user input dataFt? 
   nonNADate <- dataFl[firstNonNA, dateNm, with = FALSE]
   if (grepl("([0-9]{4}-[0-9]{2}-[0-9]{2})", nonNADate[[1]])) {
     dateFt <- "%Y-%m-%d"
@@ -332,7 +331,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #'
 #' This function prepares a dataset containing variable labels for use by 
 #' the main plotting function \code{\link{vlm}}. The input must contain 
-#' variables' names in first column and labels in second column. All other 
+#' variables' names in the first column and labels in the second column. All other 
 #' columns will be dropped. Special characters will create errors and should 
 #' be stripped outside of R. All labels will be truncated at 145 characters.
 #'
@@ -341,7 +340,7 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 #'   \code{NULL}. If \code{NULL}, no labels will be used. The label dataset must 
 #'   contain at least 2 columns: \code{varCol} (variable names) and 
 #'   \code{labelCol} (variable labels).
-#' @param idx Vector of length 2 giving column index of variable names (first
+#' @param idx A vector of length 2, giving column index of variable names (first
 #'   position) and labels (second position).
 #' @export
 #' @return A data table formated for use by the \code{\link{vlm}} function.
@@ -374,7 +373,6 @@ PrepLabels <- function(labelFl, idx = 1:2) {
       if (fileExt %in% c("csv")) { ## For csv file, only read in columns in idx
         labelFl <- fread(labelFl, select = idx, stringsAsFactors = FALSE)
       } else if (fileExt %in% c("rdata", "rda")) { ## For rda file
-        ## Question: read in all columns, including those not in idx?
         labelFl <- readRDS(labelFl)
         setDT(labelFl)
       } else {

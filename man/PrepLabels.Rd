@@ -13,7 +13,7 @@ labels, an R object convertible to \code{data.table} (e.g., data frame) or
 contain at least 2 columns: \code{varCol} (variable names) and 
 \code{labelCol} (variable labels).}
 
-\item{idx}{Vector of length 2 giving column index of variable names (first
+\item{idx}{A vector of length 2, giving column index of variable names (first
 position) and labels (second position).}
 }
 \value{
@@ -22,7 +22,7 @@ A data table formated for use by the \code{\link{vlm}} function.
 \description{
 This function prepares a dataset containing variable labels for use by 
 the main plotting function \code{\link{vlm}}. The input must contain 
-variables' names in first column and labels in second column. All other 
+variables' names in the first column and labels in the second column. All other 
 columns will be dropped. Special characters will create errors and should 
 be stripped outside of R. All labels will be truncated at 145 characters.
 }

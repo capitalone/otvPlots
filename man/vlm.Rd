@@ -15,7 +15,7 @@ vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", genCSV = TRUE,
 \item{dataFl}{Either the name of an object that can be converted using
 \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+\code{\link[data.table]{fread}} (e.g., a csv file). If the dataset is not in 
 your working directory then \code{dataFl} must include (relative or 
 absolute) path to file.}
 
@@ -49,8 +49,8 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{varNms}{Either \code{NULL} or a vector of names or indices of variables
 to be plotted. If \code{NULL}, will default to all columns which are not 
@@ -85,7 +85,7 @@ variables will be read in.}
 of variables not to read into memory. If both \code{selectCols} and 
 \code{dropCols} are \code{NULL}, then all variables will be read in.}
 
-\item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
+\item{dateFt}{\code{\link{strptime}} format of date variable. The default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 
 \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
@@ -99,7 +99,7 @@ period to be used for anomaly detection.
      \item Must be either \code{NULL}, a vector of length 2, or a vector of 
        length 3. 
      \item If \code{NULL}, the entire dataset will be used for 
-       ranking/anamoly detection. 
+       ranking/anomaly detection. 
      \item If a vector of length 2, the format of the dates must be
        a character vector in default R date format (e.g. "2016-01-30"). 
      \item If a vector of length 3, the first two columns must contain dates 
@@ -122,7 +122,7 @@ black legend. Ignored this argument if \code{labelFl == NULL}.}
 a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 
@@ -138,7 +138,7 @@ to the variable given by the second parameter. This function should
 describe how fuzzy matching should be performed to find labels (see example
 below). If \code{NULL}, only exact matches will be retuned.}
 
-\item{dropConstants}{Logical indicates whether or not constant (all
+\item{dropConstants}{Logical, indicates whether or not constant (all
 duplicated or NA) variables should be dropped from \code{dataFl} prior to
 plotting.}
 
@@ -159,7 +159,7 @@ Sorts variables according to either user input or correlation with time
  For each numerical variable, the output plots include 
  \itemize{
    \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
-   \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+   \item a trace plot of p1, p50, and p99 percentiles, grouped by \code{dateGp}
      (top right), 
    \item a trace plot of mean and +-1 SD control limits, grouped by 
      \code{dateGp}(middle right), and 
@@ -193,7 +193,7 @@ Sorts variables according to either user input or correlation with time
 }
 }
 \details{
-If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
+If the argument \code{dataNeedPrep} is set to \code{FALSE}, then 
 \itemize{
 \item \code{dataFl} must be a \code{data.table} containing variables 
   \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}, and 
@@ -201,9 +201,9 @@ If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then
   of the \code{\link{vlm}} function.
 \item the arguments \code{selectCols}, \code{dropCols}, \code{dateFt}, 
   \code{dropConstants} will be ignored by the \code{\link{vlm}} function.
-\item When analyze a dataset for the first time, it is recommended to first
+\item When analyzing a dataset for the first time, it is recommended to first
   run the \code{\link{PrepData}} function on it, and then apply the 
-  \code{\link{vlm}} function with the arguement \code{dataNeedPrep = FALSE}.
+  \code{\link{vlm}} function with the argument \code{dataNeedPrep = FALSE}.
   Please see the examples for details. 
 }
 }

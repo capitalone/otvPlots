@@ -17,8 +17,8 @@ grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"},
 \code{"quarters"}, \code{"years"}. See \code{\link[data.table]{IDate}} for
 details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 }
 \value{
 \item{meltdx}{A \code{data.table} for use by the plotting funtions 

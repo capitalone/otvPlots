@@ -21,7 +21,7 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 A \code{ggplot2} object with \code{dateGp} on the x axis, 
   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
   \code{p99} plotted on the same graph, with grouped and global percentiles 
-  differentiated by linetype.
+  differentiated by line type.
 }
 \description{
 Plot 01, 50, and 99 percentile for a numerical variable

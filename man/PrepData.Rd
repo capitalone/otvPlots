@@ -12,7 +12,7 @@ PrepData(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
 \item{dataFl}{Either the name of an object that can be converted using
 \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+\code{\link[data.table]{fread}} (e.g., a csv file). If the dataset is not in 
 your working directory then \code{dataFl} must include (relative or 
 absolute) path to file.}
 
@@ -28,7 +28,7 @@ variables will be read in.}
 of variables not to read into memory. If both \code{selectCols} and 
 \code{dropCols} are \code{NULL}, then all variables will be read in.}
 
-\item{dateFt}{\code{\link{strptime}} format of date variable. Default is SAS
+\item{dateFt}{\code{\link{strptime}} format of date variable. The default is SAS
 format \code{"\%d\%h\%Y"}. But input data with R date format 
 \code{"\%Y-\%m-\%d"} will also be detected. Both of two formats can be
 parsed automatically.}
@@ -41,8 +41,8 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{varNms}{Either \code{NULL} or a vector of names or indices of variables
 to be plotted. If \code{NULL}, will default to all columns which are not 
@@ -52,7 +52,7 @@ if applicable, and not including \code{dateGp}, \code{dateGpBp}
 (which will be added to the \code{dataFl} by the function 
 \code{\link{PrepData}}).}
 
-\item{dropConstants}{Logical indicates whether or not constant (all
+\item{dropConstants}{Logical, indicates whether or not constant (all
 duplicated or NA) variables should be dropped from \code{dataFl} prior to
 plotting.}
 
@@ -60,7 +60,7 @@ plotting.}
 \code{\link[data.table]{fread}}.}
 }
 \value{
-A \code{data.table} object, formated for use by all plotting 
+A \code{data.table} object, formatted for use by all plotting 
 functions in this package \code{\link{otvPlots}}, including the main function
 \code{\link{vlm}}, and the individual variable plotting function 
 \code{\link{PlotVar}}.
@@ -70,7 +70,7 @@ This function prepares an input dataset for use by all plotting functions
 in this package, including the main function \code{\link{vlm}}. 
 The input data \code{dataFl} must contain, at a minimum, a date column 
 \code{dateNm} and a variable to be plotted. \code{dataFl} will be 
-convereted to a \code{data.table} class, and all changes are made to it by 
+converted to a \code{data.table} class, and all changes are made to it by 
 reference.
 }
 \details{

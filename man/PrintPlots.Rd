@@ -32,8 +32,8 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 \item{dateGpBp}{Name of variable the boxplots should be grouped by. Same
 options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{labelFl}{A \code{data.table} containing variable labels, or \code{NULL}
 for no labels; usually an output of \code{\link{PrepLabels}}.}
@@ -50,7 +50,7 @@ black legend. Ignored this argument if \code{labelFl == NULL}.}
 a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 

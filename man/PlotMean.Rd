@@ -21,7 +21,7 @@ details. If \code{NULL}, then \code{dateNm} will be used as \code{dateGp}.}
 A \code{ggplot2} object with \code{dateGp} on the x axis, 
   \code{value} on the y axis, and variables \code{Mean}, \code{cl1}, and 
   \code{cl2} plotted on the same graph, with mean and control limits 
-  differentiated by linetype.
+  differentiated by line type.
 }
 \description{
 Plot mean with {Mean +- 1SD} control limits for a numerical variable

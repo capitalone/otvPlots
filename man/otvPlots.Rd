@@ -8,24 +8,24 @@
 \description{
 The \code{otvPlots} package uses \code{data.table} and \code{ggplot2} 
 packages to efficiently plot time series aggregated from large datasets. 
-Plots of numerial variables are optionally returned ordered by correlation 
+Plots of numerical variables are optionally returned ordered by correlation 
 with date -- a natural starting point for anomaly detection. Plots are 
 automatically labeled if a variable dictionary is provided.
 }
 \details{
 Output files include:
 \itemize{
- \item A PDF file of plots saved as \code{outFl}.pdf, with each indivual page 
+ \item A PDF file of plots saved as \code{outFl}.pdf, with each individual page 
  on one variable. Variables are plotted in the order indicated in the argument
  \code{sortVars} or \code{sortFn}. 
  For each numerical variable, the output plots include 
  \itemize{
    \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
-   \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+   \item a trace plot of p1, p50, and p99 percentiles, grouped by \code{dateGp}
      (top right), 
    \item a trace plot of mean and +-1 SD control limits, grouped by 
      \code{dateGp}(middle right), and 
-   \item a trace plot of missing and zerorates, grouped by \code{dateGp} 
+   \item a trace plot of missing and zero rates, grouped by \code{dateGp} 
      (bottom right).
   }
   For each categorical variable (including a numerical variable with no more 
@@ -36,13 +36,13 @@ Output files include:
       If the variable contains more than \code{kCategories} number of 
       categories, trace plots of only the largest \code{kCategories} will be 
       plotted. If the variable contains only two categories, then only the 
-      trace plot of the less prevalent cateogy will be plotted.
+      trace plot of the less prevalent category will be plotted.
   }
-  \item CSV file(s) on summary statistics of variable, both globally and over
+  \item CSV file(s) on summary statistics of variables, both globally and over
   time aggregated by \code{dateGp}. The order of variables in the CSV files
-  are the same as in the PDF file. 
+  is the same as in the PDF file. 
   \itemize{
-    \item For numerical varaibles, number of observations (counts), p1, p25, 
+    \item For numerical variables, number of observations (counts), p1, p25, 
     p50, p75, and p99 qunatiles, mean, SD, missing and zerorates are saved
     as \code{outFl}_numerical_summary.csv.
     \item For categorical varaibles, number of observations (counts) and 

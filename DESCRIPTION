@@ -3,12 +3,12 @@ Title: Over Time Variable Plots
 Version: 0.2.0
 Authors@R: c(
     person("Rebecca", "Payne", role = "aut"),
-    person("Zoey", "Zhu", email = "yixian.zhu@capitalone.com", role = c("aut")),
+    person("Zoey", "Zhu", role = c("aut")),
 		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
-		person("Capital One", email = "OpenSourceOffice@capitalone.com", role = "cph"))
+		person("Capital One", role = "cph"))
 Description: This package enables automated visualization of variable 
-    distribution and change over time for predictive model building.
-    It efficiently computes summary statistics aggreated by time for 
+    distribution and changes over time for predictive model building.
+    It efficiently computes summary statistics aggregated by time for 
     large datasets, and create plots for variable level monitoring.  
 Depends:
     R (>= 3.2.0)
@@ -29,5 +29,7 @@ Suggests:
     knitr,
     proto,
     testthat
+URL: https://github.com/capitalone/otvPlots
+BugReports: https://github.com/capitalone/otvPlots/issues    
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

@@ -19,7 +19,7 @@
 #'   \code{NULL} (no transformation). If numeric, say 5, then all box plots of
 #'   a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 #'   Negative input of \code{skewOpt} will be converted to 3.
-#' @param kSample Either \code{NULL} or an positive integer. If an integer, 
+#' @param kSample Either \code{NULL} or a positive integer. If an integer, 
 #'   indicates the sample size for both drawing boxplots and ordering numerical
 #'   graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 #'   reasonable value (default is 50K) dramatically improves processing speed. 
@@ -35,8 +35,8 @@
 #'     mean and +-1 SD control limits grouped by \code{dateGp}, and a time 
 #'     series plot of missing and zerorates grouped by \code{dateGp}.}
 #'   \item{numVarSummary}{A \code{data.table}, contains global and over time
-#'     summary statistics, including p1, p25, p50, p75, and p99 qunatiles, mean 
-#'     and SD, missing and zerorates.}
+#'     summary statistics, including p1, p25, p50, p75, and p99 quantiles, mean 
+#'     and SD, missing and zero rates.}
 #'     
 #' @seealso Functions depend on this function:
 #'          \code{\link{PlotVar}}.
@@ -252,7 +252,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
 #'   \code{value} on the y axis, and variables \code{p01}, \code{p50}, and 
 #'   \code{p99} plotted on the same graph, with grouped and global percentiles 
-#'   differentiated by linetype.
+#'   differentiated by line type.
 #' @section License:
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
@@ -298,7 +298,7 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 #' @return A \code{ggplot2} object with \code{dateGp} on the x axis, 
 #'   \code{value} on the y axis, and variables \code{Mean}, \code{cl1}, and 
 #'   \code{cl2} plotted on the same graph, with mean and control limits 
-#'   differentiated by linetype.
+#'   differentiated by line type.
 #' @export
 #' @section License: 
 #' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,

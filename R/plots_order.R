@@ -5,10 +5,10 @@
 #' Create numerical variable ranking using R2 between date to and variable
 #' 
 #' Calculates R2 of a linear model of the formula \code{var} ~ \code{dateNm} for
-#' each \code{var} of class \code{nmrcl} (or \code{ctgrl}??) and returns a vector of
+#' each \code{var} of class \code{nmrcl} and returns a vector of
 #' variable names ordered by highest R2. The linear model can be calculated over
 #' a subset of dates, see details of parameter \code{buildTm}. Non-numerical
-#' variables are returned in alphabetical order after the sorted numberical
+#' variables are returned in alphabetical order after the sorted numerical
 #' variables.
 #'
 #' @inheritParams PrepData
@@ -24,7 +24,7 @@
 #'      \item Must be either \code{NULL}, a vector of length 2, or a vector of 
 #'        length 3. 
 #'      \item If \code{NULL}, the entire dataset will be used for 
-#'        ranking/anamoly detection. 
+#'        ranking/anomaly detection. 
 #'      \item If a vector of length 2, the format of the dates must be
 #'        a character vector in default R date format (e.g. "2016-01-30"). 
 #'      \item If a vector of length 3, the first two columns must contain dates 

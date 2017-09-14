@@ -13,8 +13,8 @@ PlotNumVar(myVar, dataFl, weightNm, dateGp, dateGpBp, skewOpt = NULL,
 \item{dataFl}{A \code{data.table} of data; must be the output of the
 \code{\link{PrepData}} function.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{dateGp}{Name of the variable that the time series plots should be 
 grouped by. Options are \code{NULL}, \code{"weeks"}, \code{"months"}, 
@@ -29,7 +29,7 @@ options as \code{dateGp}. If \code{NULL}, then \code{dateGp} will be used.}
 a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 
@@ -45,8 +45,8 @@ series plots on quantiles, mean, SD, and missing and zero rates.}
     mean and +-1 SD control limits grouped by \code{dateGp}, and a time 
     series plot of missing and zerorates grouped by \code{dateGp}.}
   \item{numVarSummary}{A \code{data.table}, contains global and over time
-    summary statistics, including p1, p25, p50, p75, and p99 qunatiles, mean 
-    and SD, missing and zerorates.}
+    summary statistics, including p1, p25, p50, p75, and p99 quantiles, mean 
+    and SD, missing and zero rates.}
 }
 \description{
 Output plots include a boxplot on the left, grouped by a courser time scale 

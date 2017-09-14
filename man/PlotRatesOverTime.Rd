@@ -2,7 +2,7 @@
 % Please edit documentation in R/categorical.R
 \name{PlotRatesOverTime}
 \alias{PlotRatesOverTime}
-\title{Creates trace plots of categories' propotions over time for a discrete (or
+\title{Creates trace plots of categories' proportions over time for a discrete (or
 binary) variable}
 \usage{
 PlotRatesOverTime(dataFl, dateGp, myVar, normBy = "time", weightNm = NULL,
@@ -25,10 +25,10 @@ or \code{"var"}. If \code{"time"}, then for each time period of
 categories in that time period. This illustrates changes of categories' 
 proportions over time. If \code{"var"}, then for each category, its counts 
 are normalized by the total counts over time from only this category. This
-illustrates changes of categories' volumns over time.}
+illustrates changes of categories' volumes over time.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{newLevels}{categories of \code{myVar} in order of global frequency}
 
@@ -38,7 +38,7 @@ plotted.}
 }
 \value{
 A list:
-  \item{p}{\code{ggplot} object, trace plots of categories' propotions 
+  \item{p}{\code{ggplot} object, trace plots of categories' proportions 
     \code{myVar} over time.}
   \item{catVarSummary}{A \code{data.table}, contains categories' proportions 
     globally, and over-time in each time period in \code{dateGp}. Each row is
@@ -47,7 +47,7 @@ A list:
     ordered by global prevalence in a descending order.}
 }
 \description{
-Creates trace plots of categories' propotions over time for a discrete (or
+Creates trace plots of categories' proportions over time for a discrete (or
 binary) variable
 }
 \section{License}{

@@ -116,7 +116,7 @@ PrintPlots <- function(outFl, dataFl, sortVars, dateNm, dateGp, dateGpBp,
 #' For a numerical variable, the output includes 
 #' \itemize{
 #' \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
-#' \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+#' \item a trace plot of p1, p50, and p99 percentiles, grouped by \code{dateGp}
 #'   (top right), 
 #' \item a trace plot of mean and +-1 SD control limits, grouped by 
 #'   \code{dateGp}(middle right), and 

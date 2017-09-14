@@ -13,8 +13,8 @@ PlotCatVar(myVar, dataFl, weightNm = NULL, dateNm, dateGp, kCategories = 9,
 \item{dataFl}{A \code{data.table} of data; must be the output of the
 \code{\link{PrepData}} function.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{dateNm}{Name of column containing the date variable.}
 
@@ -33,7 +33,7 @@ or \code{"var"}. If \code{"time"}, then for each time period of
 categories in that time period. This illustrates changes of categories' 
 proportions over time. If \code{"var"}, then for each category, its counts 
 are normalized by the total counts over time from only this category. This
-illustrates changes of categories' volumns over time.}
+illustrates changes of categories' volumes over time.}
 }
 \value{
 \item{p}{A \code{grob} (i.e., \code{ggplot} grid) object, including a 

@@ -15,8 +15,8 @@ output of the \code{\link{PrepData}} function.}
 
 \item{myVar}{Name of the variable to be plotted.}
 
-\item{weightNm}{Name of variable containing row weights, or \code{NULL} for 
-no weights (all rows recieving weight 1).}
+\item{weightNm}{Name of the variable containing row weights, or \code{NULL} for 
+no weights (all rows receiving weight 1).}
 
 \item{dateNm}{Name of column containing the date variable.}
 
@@ -40,7 +40,7 @@ black legend. Ignored this argument if \code{labelFl == NULL}.}
 a variable whose skewness exceeds 5 will be on a log10 scale if possible.
 Negative input of \code{skewOpt} will be converted to 3.}
 
-\item{kSample}{Either \code{NULL} or an positive integer. If an integer, 
+\item{kSample}{Either \code{NULL} or a positive integer. If an integer, 
 indicates the sample size for both drawing boxplots and ordering numerical
 graphs by \eqn{R^2}. When the data is large, setting \code{kSample} to a 
 reasonable value (default is 50K) dramatically improves processing speed. 
@@ -75,7 +75,7 @@ plotted.}
 For a numerical variable, the output includes 
 \itemize{
 \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
-\item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+\item a trace plot of p1, p50, and p99 percentiles, grouped by \code{dateGp}
   (top right), 
 \item a trace plot of mean and +-1 SD control limits, grouped by 
   \code{dateGp}(middle right), and 
