@@ -29,5 +29,7 @@ Suggests:
     knitr,
     proto,
     testthat
+URL: https://github.com/capitalone/otvPlots
+BugReports: https://github.com/capitalone/otvPlots/issues    
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
