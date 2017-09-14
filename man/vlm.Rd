@@ -15,7 +15,7 @@ vlm(dataFl, dateNm, labelFl = NULL, outFl = "otvplots", genCSV = TRUE,
 \item{dataFl}{Either the name of an object that can be converted using
 \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 character string containing the name of dataset that can be loaded using 
-\code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+\code{\link[data.table]{fread}} (e.g., a csv file). If the dataset is not in 
 your working directory then \code{dataFl} must include (relative or 
 absolute) path to file.}
 
@@ -159,7 +159,7 @@ Sorts variables according to either user input or correlation with time
  For each numerical variable, the output plots include 
  \itemize{
    \item side-by-side boxplots grouped by \code{dateGpBp} (left), 
-   \item a trace plot of p1, p50 and p99 percentiles, grouped by \code{dateGp}
+   \item a trace plot of p1, p50, and p99 percentiles, grouped by \code{dateGp}
      (top right), 
    \item a trace plot of mean and +-1 SD control limits, grouped by 
      \code{dateGp}(middle right), and 
@@ -193,7 +193,7 @@ Sorts variables according to either user input or correlation with time
 }
 }
 \details{
-If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then 
+If the argument \code{dataNeedPrep} is set to \code{FALSE}, then 
 \itemize{
 \item \code{dataFl} must be a \code{data.table} containing variables 
   \code{weightNm}, \code{dateNm}, \code{dateGp}, and \code{dateGpBp}, and 
@@ -201,9 +201,9 @@ If the arugment \code{dataNeedPrep} is set to \code{FALSE}, then
   of the \code{\link{vlm}} function.
 \item the arguments \code{selectCols}, \code{dropCols}, \code{dateFt}, 
   \code{dropConstants} will be ignored by the \code{\link{vlm}} function.
-\item When analyze a dataset for the first time, it is recommended to first
+\item When analyzing a dataset for the first time, it is recommended to first
   run the \code{\link{PrepData}} function on it, and then apply the 
-  \code{\link{vlm}} function with the arguement \code{dataNeedPrep = FALSE}.
+  \code{\link{vlm}} function with the argument \code{dataNeedPrep = FALSE}.
   Please see the examples for details. 
 }
 }

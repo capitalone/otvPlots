@@ -18,7 +18,7 @@
 #' @param dataFl Either the name of an object that can be converted using
 #'   \code{\link[data.table]{as.data.table}} (e.g., a data frame), or a 
 #'   character string containing the name of dataset that can be loaded using 
-#'   \code{\link[data.table]{fread}} (e.g., a csv file). If dataset is not in 
+#'   \code{\link[data.table]{fread}} (e.g., a csv file). If the dataset is not in 
 #'   your working directory then \code{dataFl} must include (relative or 
 #'   absolute) path to file.
 #' @param selectCols Either \code{NULL}, or a vector of names or indices of 
@@ -202,7 +202,6 @@ PrepData <- function(dataFl, dateNm, selectCols = NULL, dropCols = NULL,
   nonNADateIndex <- which(!is.na(dataFl[, dateNm, with = FALSE]))
   firstNonNA <- min(nonNADateIndex)
   ## Recognize data format (overwrite user input dataFt!). 
-  ## Question: handle user input dataFt? 
   nonNADate <- dataFl[firstNonNA, dateNm, with = FALSE]
   if (grepl("([0-9]{4}-[0-9]{2}-[0-9]{2})", nonNADate[[1]])) {
     dateFt <- "%Y-%m-%d"
@@ -374,7 +373,6 @@ PrepLabels <- function(labelFl, idx = 1:2) {
       if (fileExt %in% c("csv")) { ## For csv file, only read in columns in idx
         labelFl <- fread(labelFl, select = idx, stringsAsFactors = FALSE)
       } else if (fileExt %in% c("rdata", "rda")) { ## For rda file
-        ## Question: read in all columns, including those not in idx?
         labelFl <- readRDS(labelFl)
         setDT(labelFl)
       } else {

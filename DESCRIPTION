@@ -7,7 +7,7 @@ Authors@R: c(
 		person("Yingbo", "Li", email = "opensource@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", role = "cph"))
 Description: This package enables automated visualization of variable 
-    distribution and change over time for predictive model building.
+    distribution and changes over time for predictive model building.
     It efficiently computes summary statistics aggregated by time for 
     large datasets, and create plots for variable level monitoring.  
 Depends:
