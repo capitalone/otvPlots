@@ -166,13 +166,15 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
 
 ## Citations
 
-All examples and unit tests for this package come from the 
-[Bank Marketing data set](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) 
+All examples for this package come from the 
+[Bank Marketing dataset](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) 
 available at the UCI Machine Learning Repository. The UCI repository maintains 
 a free collection of datasets for researchers at its
 [website](http://archive.ics.uci.edu/ml). 
 
-[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014
+Moro et al., S. Moro, P. Cortez, and P. Rita (2014). A Data-Driven Approach to 
+Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 
+62:22-31, June 2014
 
 Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
