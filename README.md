@@ -176,6 +176,16 @@ a free collection of datasets for researchers at its
 
 Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
+## Copyright 2017 Capital One Services, LLC
+
+Licensed under the [Apache License, Version 2.0 (the "License")](http://www.apache.org/licenses/LICENSE-2.0); you may not use
+this file except in compliance with the License.  
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License. 
+
 ## External Contributors
 Contributors: We welcome your interest in Capital One’s Open Source Projects (the “Project”). 
 
@@ -186,18 +196,5 @@ Any Contributor to the project must accept and sign a CLA indicating agreement t
 This project adheres to the 
 [Open Source Code of Conduct](https://developer.capitalone.com/single/code-of-conduct/).
 By participating, you are expected to honor this code.
-
-## Copyright 2016 Capital One Services, LLC
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License.  You may obtain a copy of the
-License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License. 
 
 
