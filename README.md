@@ -164,4 +164,39 @@ vlm(dataFl = bankData, dateNm = "date", labelFl = bankLabels,
     varNms = "age", sortVars = NULL)
 ```
 
+## Citations
+
+All examples for this package come from the 
+[Bank Marketing dataset](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) 
+available at the UCI Machine Learning Repository. The UCI repository maintains 
+a free collection of datasets for researchers at its
+[website](http://archive.ics.uci.edu/ml). 
+
+Moro et al., S. Moro, P. Cortez, and P. Rita (2014). A Data-Driven Approach to 
+Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 
+62:22-31, June 2014
+
+Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+
+## Copyright 2017 Capital One Services, LLC
+
+Licensed under the [Apache License, Version 2.0 (the "License")](http://www.apache.org/licenses/LICENSE-2.0); you may not use
+this file except in compliance with the License.  
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License. 
+
+## External Contributors
+Contributors: We welcome your interest in Capital One’s Open Source Projects (the “Project”). 
+
+Any Contributor to the project must accept and sign a CLA indicating agreement to the license terms. Except for the license granted in this CLA to Capital One and to recipients of software distributed by Capital One, you reserve all right, title, and interest in and to your contributions; this CLA does not impact your rights to use your own contributions for any other purpose.
+
+[Link to CLA](https://docs.google.com/forms/d/19LpBBjykHPox18vrZvBbZUcK6gQTj7qv1O5hCduAZFU/viewform)
+
+This project adheres to the 
+[Open Source Code of Conduct](https://developer.capitalone.com/single/code-of-conduct/).
+By participating, you are expected to honor this code.
+
 
