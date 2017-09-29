@@ -49,7 +49,7 @@
 #'          \code{\link{PrepData}}.
 #' 
 #' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -126,7 +126,7 @@ PlotNumVar <- function(myVar, dataFl, weightNm, dateGp, dateGpBp,
 #' @importFrom Hmisc wtd.mean
 #' @importFrom Hmisc wtd.quantile
 #' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -254,7 +254,7 @@ SummaryStats <- function(myVar, dataFl, dateGp, weightNm = NULL) {
 #'   \code{p99} plotted on the same graph, with grouped and global percentiles 
 #'   differentiated by line type.
 #' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -301,7 +301,7 @@ PlotQuantiles <- function(meltdx, myVar, dateGp) {
 #'   differentiated by line type.
 #' @export
 #' @section License: 
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -338,7 +338,7 @@ PlotMean <- function(meltdx, myVar, dateGp){
 #' @return A \code{ggplot2} object with a \code{missingrate} and
 #'   \code{zerorate} grouped by \code{dateGp}.
 #' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -370,7 +370,7 @@ PlotRates <- function(meltdx, myVar, dateGp) {
 #'   \code{dateGpBp}
 #' @export
 #' @section License:
-#' Copyright 2016 Capital One Services, LLC Licensed under the Apache License,
+#' Copyright 2017 Capital One Services, LLC Licensed under the Apache License,
 #' Version 2.0 (the "License"); you may not use this file except in compliance
 #' with the License. You may obtain a copy of the  License at
 #' http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law

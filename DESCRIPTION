@@ -22,7 +22,7 @@ Imports:
     quantreg (>= 5.33), 
     scales (>= 0.4.0),
     stringi (>= 1.1.1)
-License: file LICENSE
+License: Apache License 2.0 | file LICENSE
 LazyData: true
 Suggests:
     bit64,
