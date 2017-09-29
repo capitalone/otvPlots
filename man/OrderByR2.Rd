@@ -24,7 +24,7 @@ period to be used for anomaly detection.
      \item If \code{NULL}, the entire dataset will be used for 
        ranking/anomaly detection. 
      \item If a vector of length 2, the format of the dates must be
-       a character vector in default R date format (e.g. "2016-01-30"). 
+       a character vector in default R date format (e.g. "2017-01-30"). 
      \item If a vector of length 3, the first two columns must contain dates 
        in any strptime format, while the 3rd column contains the strptime 
        format (see \code{\link{strptime}}). 
@@ -62,7 +62,7 @@ variables.
 }
 \section{License}{
  
-Copyright 2016 Capital One Services, LLC Licensed under the
+Copyright 2017 Capital One Services, LLC Licensed under the
 Apache License, Version 2.0 (the "License"); you may not use this file
 except in compliance with the License. You may obtain a copy of the 
 License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
