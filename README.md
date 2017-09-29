@@ -178,10 +178,11 @@ Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier,
 
 Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
-## Copyright 2016 Capital One Services, LLC
+## Copyright 2017 Capital One Services, LLC
 
-Licensed under the [Apache License, Version 2.0 (the "License")](http://www.apache.org/licenses/LICENSE-2.0); you may not use
-this file except in compliance with the License.  
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
