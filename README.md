@@ -28,7 +28,7 @@ For each numerical variable, the output plots include
 * a trace plot of missing and zero rates (bottom right).
 
 #### Here is an example page of plots for a numerical variable 
-<img src="/figures/sample_plots_numerical.png" 
+<img src="https://github.com/capitalone/otvPlots/blob/master/figures/sample_plots_numerical.png" 
      alt="numerical plot" 
    width="770" 
    height="560">
@@ -39,7 +39,7 @@ For each categorical variable (including a numerical variable with no more
 * a grid of trace plots on categories' proportions over time (right). 
 
 #### Here is an example page of plots for a categorical variable 
-<img src="/figures/sample_plots_categorical.png" 
+<img src="https://github.com/capitalone/otvPlots/blob/master/figures/sample_plots_categorical.png" 
      alt="categorical plot" 
    width="770" 
    height="560">
