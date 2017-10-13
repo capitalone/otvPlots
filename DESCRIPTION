@@ -6,10 +6,10 @@ Authors@R: c(
     person("Zoey", "Zhu", role = c("aut")),
 		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", role = "cph"))
-Description: This package enables automated visualization of variable 
+Description: Enables automated visualization of variable 
     distribution and changes over time for predictive model building.
-    It efficiently computes summary statistics aggregated by time for 
-    large datasets, and create plots for variable level monitoring.  
+    Computes summary statistics aggregated by time for 
+    large datasets, and creates plots for variable level monitoring.  
 Depends:
     R (>= 3.2.0)
 Imports:
@@ -30,6 +30,5 @@ Suggests:
     proto,
     testthat
 URL: https://github.com/capitalone/otvPlots
-BugReports: https://github.com/capitalone/otvPlots/issues    
-VignetteBuilder: knitr
+BugReports: https://github.com/capitalone/otvPlots/issues   
 RoxygenNote: 6.0.1
