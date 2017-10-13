@@ -1,2 +1,3 @@
 ^\.travis\.yml$
 figures
+cran-comments.md
