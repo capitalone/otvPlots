@@ -1,4 +1,7 @@
 # R Package for Variable Level Monitoring
+
+[![](http://cranlogs.r-pkg.org/badges/otvPlots)](http://cran.rstudio.com/web/packages/otvPlots/index.html)
+
 An important part of model building is the "proc eyeball" sanity check. It can
 also be a painful part of the process, when you are the data scientist tasked 
 with creating and checking 10,000 or more near-identical plots. The `otvPlots`
@@ -57,30 +60,35 @@ The order of variables in the CSV files is the same as in the PDF file.
      global prevalence in a descending order.
 
 # Installation
-Open an R (or RStudio) console and run the 
-following code:
-
+Open an R (or RStudio) console and install the package from CRAN
+ 
+```
+install.packages("otvPlots")
+```
+ 
+Alternatively, if you prefer to install from GibHub:
+ 
 1. Install the `devtools` package if not yet. You only need to do this once, so
 feel free to skip this step if the `devtools` is already installed. You will be
-asked to select a CRAN mirror. 
-
+asked to select a CRAN mirror.
+ 
 ```
 install.packages("devtools")
 ```
-
+ 
 2. Install the `otvPlots` package
 ```
 devtools::install_github("capitalone/otvPlots")
 ```
-
-You can also build the package yourself by cloning the repo, setting your 
+ 
+You can also build the package yourself by cloning the repo, setting your
 working directory to the otvPlots folder and running `devtools::build()`
-in R, after installing the `devtools` package. 
-
+in R, after installing the `devtools` package.
+ 
 Note that otvPlots does depend on R and several R packages to run. You can
 see a complete and up to date list of dependencies in the Imports field in
 the DESCRIPTION file.
-
+ 
 
 # Getting Started
 
