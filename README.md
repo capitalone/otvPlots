@@ -66,7 +66,7 @@ Open an R (or RStudio) console and install the package from CRAN
 install.packages("otvPlots")
 ```
  
-Alternatively, if you prefer to install from GibHub:
+Alternatively, if you prefer to install from GitHub:
  
 1. Install the `devtools` package if not yet. You only need to do this once, so
 feel free to skip this step if the `devtools` is already installed. You will be
