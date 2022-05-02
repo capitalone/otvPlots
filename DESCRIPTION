@@ -6,7 +6,7 @@ Authors@R: c(
     person("Zoey", "Zhu", role = c("aut")),
 		person("Yingbo", "Li", email = "yingbo.li@capitalone.com", role = c("aut", "cre")),
 		person("Capital One", role = "cph"))
-Description: Enables automated visualization of variable 
+Description: This package enables automated visualization of variable 
     distribution and changes over time for predictive model building.
     Computes summary statistics aggregated by time for 
     large datasets, and creates plots for variable level monitoring.  
