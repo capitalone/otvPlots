@@ -3,6 +3,6 @@
 
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence,
-# @yingboli and @woody982 will be requested for
+# @yingboli and @Yingru will be requested for
 # review when someone opens a pull request.
-*       @yingboli @woody982
+*       @yingboli @Yingru
